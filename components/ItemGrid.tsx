@@ -8,7 +8,7 @@ import _ from 'lodash'
 import { AnimatePresence, AnimationProps, motion, Reorder } from 'framer-motion'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
-import JSONFetcher from '../pages/JSONFetcher'
+import JSONFetcher from './JSONFetcher'
 
 import {
   Category,
