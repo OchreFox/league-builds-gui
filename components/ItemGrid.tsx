@@ -6,7 +6,6 @@ import { css, cx } from '@emotion/css'
 import fuzzy from 'fuzzy'
 import _ from 'lodash'
 import { AnimatePresence, AnimationProps, motion, Reorder } from 'framer-motion'
-import Fuse from 'fuse.js'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import JSONFetcher from '../pages/JSONFetcher'
@@ -37,47 +36,19 @@ export default function ItemGrid({
 
   // Basic items state
   const [basicItems, setBasicItems] = useState<Array<ItemsSchema>>([])
-  const [initialBasicItems, setInitialBasicItems] = useState<
-    Array<ItemsSchema>
-  >([])
   const [showBasicItems, setShowBasicItems] = useState(true)
   // Epic items state
   const [epicItems, setEpicItems] = useState<Array<ItemsSchema>>([])
-  const [initialEpicItems, setInitialEpicItems] = useState<Array<ItemsSchema>>(
-    []
-  )
   const [showEpicItems, setShowEpicItems] = useState(true)
   // Legendary items state
   const [legendaryItems, setLegendaryItems] = useState<Array<ItemsSchema>>([])
-  const [initialLegendaryItems, setInitialLegendaryItems] = useState<
-    Array<ItemsSchema>
-  >([])
   const [showLegendaryItems, setShowLegendaryItems] = useState(true)
   // Mythic items state
   const [mythicItems, setMythicItems] = useState<Array<ItemsSchema>>([])
-  const [initialMythicItems, setInitialMythicItems] = useState<
-    Array<ItemsSchema>
-  >([])
   const [showMythicItems, setShowMythicItems] = useState(true)
   // Data initialization flag
   const [dataInitialized, setDataInitialized] = useState(false)
-  // Fuse search instances
-  const basicItemsFuse = new Fuse(initialBasicItems, {
-    keys: ['name', 'nicknames', 'description'],
-    threshold: 0.3,
-  })
-  const epicItemsFuse = new Fuse(initialEpicItems, {
-    keys: ['name', 'nicknames', 'description'],
-    threshold: 0.3,
-  })
-  const legendaryItemsFuse = new Fuse(initialLegendaryItems, {
-    keys: ['name', 'nicknames', 'description'],
-    threshold: 0.3,
-  })
-  const mythicItemsFuse = new Fuse(initialMythicItems, {
-    keys: ['name', 'nicknames', 'description'],
-    threshold: 0.3,
-  })
+
   // Previous refs
   const previousValues = useRef({
     goldOrderDirection,
@@ -109,10 +80,19 @@ export default function ItemGrid({
     )
   }
 
+  /**
+   * Get the pluralized name of an item
+   * @param item - ItemsSchema - Item to check
+   * @returns string - Pluralized name of the item
+   */
   function getPluralFromItems(itemSubset: Array<ItemsSchema>) {
     return itemSubset.length === 1 ? 'item' : 'items'
   }
 
+  /**
+   * Initializes items: takes an object of all the items, sorts them by type, and then sets the state of each type of item.
+   * @returns the following:
+   */
   function initializeItems() {
     // Only run the function if the items are present
     if (!items) return
@@ -143,218 +123,6 @@ export default function ItemGrid({
     tempEpicItems = _.orderBy(tempEpicItems, ['gold.total'], ['asc'])
     tempLegendaryItems = _.orderBy(tempLegendaryItems, ['gold.total'], ['asc'])
     tempMythicItems = _.orderBy(tempMythicItems, ['gold.total'], ['asc'])
-    // Set basic items
-    setBasicItems(tempBasicItems)
-    setInitialBasicItems(tempBasicItems)
-    // Set epic items
-    setEpicItems(tempEpicItems)
-    setInitialEpicItems(tempEpicItems)
-    // Set legendary items
-    setLegendaryItems(tempLegendaryItems)
-    setInitialLegendaryItems(tempLegendaryItems)
-    // Set mythic items
-    setMythicItems(tempMythicItems)
-    setInitialMythicItems(tempMythicItems)
-  }
-
-  /**
-   * Function to order items by gold
-   * @param itemSubset - Array<ItemsCombined> - Items to be ordered
-   * @returns {Array<ItemsSchema>} Ordered items
-   */
-  function orderItemsByGoldHelper(itemSubset: Array<ItemsSchema>) {
-    if (goldOrderDirection === 'asc') {
-      return itemSubset.sort((a, b) => {
-        const aGold = a.gold?.total || 0
-        const bGold = b.gold?.total || 0
-        return aGold - bGold
-      })
-    } else {
-      return itemSubset.sort((a, b) => {
-        const aGold = a.gold?.total || 0
-        const bGold = b.gold?.total || 0
-        return bGold - aGold
-      })
-    }
-  }
-
-  /**
-   * Function to order items by category
-   * @param itemSubset - Array<ItemsCombined> - Items to order
-   * @param activeCategories - Array<Category> - Categories to order by
-   * @returns Array<ItemsCombined> - Filtered items array
-   */
-  const orderItemsByCategoryHelper = (
-    itemSubset: Array<ItemsSchema>,
-    activeCategories: Array<Category[]>
-  ) => {
-    let filteredItems: Array<ItemsSchema> = []
-    // Map through items and filter by activeCategories
-    filteredItems = Object.values(itemSubset).filter((item) =>
-      activeCategories.every((categoryArray) =>
-        item.categories?.some((categoryString) =>
-          categoryArray.includes(categoryString)
-        )
-      )
-    )
-    return filteredItems
-  }
-
-  /**
-   * Function to order items by champion class
-   * @param itemSubset - Array<ItemsCombined> - Items to order
-   * @param championClass - Champion class to order by
-   * @returns Array<ItemsCombined> - Filtered items array
-   */
-  const orderItemsByChampionClassHelper = (
-    itemSubset: Array<ItemsSchema>,
-    championClass: ChampionClass
-  ) => {
-    let filteredItems: Array<ItemsSchema> = []
-
-    // If the champion class is none, return the items
-    if (championClass === ChampionClass.None) {
-      return itemSubset
-    }
-
-    // Map through items and filter by championClass
-    for (const item of itemSubset) {
-      if (item.classes?.includes(championClass)) {
-        filteredItems.push(item)
-      }
-    }
-    return filteredItems
-  }
-
-  /**
-   * Function to order the initial items by gold
-   */
-  function orderInitialItemsByGold() {
-    setInitialBasicItems(
-      _.orderBy(initialBasicItems, ['gold.total'], [goldOrderDirection as any])
-    )
-    setInitialEpicItems(
-      _.orderBy(initialEpicItems, ['gold.total'], [goldOrderDirection as any])
-    )
-    setInitialLegendaryItems(
-      _.orderBy(
-        initialLegendaryItems,
-        ['gold.total'],
-        [goldOrderDirection as any]
-      )
-    )
-    setInitialMythicItems(
-      _.orderBy(initialMythicItems, ['gold.total'], [goldOrderDirection as any])
-    )
-  }
-
-  /**
-   * Reset the items to the initial state
-   */
-  function resetItems() {
-    setBasicItems(initialBasicItems)
-    setEpicItems(initialEpicItems)
-    setLegendaryItems(initialLegendaryItems)
-    setMythicItems(initialMythicItems)
-    console.log('Resetting items')
-  }
-
-  /**
-   * Filters items by rarity, gold, type, and class.
-   * @returns the filtered items.
-   */
-  function filterItems() {
-    // Create temporary arrays for each rarity
-    let tempBasicItems: Array<ItemsSchema> = initialBasicItems
-    let tempEpicItems: Array<ItemsSchema> = initialEpicItems
-    let tempLegendaryItems: Array<ItemsSchema> = initialLegendaryItems
-    let tempMythicItems: Array<ItemsSchema> = initialMythicItems
-
-    // Filter items by search filter
-    if (searchFilter !== '') {
-      console.log('Filtering items by search filter: ' + searchFilter)
-      tempBasicItems = _.chain(basicItemsFuse.search(searchFilter))
-        .flatMap(({ item }) => item)
-        .value() as unknown as Array<ItemsSchema>
-      tempEpicItems = _.chain(epicItemsFuse.search(searchFilter))
-        .flatMap(({ item }) => item)
-        .value() as unknown as Array<ItemsSchema>
-      tempLegendaryItems = _.chain(legendaryItemsFuse.search(searchFilter))
-        .flatMap(({ item }) => item)
-        .value() as unknown as Array<ItemsSchema>
-      tempMythicItems = _.chain(mythicItemsFuse.search(searchFilter))
-        .flatMap(({ item }) => item)
-        .value() as unknown as Array<ItemsSchema>
-    }
-    previousValues.current.searchFilter = searchFilter
-
-    // Filter items by gold
-    if (previousValues.current.goldOrderDirection !== goldOrderDirection) {
-      console.log('Sorting items in order: ' + goldOrderDirection)
-      tempBasicItems = orderItemsByGoldHelper(tempBasicItems)
-      tempEpicItems = orderItemsByGoldHelper(tempEpicItems)
-      tempLegendaryItems = orderItemsByGoldHelper(tempLegendaryItems)
-      tempMythicItems = orderItemsByGoldHelper(tempMythicItems)
-      // Also sort initial items by gold in case we reset filters
-      orderInitialItemsByGold()
-      previousValues.current.goldOrderDirection = goldOrderDirection
-    }
-
-    // Filter items by type or category
-    // Create an array of all the categories found in typeFilters that are active
-    let activeCategories: Array<Category[]> = []
-    let flatActiveCategories: Array<Category> = []
-    typeFilters.forEach((filter) => {
-      if (filter.isActive) {
-        activeCategories.push([...filter.categories])
-        flatActiveCategories.push(...filter.categories)
-      }
-    })
-    console.log('Sorting items by types: ' + flatActiveCategories)
-    if (flatActiveCategories.includes(Category.All)) {
-      resetItems()
-    } else {
-      tempBasicItems = orderItemsByCategoryHelper(
-        tempBasicItems,
-        activeCategories
-      )
-      tempEpicItems = orderItemsByCategoryHelper(
-        tempEpicItems,
-        activeCategories
-      )
-      tempLegendaryItems = orderItemsByCategoryHelper(
-        tempLegendaryItems,
-        activeCategories
-      )
-      tempMythicItems = orderItemsByCategoryHelper(
-        tempMythicItems,
-        activeCategories
-      )
-    }
-
-    previousValues.current.typeFilters = typeFilters
-
-    // Filter items by class
-    let activeClass = classFilters.filter((filter) => filter.isActive)[0].class
-    console.log('Sorting items by class: ' + activeClass)
-
-    tempBasicItems = orderItemsByChampionClassHelper(
-      tempBasicItems,
-      activeClass
-    )
-    tempEpicItems = orderItemsByChampionClassHelper(tempEpicItems, activeClass)
-    tempLegendaryItems = orderItemsByChampionClassHelper(
-      tempLegendaryItems,
-      activeClass
-    )
-    tempMythicItems = orderItemsByChampionClassHelper(
-      tempMythicItems,
-      activeClass
-    )
-
-    previousValues.current.classFilters = classFilters
-
-    // Set items
     setBasicItems(tempBasicItems)
     setEpicItems(tempEpicItems)
     setLegendaryItems(tempLegendaryItems)
@@ -419,6 +187,11 @@ export default function ItemGrid({
       }
       return { ...item, visible: false }
     })
+    visibleItems = _.orderBy(
+      visibleItems,
+      ['gold.total'],
+      [goldOrderDirection as any]
+    )
     return { visibleItems: visibleItems, count: visibleItemCount }
   }
 
@@ -526,7 +299,6 @@ export default function ItemGrid({
       )
         return
       else {
-        // filterItems()
         // Reduce items
         const activeCategories = getActiveCategories()
         const activeChampionClass = getActiveChampionClass()
@@ -549,41 +321,30 @@ export default function ItemGrid({
   const gridContainerVariants = {
     enter: {
       opacity: 0,
-      scaleY: 0,
-      originX: 0,
-      originY: 0,
+      y: 20,
     },
     center: {
-      // zIndex: 1,
       opacity: 1,
-      scaleY: 1,
-      originX: 0,
-      originY: 0,
+      y: 0,
     },
     exit: {
-      // zIndex: 0,
       opacity: 0,
-      scaleY: 0,
-      originX: 0,
-      originY: 0,
+      y: -20,
     },
   }
 
   const titleVariants = {
     enter: {
       opacity: 0,
-      y: -10,
-      scaleY: 0,
+      x: -100,
     },
     center: {
       opacity: 1,
-      y: 0,
-      scaleY: 1,
+      x: 0,
     },
     exit: {
       opacity: 0,
-      y: -10,
-      scaleY: 0,
+      x: -100,
     },
   }
 
@@ -596,211 +357,214 @@ export default function ItemGrid({
   return (
     <SimpleBar className="mt-4 mb-4 flex-1 overflow-y-auto md:h-0 md:pr-5">
       <AnimatePresence>
-        {/* Create a grid to display the items */}
-        {!showBasicItems &&
-          !showEpicItems &&
-          !showLegendaryItems &&
-          !showMythicItems && (
-            <motion.h3
-              key="epicLabel"
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transitionVariant}
-              className={cx(
-                'mb-2 text-center font-body font-semibold text-gray-200',
-                tierFilter !== Rarity.Epic && 'mt-6'
-              )}
-            >
-              No items match your filters.
-            </motion.h3>
-          )}
-        {/* Display only items where item.tier is 1 */}
-        {showBasicItems &&
-          (tierFilter === Rarity.Empty || tierFilter === Rarity.Basic ? (
-            <React.Fragment key="basicContainer">
-              <RarityTitle
-                rarity={Rarity.Basic}
+        <motion.div layout="position" transition={transitionVariant}>
+          {/* Create a grid to display the items */}
+          {!showBasicItems &&
+            !showEpicItems &&
+            !showLegendaryItems &&
+            !showMythicItems && (
+              <motion.h3
+                key="epicLabel"
                 variants={titleVariants}
-                transition={transitionVariant}
-                tier={1}
-                backgroundColor="bg-slate-900/25"
-              />
-              <motion.div
-                key="basicGrid"
-                variants={gridContainerVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={transitionVariant}
-                className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                className={cx(
+                  'mb-2 text-center font-body font-semibold text-gray-200',
+                  tierFilter !== Rarity.Epic && 'mt-6'
+                )}
               >
-                {/* Loop through the items object */}
-                <ItemContainer
-                  itemsCombined={basicItems}
+                No items match your filters.
+              </motion.h3>
+            )}
+          {/* Display only items where item.tier is 1 */}
+          {showBasicItems &&
+            (tierFilter === Rarity.Empty || tierFilter === Rarity.Basic ? (
+              <React.Fragment key="basicContainer">
+                <RarityTitle
+                  rarity={Rarity.Basic}
+                  variants={titleVariants}
                   transition={transitionVariant}
+                  tier={1}
+                  backgroundColor="bg-slate-900/25"
                 />
-              </motion.div>
-            </React.Fragment>
-          ) : (
-            <motion.p
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transitionVariant}
-              key="basicItemsHidden"
-              className="mb-2 italic text-gray-400"
-            >
-              {basicItems.length} basic {getPluralFromItems(basicItems)} hidden.
-            </motion.p>
-          ))}
-
-        {showEpicItems &&
-          (tierFilter === Rarity.Empty || tierFilter === Rarity.Epic ? (
-            <React.Fragment key="epicContainer">
-              <RarityTitle
-                rarity={Rarity.Epic}
+                <motion.div
+                  key="basicGrid"
+                  variants={gridContainerVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transitionVariant}
+                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                >
+                  {/* Loop through the items object */}
+                  <ItemContainer
+                    itemsCombined={basicItems}
+                    transition={transitionVariant}
+                  />
+                </motion.div>
+              </React.Fragment>
+            ) : (
+              <motion.p
                 variants={titleVariants}
-                transition={transitionVariant}
-                tier={2}
-                backgroundColor="bg-purple-800/25"
-              />
-              <motion.div
-                key="epicGrid"
-                variants={gridContainerVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={transitionVariant}
-                className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                key="basicItemsHidden"
+                className="mb-2 italic text-gray-400"
               >
-                {/* Loop through the epic items */}
-                <ItemContainer
-                  itemsCombined={epicItems}
-                  transition={transitionVariant}
-                />
-              </motion.div>
-            </React.Fragment>
-          ) : (
-            <motion.p
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transitionVariant}
-              key="epicItemsHidden"
-              className="mb-2 italic text-gray-400"
-            >
-              {epicItems.length} <span className="text-purple-600">epic</span>{' '}
-              {getPluralFromItems(epicItems)} hidden.
-            </motion.p>
-          ))}
+                {basicItems.length} basic {getPluralFromItems(basicItems)}{' '}
+                hidden.
+              </motion.p>
+            ))}
 
-        {showLegendaryItems &&
-          (tierFilter === Rarity.Empty || tierFilter === Rarity.Legendary ? (
-            <React.Fragment key="legendaryContainer">
-              <RarityTitle
-                rarity={Rarity.Legendary}
+          {showEpicItems &&
+            (tierFilter === Rarity.Empty || tierFilter === Rarity.Epic ? (
+              <React.Fragment key="epicContainer">
+                <RarityTitle
+                  rarity={Rarity.Epic}
+                  variants={titleVariants}
+                  transition={transitionVariant}
+                  tier={2}
+                  backgroundColor="bg-purple-800/25"
+                />
+                <motion.div
+                  key="epicGrid"
+                  variants={gridContainerVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transitionVariant}
+                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                >
+                  {/* Loop through the epic items */}
+                  <ItemContainer
+                    itemsCombined={epicItems}
+                    transition={transitionVariant}
+                  />
+                </motion.div>
+              </React.Fragment>
+            ) : (
+              <motion.p
                 variants={titleVariants}
-                transition={transitionVariant}
-                tier={3}
-                backgroundColor="bg-red-800/25"
-              />
-              <motion.div
-                key="legendaryGrid"
-                variants={gridContainerVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={transitionVariant}
-                className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                key="epicItemsHidden"
+                className="mb-2 italic text-gray-400"
               >
-                {/* Loop through the items object */}
-                <ItemContainer
-                  itemsCombined={legendaryItems}
+                {epicItems.length} <span className="text-purple-600">epic</span>{' '}
+                {getPluralFromItems(epicItems)} hidden.
+              </motion.p>
+            ))}
+
+          {showLegendaryItems &&
+            (tierFilter === Rarity.Empty || tierFilter === Rarity.Legendary ? (
+              <React.Fragment key="legendaryContainer">
+                <RarityTitle
+                  rarity={Rarity.Legendary}
+                  variants={titleVariants}
                   transition={transitionVariant}
+                  tier={3}
+                  backgroundColor="bg-red-800/25"
                 />
-              </motion.div>
-            </React.Fragment>
-          ) : (
-            <motion.p
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transitionVariant}
-              key="legendaryItemsHidden"
-              className="mb-2 italic text-gray-400"
-            >
-              {legendaryItems.length}{' '}
-              <span className="text-red-600">legendary</span>{' '}
-              {getPluralFromItems(legendaryItems)} hidden.
-            </motion.p>
-          ))}
-
-        {showMythicItems &&
-          (tierFilter === Rarity.Empty || tierFilter === Rarity.Mythic ? (
-            <React.Fragment key="mythicContainer">
-              <RarityTitle
-                rarity={Rarity.Mythic}
+                <motion.div
+                  key="legendaryGrid"
+                  variants={gridContainerVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transitionVariant}
+                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                >
+                  {/* Loop through the items object */}
+                  <ItemContainer
+                    itemsCombined={legendaryItems}
+                    transition={transitionVariant}
+                  />
+                </motion.div>
+              </React.Fragment>
+            ) : (
+              <motion.p
                 variants={titleVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={transitionVariant}
-                tier={3}
-                backgroundColor={css`
-                  background: radial-gradient(
-                    rgb(234 179 8 / 25%),
-                    rgb(161 98 7 / 25%)
-                  );
-                  background-size: 400% 400%;
-                  animation: Glow 3s ease infinite;
+                key="legendaryItemsHidden"
+                className="mb-2 italic text-gray-400"
+              >
+                {legendaryItems.length}{' '}
+                <span className="text-red-600">legendary</span>{' '}
+                {getPluralFromItems(legendaryItems)} hidden.
+              </motion.p>
+            ))}
 
-                  @keyframes Glow {
-                    0% {
-                      background-position: 50% 0;
+          {showMythicItems &&
+            (tierFilter === Rarity.Empty || tierFilter === Rarity.Mythic ? (
+              <React.Fragment key="mythicContainer">
+                <RarityTitle
+                  rarity={Rarity.Mythic}
+                  variants={titleVariants}
+                  transition={transitionVariant}
+                  tier={3}
+                  backgroundColor={css`
+                    background: radial-gradient(
+                      rgb(234 179 8 / 25%),
+                      rgb(161 98 7 / 25%)
+                    );
+                    background-size: 400% 400%;
+                    animation: Glow 3s ease infinite;
+
+                    @keyframes Glow {
+                      0% {
+                        background-position: 50% 0;
+                      }
+                      50% {
+                        background-position: 50% 100%;
+                      }
+                      100% {
+                        background-position: 50% 0;
+                      }
                     }
-                    50% {
-                      background-position: 50% 100%;
-                    }
-                    100% {
-                      background-position: 50% 0;
-                    }
-                  }
-                `}
-              />
-              <motion.div
-                key="mythicGrid"
-                variants={gridContainerVariants}
+                  `}
+                />
+                <motion.div
+                  key="mythicGrid"
+                  variants={gridContainerVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transitionVariant}
+                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                >
+                  {/* Loop through the items object */}
+                  <ItemContainer
+                    itemsCombined={mythicItems}
+                    transition={transitionVariant}
+                    mythic={true}
+                  />
+                </motion.div>
+              </React.Fragment>
+            ) : (
+              <motion.p
+                variants={titleVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={transitionVariant}
-                className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                key="mythicItemsHidden"
+                className="mb-2 italic text-gray-400"
               >
-                {/* Loop through the items object */}
-                <ItemContainer
-                  itemsCombined={mythicItems}
-                  transition={transitionVariant}
-                  mythic={true}
-                />
-              </motion.div>
-            </React.Fragment>
-          ) : (
-            <motion.p
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transitionVariant}
-              key="mythicItemsHidden"
-              className="mb-2 italic text-gray-400"
-            >
-              {mythicItems.length}{' '}
-              <span className="text-orange-600">mythic</span>{' '}
-              {getPluralFromItems(mythicItems)} hidden.
-            </motion.p>
-          ))}
+                {mythicItems.length}{' '}
+                <span className="text-orange-600">mythic</span>{' '}
+                {getPluralFromItems(mythicItems)} hidden.
+              </motion.p>
+            ))}
+        </motion.div>
       </AnimatePresence>
     </SimpleBar>
   )
