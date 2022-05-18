@@ -21,5 +21,4 @@ module.exports = withPlugins([
       disableStaticImages: true,
     },
   },
-  // your other plugins here
 ])
