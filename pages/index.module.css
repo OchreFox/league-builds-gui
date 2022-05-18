@@ -1,0 +1,44 @@
+.noise {
+  --color: rgb(30, 41, 59);
+  background: linear-gradient(90deg, var(--color), transparent), url(/noise.svg);
+}
+
+.smooth-shadow {
+  box-shadow: 0px 2.8px 2.2px rgba(0, 0, 0, 0.042),
+    0px 6.7px 5.3px rgba(0, 0, 0, 0.061), 0px 12.5px 10px rgba(0, 0, 0, 0.075),
+    0px 22.3px 17.9px rgba(0, 0, 0, 0.089),
+    0px 41.8px 33.4px rgba(0, 0, 0, 0.108), 0px 100px 80px rgba(0, 0, 0, 0.15);
+}
+
+.container-background {
+  background: rgb(15, 23, 42);
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.8) 0%,
+    rgba(15, 23, 42, 0.6) 80%,
+    rgba(8, 50, 70, 0.5) 100%
+  );
+}
+
+.background--custom {
+  background-color: #ffffff;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  overflow: hidden;
+  z-index: -2;
+  top: 0;
+  left: 0;
+}
+canvas#canvas {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 60%;
+  transform: rotate(0deg) scale(2) translateY(0%);
+  --gradient-color-1: #5daf64;
+  --gradient-color-2: #2b72e3;
+  --gradient-color-3: #0510ec;
+  --gradient-color-4: #7e898c;
+  --gradient-speed: 0.000002;
+}

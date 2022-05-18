@@ -1,0 +1,67 @@
+{
+  "$id": "build",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/ItemBuild",
+  "definitions": {
+    "ItemBuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "associatedMaps": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "associatedChampions": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Block"
+          }
+        }
+      },
+      "required": ["associatedChampions", "associatedMaps", "blocks", "title"],
+      "title": "ItemBuild"
+    },
+    "Block": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": ["items", "type"],
+      "title": "Block"
+    },
+    "Item": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer"
+        }
+      },
+      "required": ["count", "id"],
+      "title": "Item"
+    }
+  }
+}
