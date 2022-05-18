@@ -21,18 +21,3 @@ pnpm create next-app -- --example with-tailwindcss with-tailwindcss-app
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
-
-
-## Implementation notes
-
-- The `jsoncrush` package will not work correctly unless its `package.json` file is [modified](https://github.com/zischwartz/JSONCrush/commit/10d91e148e936eb2cb63fb783c39029a32ff7f38) with the following:
-
-```diff
-    "description": "Compress JSON in URL friendly strings",
-    "main": "JSONCrush.js",
-    "types": "JSONCrush.d.ts",
-+   "type": "module",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-```
