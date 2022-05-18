@@ -1,8 +1,5 @@
-import Image from 'next/image'
 import { Icon } from '@iconify/react'
 import packageJson from '../package.json'
-import logo from '../public/logo-white.svg'
-import headIcon from '../public/icon.png'
 
 export default function Footer() {
   return (
@@ -11,18 +8,24 @@ export default function Footer() {
         <a
           title="Home"
           href="https://ochrefox.net"
-          className="flex items-center justify-center md:justify-start"
+          className="flex shrink-0 items-center justify-center md:justify-start"
         >
-          <Image className="mx-2 rounded-full" src={headIcon} alt="Logo" />
-          <Image
-            src={logo}
+          <img
+            className="mx-2 rounded-full"
+            src={require('../public/icon.png')}
+            alt="Ochrefox"
+            width="30"
+            height="30"
+          />
+          <img
+            src={require('../public/logo-white.svg')}
             alt="Logo"
             className="mt-1 mr-2"
-            width={200}
-            height={30}
+            width="90"
+            height="30"
           />
         </a>
-        <div className="mt-4 grid text-center text-sm text-gray-100 sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-700 sm:py-2 sm:pl-4 sm:text-left">
+        <div className="mt-4 grid text-left text-sm text-gray-100 sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-700 sm:py-2 sm:pl-4">
           <p className="inline-flex items-center bg-black/25 font-monospace text-green-500">
             {new Date().getFullYear()} - Made with &nbsp;
             <Icon icon="twemoji:red-heart" inline={true} />

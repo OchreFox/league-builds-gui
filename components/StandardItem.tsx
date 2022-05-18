@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ItemsSchema } from '../types/Items'
 
@@ -28,7 +28,7 @@ export const StandardItem = ({
       className="mb-2 flex flex-col text-center"
     >
       {/* Display the item icon */}
-      <Image
+      <img
         src={item.icon ?? ''}
         alt={item.name ?? ''}
         className="object-cover"

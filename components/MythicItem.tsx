@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { css, cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import { ItemsSchema } from '../types/Items'
@@ -54,7 +54,7 @@ export const MythicItem = ({
         )}
       >
         {/* Display the item icon */}
-        <Image
+        <img
           src={item.icon ?? ''}
           alt={item.name ?? ''}
           width={50}
