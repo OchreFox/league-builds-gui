@@ -1748,10 +1748,10 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-framer-motion@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.npmjs.org/framer-motion/-/framer-motion-6.3.0.tgz"
-  integrity sha512-Nm6l2cemuFeSC1fmq9R32sCQs1eplOuZ3r14/PxRDewpE3NUr+ul5ulGRRzk8K0Aa5p76Tedi3sfCUaTPa5fRg==
+framer-motion@^6.3.3:
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-6.3.4.tgz#b8035f60c6d7863162310ddee32eb386212a3ce7"
+  integrity sha512-FXHqpY23g0MhznXpAf94SyEmUqfw7KoLaCQqTKrjWZgQzMkjvfOgOVYKUA9Dlmys6XGn0qN+AMzjhFJ1N5bH+A==
   dependencies:
     framesync "6.0.1"
     hey-listen "^1.0.8"
