@@ -15,7 +15,7 @@
     "@emotion/css": "^11.9.0",
     "@headlessui/react": "^1.6.1",
     "@popperjs/core": "^2.11.5",
-    "@types/lodash": "^4.14.181",
+    "@types/lodash": "^4.14.182",
     "ajv": "^8.11.0",
     "clsx": "^1.1.1",
     "framer-motion": "^6.3.3",
