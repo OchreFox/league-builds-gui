@@ -13,7 +13,7 @@
     "@dnd-kit/core": "^5.0.3",
     "@dnd-kit/sortable": "^6.0.1",
     "@emotion/css": "^11.9.0",
-    "@headlessui/react": "^1.5.0",
+    "@headlessui/react": "^1.6.1",
     "@popperjs/core": "^2.11.5",
     "@types/lodash": "^4.14.181",
     "ajv": "^8.11.0",
