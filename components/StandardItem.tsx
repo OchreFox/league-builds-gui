@@ -1,14 +1,10 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ItemsSchema } from '../types/Items'
 import { StandardItemState } from '../types/FilterProps'
 import { usePopper } from 'react-popper'
 import { css, cx } from '@emotion/css'
 import JsxParser from 'react-jsx-parser'
 import ReactDOM from 'react-dom'
-import { XMLBuilder, XMLParser } from 'fast-xml-parser'
-import DOMPurify from 'dompurify'
-import _ from 'lodash'
 
 const statProperties = [
   {

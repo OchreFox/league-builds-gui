@@ -212,9 +212,6 @@ export default function ItemGrid({
    * @returns boolean - True if item matches search query
    */
   const matchesSearchQuery = (item: ItemsSchema, searchQuery: string) => {
-    // if (searchQuery === '') {
-    //   return true
-    // }
     let searchArray = []
     item.name && searchArray.push(item.name)
     item.nicknames && searchArray.push(...item.nicknames)
@@ -326,9 +323,6 @@ export default function ItemGrid({
         // Reduce items
         const activeCategories = getActiveCategories()
         const activeChampionClass = getActiveChampionClass()
-        // console.log('Rarity filter: ' + tierFilter)
-        // console.log('Categories filter: ' + activeCategories)
-        // console.log('Champion class filter: ' + activeChampionClass)
 
         reduceItems(activeCategories, activeChampionClass)
 
