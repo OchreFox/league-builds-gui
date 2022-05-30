@@ -1,29 +1,27 @@
 import React from 'react'
-import { ItemsSchema } from '../types/Items'
 import { StandardItem } from './StandardItem'
-import { MythicItem } from './MythicItem'
+import { ItemContainerState } from '../types/FilterProps'
 
 export const ItemContainer = ({
   itemsCombined,
   transition,
   mythic,
-}: {
-  itemsCombined: ItemsSchema[]
-  transition: any
-  mythic: boolean
-}) => {
+  hoveredItem,
+  setHoveredItem,
+}: ItemContainerState) => {
   if (!itemsCombined || itemsCombined.length === 0) {
     return null
   }
-  const ItemType = mythic ? MythicItem : StandardItem
-  // console.log(itemsCombined)
   return (
     <>
       {itemsCombined.map((item, index) => (
-        <ItemType
+        <StandardItem
           key={item.id + '-' + index}
           item={item}
           transition={transition}
+          hoveredItem={hoveredItem}
+          setHoveredItem={setHoveredItem}
+          isMythic={mythic}
         />
       ))}
     </>

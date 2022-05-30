@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em"
-    preserveAspectRatio="xMidYMid meet" viewBox="2 2 20 20">
-    <rect x="0" y="0" width="24" height="24" fill="none" stroke="none" />
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet"
+    viewBox="2 6 19.24 13.24">
+    <rect x="0" y="0" width="24" height="24" fill="none" stroke="none"></rect>
     <path fill="#ffffff"
-        d="M2 6v2h12V6H2m0 4v2h9v-2H2m12.17.76l-1.41 1.41L15.59 15l-2.83 2.83l1.41 1.41L17 16.41l2.83 2.83l1.41-1.41L18.41 15l2.83-2.83l-1.41-1.41L17 13.59l-2.83-2.83M2 14v2h9v-2H2Z" />
+        d="M2 6v2h12V6H2m0 4v2h9v-2H2m12.17.76l-1.41 1.41L15.59 15l-2.83 2.83l1.41 1.41L17 16.41l2.83 2.83l1.41-1.41L18.41 15l2.83-2.83l-1.41-1.41L17 13.59l-2.83-2.83M2 14v2h9v-2H2Z">
+    </path>
 </svg>

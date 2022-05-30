@@ -9,7 +9,7 @@ import { AnimatePresence, AnimationProps, motion, Reorder } from 'framer-motion'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import JSONFetcher from './JSONFetcher'
-
+import fuzzysort from 'fuzzysort'
 import {
   Category,
   ItemsSchema,
@@ -26,28 +26,31 @@ export default function ItemGrid({
   typeFilters,
   classFilters,
   searchFilter,
+  setAutocompleteResults,
 }: SortByFilters) {
   // Fetch items from custom JSON
   const { data: items, error: itemsError } = useSWR<Array<ItemsSchema>>(
-    // 'https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/latest/items.json',
-    'https://cdn.ochrefox.net/data/latest/items.json',
+    'https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/latest/items.json',
+    // 'https://cdn.ochrefox.net/data/latest/items.json',
     JSONFetcher
   )
 
   // Basic items state
   const [basicItems, setBasicItems] = useState<Array<ItemsSchema>>([])
-  const [showBasicItems, setShowBasicItems] = useState(true)
+  const [basicItemsCount, setBasicItemsCount] = useState(0)
   // Epic items state
   const [epicItems, setEpicItems] = useState<Array<ItemsSchema>>([])
-  const [showEpicItems, setShowEpicItems] = useState(true)
+  const [epicItemsCount, setEpicItemsCount] = useState(0)
   // Legendary items state
   const [legendaryItems, setLegendaryItems] = useState<Array<ItemsSchema>>([])
-  const [showLegendaryItems, setShowLegendaryItems] = useState(true)
+  const [legendaryItemsCount, setLegendaryItemsCount] = useState(0)
   // Mythic items state
   const [mythicItems, setMythicItems] = useState<Array<ItemsSchema>>([])
-  const [showMythicItems, setShowMythicItems] = useState(true)
+  const [mythicItemsCount, setMythicItemsCount] = useState(0)
   // Data initialization flag
   const [dataInitialized, setDataInitialized] = useState(false)
+  // Current hovered item
+  const [hoveredItem, setHoveredItem] = useState<number | null>(null)
 
   // Previous refs
   const previousValues = useRef({
@@ -96,6 +99,7 @@ export default function ItemGrid({
   function initializeItems() {
     // Only run the function if the items are present
     if (!items) return
+
     // Create temporary arrays for each item type
     let tempBasicItems: Array<ItemsSchema> = []
     let tempEpicItems: Array<ItemsSchema> = []
@@ -127,6 +131,12 @@ export default function ItemGrid({
     setEpicItems(tempEpicItems)
     setLegendaryItems(tempLegendaryItems)
     setMythicItems(tempMythicItems)
+
+    // Set the count of each rarity
+    setBasicItemsCount(tempBasicItems.length)
+    setEpicItemsCount(tempEpicItems.length)
+    setLegendaryItemsCount(tempLegendaryItems.length)
+    setMythicItemsCount(tempMythicItems.length)
   }
 
   /**
@@ -202,15 +212,16 @@ export default function ItemGrid({
    * @returns boolean - True if item matches search query
    */
   const matchesSearchQuery = (item: ItemsSchema, searchQuery: string) => {
-    if (searchQuery === '') {
-      return true
-    }
     let searchArray = []
     item.name && searchArray.push(item.name)
     item.nicknames && searchArray.push(...item.nicknames)
 
     var results = fuzzy.simpleFilter(searchQuery, searchArray)
     return results.length > 0
+  }
+
+  const isInStore = (item: ItemsSchema) => {
+    return item.inStore
   }
 
   /**
@@ -242,8 +253,7 @@ export default function ItemGrid({
 
   function reduceItems(
     categories: Array<Category[]>,
-    championClass: ChampionClass,
-    searchQuery: string
+    championClass: ChampionClass
   ) {
     if (!items) {
       console.error('No items array provided to reduceItems')
@@ -253,7 +263,8 @@ export default function ItemGrid({
     let filterMethods: Array<Function> = [
       (item: ItemsSchema) => includesCategory(item, categories),
       (item: ItemsSchema) => isFromChampionClass(item, championClass),
-      (item: ItemsSchema) => matchesSearchQuery(item, searchQuery),
+      (item: ItemsSchema) => matchesSearchQuery(item, searchFilter),
+      (item: ItemsSchema) => isInStore(item),
     ]
 
     let filteredItems = Object.values(items).filter((item) => {
@@ -261,13 +272,13 @@ export default function ItemGrid({
       return filterMethods.every((method) => method(item))
     })
 
-    let { visibleItems: basicVisibleItems, count: basicItemsCount } =
+    let { visibleItems: basicVisibleItems, count: basicCount } =
       markItemsAsVisible(basicItems, filteredItems)
-    let { visibleItems: epicVisibleItems, count: epicItemsCount } =
+    let { visibleItems: epicVisibleItems, count: epicCount } =
       markItemsAsVisible(epicItems, filteredItems)
-    let { visibleItems: legendaryVisibleItems, count: legendaryItemsCount } =
+    let { visibleItems: legendaryVisibleItems, count: legendaryCount } =
       markItemsAsVisible(legendaryItems, filteredItems)
-    let { visibleItems: mythicVisibleItems, count: mythicItemsCount } =
+    let { visibleItems: mythicVisibleItems, count: mythicCount } =
       markItemsAsVisible(mythicItems, filteredItems)
 
     setBasicItems(basicVisibleItems)
@@ -275,10 +286,20 @@ export default function ItemGrid({
     setLegendaryItems(legendaryVisibleItems)
     setMythicItems(mythicVisibleItems)
 
-    setShowBasicItems(basicItemsCount > 0)
-    setShowEpicItems(epicItemsCount > 0)
-    setShowLegendaryItems(legendaryItemsCount > 0)
-    setShowMythicItems(mythicItemsCount > 0)
+    setBasicItemsCount(basicCount)
+    setEpicItemsCount(epicCount)
+    setLegendaryItemsCount(legendaryCount)
+    setMythicItemsCount(mythicCount)
+
+    // Check if the searchFilter has changed
+    if (previousValues.current.searchFilter !== searchFilter) {
+      // Return fuzzy search results
+      let fuzzySearchResults = fuzzysort.go(searchFilter, filteredItems, {
+        limit: 10,
+        keys: ['name', 'nicknames'],
+      })
+      setAutocompleteResults(fuzzySearchResults)
+    }
   }
 
   useEffect(() => {
@@ -302,11 +323,14 @@ export default function ItemGrid({
         // Reduce items
         const activeCategories = getActiveCategories()
         const activeChampionClass = getActiveChampionClass()
-        console.log('Rarity filter: ' + tierFilter)
-        console.log('Categories filter: ' + activeCategories)
-        console.log('Champion class filter: ' + activeChampionClass)
 
-        reduceItems(activeCategories, activeChampionClass, searchFilter)
+        reduceItems(activeCategories, activeChampionClass)
+
+        // Set previous values
+        previousValues.current.goldOrderDirection = goldOrderDirection
+        previousValues.current.typeFilters = typeFilters
+        previousValues.current.classFilters = classFilters
+        previousValues.current.searchFilter = searchFilter
       }
     }
   }, [
@@ -355,14 +379,14 @@ export default function ItemGrid({
   }
 
   return (
-    <SimpleBar className="mt-4 mb-4 flex-1 overflow-y-auto md:h-0 md:pr-5">
-      <AnimatePresence>
-        <motion.div layout="position" transition={transitionVariant}>
+    <SimpleBar className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5">
+      <AnimatePresence exitBeforeEnter>
+        <motion.div transition={transitionVariant}>
           {/* Create a grid to display the items */}
-          {!showBasicItems &&
-            !showEpicItems &&
-            !showLegendaryItems &&
-            !showMythicItems && (
+          {basicItemsCount === 0 &&
+            epicItemsCount === 0 &&
+            legendaryItemsCount === 0 &&
+            mythicItemsCount === 0 && (
               <motion.h3
                 key="epicLabel"
                 variants={titleVariants}
@@ -379,7 +403,7 @@ export default function ItemGrid({
               </motion.h3>
             )}
           {/* Display only items where item.tier is 1 */}
-          {showBasicItems &&
+          {basicItemsCount > 0 &&
             (tierFilter === Rarity.Empty || tierFilter === Rarity.Basic ? (
               <React.Fragment key="basicContainer">
                 <RarityTitle
@@ -396,12 +420,14 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
                 >
                   {/* Loop through the items object */}
                   <ItemContainer
                     itemsCombined={basicItems}
                     transition={transitionVariant}
+                    hoveredItem={hoveredItem}
+                    setHoveredItem={setHoveredItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -415,12 +441,11 @@ export default function ItemGrid({
                 key="basicItemsHidden"
                 className="mb-2 italic text-gray-400"
               >
-                {basicItems.length} basic {getPluralFromItems(basicItems)}{' '}
-                hidden.
+                {basicItemsCount} basic {getPluralFromItems(basicItems)} hidden.
               </motion.p>
             ))}
 
-          {showEpicItems &&
+          {epicItemsCount > 0 &&
             (tierFilter === Rarity.Empty || tierFilter === Rarity.Epic ? (
               <React.Fragment key="epicContainer">
                 <RarityTitle
@@ -437,12 +462,14 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
                 >
                   {/* Loop through the epic items */}
                   <ItemContainer
                     itemsCombined={epicItems}
                     transition={transitionVariant}
+                    hoveredItem={hoveredItem}
+                    setHoveredItem={setHoveredItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -456,12 +483,12 @@ export default function ItemGrid({
                 key="epicItemsHidden"
                 className="mb-2 italic text-gray-400"
               >
-                {epicItems.length} <span className="text-purple-600">epic</span>{' '}
+                {epicItemsCount} <span className="text-purple-600">epic</span>{' '}
                 {getPluralFromItems(epicItems)} hidden.
               </motion.p>
             ))}
 
-          {showLegendaryItems &&
+          {legendaryItemsCount > 0 &&
             (tierFilter === Rarity.Empty || tierFilter === Rarity.Legendary ? (
               <React.Fragment key="legendaryContainer">
                 <RarityTitle
@@ -478,12 +505,14 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
                 >
                   {/* Loop through the items object */}
                   <ItemContainer
                     itemsCombined={legendaryItems}
                     transition={transitionVariant}
+                    hoveredItem={hoveredItem}
+                    setHoveredItem={setHoveredItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -497,13 +526,13 @@ export default function ItemGrid({
                 key="legendaryItemsHidden"
                 className="mb-2 italic text-gray-400"
               >
-                {legendaryItems.length}{' '}
+                {legendaryItemsCount}{' '}
                 <span className="text-red-600">legendary</span>{' '}
                 {getPluralFromItems(legendaryItems)} hidden.
               </motion.p>
             ))}
 
-          {showMythicItems &&
+          {mythicItemsCount > 0 &&
             (tierFilter === Rarity.Empty || tierFilter === Rarity.Mythic ? (
               <React.Fragment key="mythicContainer">
                 <RarityTitle
@@ -539,13 +568,15 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
                 >
                   {/* Loop through the items object */}
                   <ItemContainer
                     itemsCombined={mythicItems}
                     transition={transitionVariant}
                     mythic={true}
+                    hoveredItem={hoveredItem}
+                    setHoveredItem={setHoveredItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -559,7 +590,7 @@ export default function ItemGrid({
                 key="mythicItemsHidden"
                 className="mb-2 italic text-gray-400"
               >
-                {mythicItems.length}{' '}
+                {mythicItemsCount}{' '}
                 <span className="text-orange-600">mythic</span>{' '}
                 {getPluralFromItems(mythicItems)} hidden.
               </motion.p>
