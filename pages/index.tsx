@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import { Icon } from '@iconify/react'
 import Head from 'next/head'
 import JSONFetcher from '../components/JSONFetcher'
-import styles from './index.module.css'
+import styles from '../styles/index.module.css'
 import Footer from '../components/Footer'
 import FilterItemsByType from '../components/filterItemsByType'
 import FilterItemsByClass from '../components/filterItemsByClass'
@@ -13,14 +13,14 @@ import ItemGrid from '../components/ItemGrid'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { Rarity, SortDirection } from '../types/FilterProps'
-import { Category, ChampionClass } from '../types/Items'
+import { Category, ChampionClass, ItemsSchema } from '../types/Items'
 
 function Home() {
   const [classFilters, setClassFilters] = useState([
     {
       name: 'All Classes',
       isActive: true,
-      icon: 'all.svg',
+      icon: 'all-classes.svg',
       class: ChampionClass.None,
     },
     {
@@ -192,6 +192,9 @@ function Home() {
   const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
   const [rarityFilter, setRarityFilter] = useState(Rarity.Empty)
   const [searchTerm, setSearchTerm] = useState('')
+  // Fuzzysort.KeysResults<ItemsSchema>
+  const [autocompleteResults, setAutocompleteResults] =
+    useState<Fuzzysort.KeysResults<ItemsSchema>>()
 
   // fetch the latest version of API
   // const { data: latestVersion, error: latestVersionError } = useSWR<
@@ -276,14 +279,14 @@ function Home() {
               <div className="mb-4 flex shrink-0 flex-col border-r border-yellow-900 pr-4 md:mb-0">
                 {/* Filter items by class */}
                 <h3 className="mb-2 border-b border-yellow-900 font-body font-semibold text-gray-200">
-                  CLASS
+                  CHAMPION CLASS
                 </h3>
                 <FilterItemsByClass
                   filterItems={classFilters}
                   setFilterItems={setClassFilters}
                 />
                 <h3 className="mt-6 mb-2 border-b border-yellow-900 font-body font-semibold text-gray-200">
-                  RARITY
+                  ITEM RARITY
                 </h3>
                 <div className="flex flex-row justify-between">
                   {/* Filter by rarity button group */}
@@ -325,7 +328,7 @@ function Home() {
                 </div>
                 {/* Filter items by type */}
                 <h3 className="mt-6 mb-2 border-b border-yellow-900 font-body font-semibold text-gray-200">
-                  TYPE
+                  ITEM TYPE
                 </h3>
                 <FilterItemsByType
                   filterItems={typeFilters}
@@ -333,12 +336,16 @@ function Home() {
                 />
               </div>
               {/* Item container */}
-              <div className="flex grow flex-col border-r border-yellow-900 pr-4">
+              <div
+                className="flex grow flex-col border-r border-yellow-900 pr-4"
+                id="item-container"
+              >
                 {/* Search bar */}
                 <div className="flex flex-col space-y-2">
                   <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
+                    autocompleteResults={autocompleteResults}
                   />
                 </div>
                 {/* Item grid */}
@@ -348,6 +355,7 @@ function Home() {
                   typeFilters={typeFilters}
                   classFilters={classFilters}
                   searchFilter={searchTerm}
+                  setAutocompleteResults={setAutocompleteResults}
                 />
               </div>
               {/* Item tree view */}

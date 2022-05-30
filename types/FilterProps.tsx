@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Category, ChampionClass } from './Items'
+import { Category, ChampionClass, ItemsSchema } from './Items'
 
 export type FilterByTypeProps = {
   name: string
@@ -30,6 +30,9 @@ export type SortByFilters = {
   typeFilters: FilterByTypeProps[]
   classFilters: FilterByClassProps[]
   searchFilter: string
+  setAutocompleteResults: Dispatch<
+    SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>
+  >
 }
 
 export enum Rarity {
@@ -57,4 +60,21 @@ export enum SortDirection {
 export type FilterBySearchState = {
   searchTerm: string
   setSearchTerm: Dispatch<SetStateAction<string>>
+  autocompleteResults: Fuzzysort.KeysResults<ItemsSchema> | undefined
+}
+
+export type ItemContainerState = {
+  itemsCombined: ItemsSchema[]
+  transition: any
+  mythic: boolean
+  hoveredItem: number | null
+  setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
+}
+
+export type StandardItemState = {
+  item: ItemsSchema
+  transition: any
+  hoveredItem: number | null
+  setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
+  isMythic: boolean
 }
