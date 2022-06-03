@@ -13,6 +13,9 @@ module.exports = {
       monospace: ['"IBM Plex Mono"', 'monospace'],
     },
     extend: {
+      zIndex: {
+        '-1': '-1',
+      },
       screens: {
         '3xl': '1920px',
       },

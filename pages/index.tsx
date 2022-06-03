@@ -14,6 +14,7 @@ import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { Rarity, SortDirection } from '../types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from '../types/Items'
+import { ItemBuildTree } from '../components/ItemBuildTree'
 
 function Home() {
   const [classFilters, setClassFilters] = useState([
@@ -192,9 +193,9 @@ function Home() {
   const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
   const [rarityFilter, setRarityFilter] = useState(Rarity.Empty)
   const [searchTerm, setSearchTerm] = useState('')
-  // Fuzzysort.KeysResults<ItemsSchema>
   const [autocompleteResults, setAutocompleteResults] =
     useState<Fuzzysort.KeysResults<ItemsSchema>>()
+  const [selectedItem, setSelectedItem] = useState<ItemsSchema | null>(null)
 
   // fetch the latest version of API
   // const { data: latestVersion, error: latestVersionError } = useSWR<
@@ -274,9 +275,9 @@ function Home() {
           <div className="flex h-full flex-col space-y-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
             {/* Item picker */}
             <div
-              className={`${styles['smooth-shadow']} ${styles['container-background']} col-span-2 flex flex-col border-2 border-yellow-900 px-4 py-3 md:flex-row md:space-x-4`}
+              className={`${styles['smooth-shadow']} ${styles['container-background']} col-span-2 flex flex-col border-2 border-yellow-900 px-4 py-3 md:grid md:grid-cols-9 md:grid-rows-1 md:gap-2`}
             >
-              <div className="mb-4 flex shrink-0 flex-col border-r border-yellow-900 pr-4 md:mb-0">
+              <div className="col-span-2 mb-4 flex shrink-0 flex-col border-r border-yellow-900 pr-4 md:mb-0">
                 {/* Filter items by class */}
                 <h3 className="mb-2 border-b border-yellow-900 font-body font-semibold text-gray-200">
                   CHAMPION CLASS
@@ -337,7 +338,7 @@ function Home() {
               </div>
               {/* Item container */}
               <div
-                className="flex grow flex-col border-r border-yellow-900 pr-4"
+                className="col-span-5 flex grow flex-col border-r border-yellow-900 pr-4"
                 id="item-container"
               >
                 {/* Search bar */}
@@ -356,11 +357,13 @@ function Home() {
                   classFilters={classFilters}
                   searchFilter={searchTerm}
                   setAutocompleteResults={setAutocompleteResults}
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
                 />
               </div>
               {/* Item tree view */}
-              <div className="flex flex-col text-white">
-                Item tree goes here weeeeeeeeeeeeee
+              <div className="col-span-2 flex flex-col text-white">
+                <ItemBuildTree selectedItem={selectedItem} />
               </div>
             </div>
             {/* Build maker */}

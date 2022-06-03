@@ -7,7 +7,9 @@ export const ItemContainer = ({
   transition,
   mythic,
   hoveredItem,
+  selectedItem,
   setHoveredItem,
+  setSelectedItem,
 }: ItemContainerState) => {
   if (!itemsCombined || itemsCombined.length === 0) {
     return null
@@ -22,6 +24,8 @@ export const ItemContainer = ({
           hoveredItem={hoveredItem}
           setHoveredItem={setHoveredItem}
           isMythic={mythic}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
         />
       ))}
     </>

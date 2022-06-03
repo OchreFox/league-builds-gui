@@ -1,9 +1,7 @@
-import clsx from 'clsx'
-import React from 'react'
+import React, { Fragment, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { cx } from '@emotion/css'
+import { cx, css } from '@emotion/css'
 import { FilterByTypeState, FilterByTypeProps } from '../types/FilterProps'
-import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { InlineIcon } from '@iconify/react'
 
@@ -13,6 +11,7 @@ export default function FilterItemsByType({
 }: FilterByTypeState) {
   const getItemClassnames = (item: FilterByTypeProps) => {
     let itemClassnames: string
+    // Pressed button
     if (item.isActive) {
       if (item.name === 'All Items') {
         itemClassnames = 'bg-brand-default font-bold text-white'
@@ -20,12 +19,14 @@ export default function FilterItemsByType({
         itemClassnames = 'bg-slate-600 text-white'
       }
     } else {
+      // Unpressed button
       itemClassnames =
-        'bg-transparent text-gray-600 transition-colors duration-100 ease-out hover:bg-cyan-900 hover:text-black'
+        'bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-black'
     }
-    return clsx(
+    // Base button
+    return cx(
       itemClassnames,
-      'group flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium md:justify-start'
+      'group flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium md:justify-start transition-all duration-100 ease-out'
     )
   }
 
@@ -36,7 +37,7 @@ export default function FilterItemsByType({
     } else {
       imageClassnames = 'text-gray-400 brightness-50 group-hover:text-gray-500'
     }
-    return clsx(
+    return cx(
       imageClassnames,
       'flex-shrink-0 transition-colors duration-200 my-2 md:my-0 md:-ml-1 md:mr-3',
       item.name === 'All Items' ? 'h-4 w-auto' : 'h-4 w-4'
@@ -77,7 +78,7 @@ export default function FilterItemsByType({
         {({ open }) => (
           <Fragment>
             <div>
-              <Menu.Button className="inline-flex w-full items-center justify-center rounded-md border border-yellow-900 bg-brand-dark px-4 py-2 text-sm font-medium font-bold text-white shadow-sm hover:bg-brand-light focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-yellow-500">
+              <Menu.Button className="inline-flex w-full items-center justify-center rounded-md border border-yellow-900 bg-brand-dark px-4 py-2 text-sm  font-bold text-white shadow-sm hover:bg-brand-light focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-yellow-500">
                 Item Type
                 <InlineIcon icon="bi:chevron-down" className="ml-1" />
               </Menu.Button>
@@ -141,7 +142,7 @@ export default function FilterItemsByType({
             )}
             <motion.button
               // Framer Motion onClick animation
-              whileTap={{ scale: 0.95 }}
+              // whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.1, type: 'tween' }}
               // Button styling
               type="button"
@@ -149,14 +150,16 @@ export default function FilterItemsByType({
               title={item.name}
               className={getItemClassnames(item)}
               // Toggle filterItem isActive status
-              onClick={() => handleClick(item)}
+              onClick={() => {
+                handleClick(item)
+              }}
             >
               <img
                 alt={item.name}
                 className={getImageClassnames(item)}
                 src={'icons/' + item.icon}
               />
-              <span className="m-0 hidden md:ml-2 md:inline-block">
+              <span className="z-10 m-0 hidden md:ml-2 md:inline-block">
                 {item.name}
               </span>
             </motion.button>

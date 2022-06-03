@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import useSWR from 'swr'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { css, cx } from '@emotion/css'
@@ -8,7 +7,6 @@ import _ from 'lodash'
 import { AnimatePresence, AnimationProps, motion, Reorder } from 'framer-motion'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
-import JSONFetcher from './JSONFetcher'
 import fuzzysort from 'fuzzysort'
 import {
   Category,
@@ -16,9 +14,10 @@ import {
   RequiredChampion,
   ChampionClass,
 } from '../types/Items'
-import { Rarity, SortByFilters } from '../types/FilterProps'
+import { Rarity, ItemGridState } from '../types/FilterProps'
 import { ItemContainer } from './ItemContainer'
 import { RarityTitle } from './RarityTitle'
+import { useItems } from './hooks/useItems'
 
 export default function ItemGrid({
   goldOrderDirection,
@@ -27,14 +26,11 @@ export default function ItemGrid({
   classFilters,
   searchFilter,
   setAutocompleteResults,
-}: SortByFilters) {
+  selectedItem,
+  setSelectedItem,
+}: ItemGridState) {
   // Fetch items from custom JSON
-  const { data: items, error: itemsError } = useSWR<Array<ItemsSchema>>(
-    'https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/latest/items.json',
-    // 'https://cdn.ochrefox.net/data/latest/items.json',
-    JSONFetcher
-  )
-
+  const { items, itemsError } = useItems()
   // Basic items state
   const [basicItems, setBasicItems] = useState<Array<ItemsSchema>>([])
   const [basicItemsCount, setBasicItemsCount] = useState(0)
@@ -387,20 +383,31 @@ export default function ItemGrid({
             epicItemsCount === 0 &&
             legendaryItemsCount === 0 &&
             mythicItemsCount === 0 && (
-              <motion.h3
-                key="epicLabel"
-                variants={titleVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                className={cx(
-                  'mb-2 text-center font-body font-semibold text-gray-200',
-                  tierFilter !== Rarity.Epic && 'mt-6'
-                )}
-              >
-                No items match your filters.
-              </motion.h3>
+              <Fragment key="noItems">
+                <motion.h3
+                  variants={titleVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transitionVariant}
+                  className={cx(
+                    'mb-2 text-center font-body font-semibold text-gray-200',
+                    tierFilter !== Rarity.Epic && 'mt-6'
+                  )}
+                >
+                  No items match your filters.
+                </motion.h3>
+                <motion.img
+                  variants={titleVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transitionVariant}
+                  src="icons/poro_question.png"
+                  alt="Poro question mark"
+                  className="mx-auto h-32 w-32 brightness-200"
+                />
+              </Fragment>
             )}
           {/* Display only items where item.tier is 1 */}
           {basicItemsCount > 0 &&
@@ -420,14 +427,16 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
                 >
                   {/* Loop through the items object */}
                   <ItemContainer
                     itemsCombined={basicItems}
                     transition={transitionVariant}
                     hoveredItem={hoveredItem}
+                    selectedItem={selectedItem}
                     setHoveredItem={setHoveredItem}
+                    setSelectedItem={setSelectedItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -462,14 +471,16 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
                 >
                   {/* Loop through the epic items */}
                   <ItemContainer
                     itemsCombined={epicItems}
                     transition={transitionVariant}
                     hoveredItem={hoveredItem}
+                    selectedItem={selectedItem}
                     setHoveredItem={setHoveredItem}
+                    setSelectedItem={setSelectedItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -505,14 +516,16 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
                 >
                   {/* Loop through the items object */}
                   <ItemContainer
                     itemsCombined={legendaryItems}
                     transition={transitionVariant}
                     hoveredItem={hoveredItem}
+                    selectedItem={selectedItem}
                     setHoveredItem={setHoveredItem}
+                    setSelectedItem={setSelectedItem}
                   />
                 </motion.div>
               </React.Fragment>
@@ -568,7 +581,7 @@ export default function ItemGrid({
                   animate="center"
                   exit="exit"
                   transition={transitionVariant}
-                  className="item-grid grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-6 3xl:grid-cols-9"
+                  className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
                 >
                   {/* Loop through the items object */}
                   <ItemContainer
@@ -576,7 +589,9 @@ export default function ItemGrid({
                     transition={transitionVariant}
                     mythic={true}
                     hoveredItem={hoveredItem}
+                    selectedItem={selectedItem}
                     setHoveredItem={setHoveredItem}
+                    setSelectedItem={setSelectedItem}
                   />
                 </motion.div>
               </React.Fragment>

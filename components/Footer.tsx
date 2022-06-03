@@ -12,13 +12,13 @@ export default function Footer() {
         >
           <img
             className="mx-2 rounded-full"
-            src={require('../public/icon.png')}
+            src="/icon.png"
             alt="Ochrefox"
             width="30"
             height="30"
           />
           <img
-            src={require('../public/logo-white.svg')}
+            src="/logo-white.svg"
             alt="Logo"
             className="mt-1 mr-2"
             width="90"

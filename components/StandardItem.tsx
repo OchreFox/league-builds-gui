@@ -1,115 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+} from 'react'
 import { motion } from 'framer-motion'
-import { StandardItemState } from '../types/FilterProps'
 import { usePopper } from 'react-popper'
 import { css, cx } from '@emotion/css'
 import JsxParser from 'react-jsx-parser'
 import ReactDOM from 'react-dom'
-
-const statProperties = [
-  {
-    pattern: 'Movespeed',
-    statName: 'Movement Speed',
-    imgSource: 'icons/movement-speed.svg',
-  },
-  {
-    pattern: 'Health',
-    statName: 'Health',
-    imgSource: 'icons/health.svg',
-  },
-  {
-    pattern: 'CriticalStrikeChance',
-    statName: 'Critical Strike Chance',
-    imgSource: 'icons/critical-strike.svg',
-  },
-  {
-    pattern: 'AbilityPower',
-    statName: 'Ability Power',
-    imgSource: 'icons/ability-power.svg',
-  },
-  {
-    pattern: 'AttackDamage',
-    statName: 'Attack Damage',
-    imgSource: 'icons/attack-damage.svg',
-  },
-  {
-    pattern: 'Mana',
-    statName: 'Mana',
-    imgSource: 'icons/mana.svg',
-  },
-  {
-    pattern: 'ManaRegen',
-    statName: 'Mana Regen',
-    imgSource: 'icons/mana-regeneration.webp',
-  },
-  {
-    pattern: 'Armor',
-    statName: 'Armor',
-    imgSource: 'icons/armor.svg',
-  },
-  {
-    pattern: 'ArmorPenetration',
-    statName: 'Armor Penetration',
-    imgSource: 'icons/armor-penetration.svg',
-  },
-  {
-    pattern: 'MagicResistance',
-    statName: 'Magic Resist',
-    imgSource: 'icons/magic-resist.svg',
-  },
-  {
-    pattern: 'AttackSpeed',
-    statName: 'Attack Speed',
-    imgSource: 'icons/attack-speed.svg',
-  },
-  {
-    pattern: 'HealthRegen',
-    statName: 'Health Regeneration',
-    imgSource: 'icons/health-regeneration.svg',
-  },
-  {
-    pattern: 'AbilityHaste',
-    statName: 'Ability Haste',
-    imgSource: 'icons/ability-haste.svg',
-  },
-  {
-    pattern: 'Lifesteal',
-    statName: 'Life Steal',
-    imgSource: 'icons/life-steal.svg',
-  },
-  {
-    pattern: 'Omnivamp',
-    statName: 'Omnivamp',
-    imgSource: 'icons/omni-vamp.svg',
-  },
-  {
-    pattern: 'HealAndShieldPower',
-    statName: 'Heal and Shield Power',
-    imgSource: 'icons/heal-and-shield-power.svg',
-  },
-  {
-    pattern: 'Lethality',
-    statName: 'Lethality',
-    imgSource: 'icons/armor-penetration.svg',
-  },
-  {
-    pattern: 'Tenacity',
-    statName: 'Tenacity',
-    imgSource: 'icons/tenacity.svg',
-  },
-  {
-    pattern: 'GoldPer10',
-    statName: 'Gold Per 10 seconds',
-    imgSource: 'icons/gold.svg',
-  },
-]
+import { statProperties } from './StatProperties'
+import { StandardItemState } from '../types/FilterProps'
 
 export const StandardItem = ({
   item,
   transition,
   hoveredItem,
-  setHoveredItem,
   isMythic,
+  selectedItem,
+  setHoveredItem,
+  setSelectedItem,
 }: StandardItemState) => {
   if (!item.icon) {
     console.warn('No src for item:', item.name)
@@ -122,8 +33,7 @@ export const StandardItem = ({
   const buttonRef = useRef(null)
   const popperRef = useRef(null)
   const [arrowRef, setArrowRef] = useState<HTMLDivElement | null>(null)
-
-  const { styles, attributes } = usePopper(
+  const { styles, attributes, update } = usePopper(
     buttonRef.current,
     popperRef.current,
     {
@@ -144,6 +54,7 @@ export const StandardItem = ({
       ],
     }
   )
+
   useEffect(() => {
     if (showPopper) {
       const timer = setTimeout(() => {
@@ -165,7 +76,67 @@ export const StandardItem = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           key={item.id}
-          className="mb-2 flex cursor-pointer flex-col text-center"
+          className={cx(
+            'group -m-1 flex cursor-pointer flex-col items-center px-2 py-2 text-center',
+            css`
+              border: 2px solid rgba(0, 0, 0, 0);
+            `,
+            selectedItem !== null &&
+              selectedItem.id === item.id &&
+              cx(
+                css`
+                  &:before {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    z-index: -1;
+                    background: linear-gradient(
+                      180deg,
+                      rgba(0, 0, 0, 0) 0%,
+                      rgba(204, 41, 54, 0.75) 50%,
+                      rgba(0, 0, 0, 0) 100%
+                    );
+                    background-size: 600% 600%;
+
+                    animation: scroll 15s linear infinite;
+                    @keyframes scroll {
+                      0% {
+                        background-position: 50% 0%;
+                      }
+                      100% {
+                        background-position: 50% -600%;
+                      }
+                    }
+                  }
+
+                  border: 2px solid;
+                  border-image: linear-gradient(
+                      var(--angle),
+                      #12c2e9,
+                      #b9f5ff,
+                      #c471ed,
+                      #14fff5,
+                      #f64f59
+                    )
+                    1;
+                  box-sizing: content-box;
+                  animation: 5s rotate linear infinite;
+                  @keyframes rotate {
+                    to {
+                      --angle: 360deg;
+                    }
+                  }
+                  @property --angle {
+                    syntax: '<angle>';
+                    initial-value: 0deg;
+                    inherits: false;
+                  }
+                `
+              )
+          )}
           ref={buttonRef}
           onMouseEnter={() => {
             setShowPopper(true)
@@ -173,12 +144,20 @@ export const StandardItem = ({
           onMouseLeave={() => {
             setShowPopper(false)
           }}
+          onClick={() => {
+            // Toggle selectedItem
+            if (selectedItem !== null && selectedItem.id === item.id) {
+              setSelectedItem(null)
+            } else {
+              setSelectedItem(item)
+            }
+          }}
         >
           <div
             className={
               isMythic
                 ? cx(
-                    'relative flex items-center justify-center border border-yellow-700',
+                    'relative inline-flex shrink-0 items-center justify-center border border-yellow-700',
                     css`
                       background: radial-gradient(#eab308, #a16207);
                       background-size: 400% 400%;
@@ -212,7 +191,7 @@ export const StandardItem = ({
               src={item.icon ?? ''}
               alt={item.name ?? ''}
               className={cx(
-                'border border-black object-cover ring-1 ring-yellow-700 transition duration-100 hover:z-30 hover:ring-2 hover:brightness-125',
+                'border border-black object-cover ring-1 ring-yellow-700 transition duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125',
                 !isMythic &&
                   hoveredItem !== null &&
                   item.id !== hoveredItem &&
@@ -227,7 +206,7 @@ export const StandardItem = ({
           </div>
           <p
             className={cx(
-              'font-sans text-gray-200',
+              'font-sans text-gray-200 group-hover:text-yellow-200',
               hoveredItem !== null &&
                 item.id !== hoveredItem &&
                 css`
@@ -265,7 +244,7 @@ export const StandardItem = ({
                     padding: var(--parent-padding);
                     background: linear-gradient(
                       180deg,
-                      rgba(221, 122, 57, 0.2) 0%,
+                      rgba(221, 122, 57, 0.1) 0%,
                       rgba(9, 22, 27, 0.5) 30%
                     );
                     border: 1px solid var(--border-color);

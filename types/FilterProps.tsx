@@ -24,7 +24,7 @@ export type FilterByClassState = {
   setFilterItems: Dispatch<SetStateAction<FilterByClassProps[]>>
 }
 
-export type SortByFilters = {
+export type ItemGridState = {
   goldOrderDirection: SortDirection
   tierFilter: Rarity
   typeFilters: FilterByTypeProps[]
@@ -33,6 +33,8 @@ export type SortByFilters = {
   setAutocompleteResults: Dispatch<
     SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>
   >
+  selectedItem: ItemsSchema | null
+  setSelectedItem: Dispatch<SetStateAction<ItemsSchema | null>>
 }
 
 export enum Rarity {
@@ -68,13 +70,17 @@ export type ItemContainerState = {
   transition: any
   mythic: boolean
   hoveredItem: number | null
+  selectedItem: ItemsSchema | null
   setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
+  setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
 }
 
 export type StandardItemState = {
   item: ItemsSchema
   transition: any
   hoveredItem: number | null
-  setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
   isMythic: boolean
+  selectedItem: ItemsSchema | null
+  setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
+  setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
 }
