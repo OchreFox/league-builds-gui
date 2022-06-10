@@ -359,20 +359,11 @@ export const ItemBuildTree = ({
     }
   }, [selectedItem])
 
-  if (!selectedItem) {
-    return (
-      <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
-        <img
-          src="icons/poro_sleeping.png"
-          alt="Poro sleeping"
-          className="mx-auto h-32 w-32 opacity-75"
-        />
-        <p className="italic text-gray-500">
-          Select an item to see its build path tree
-        </p>
-      </div>
-    )
-  } else {
+  if (!items) {
+    return null
+  }
+
+  if (selectedItem) {
     return (
       items && (
         <>
@@ -384,6 +375,19 @@ export const ItemBuildTree = ({
           </div>
         </>
       )
+    )
+  } else {
+    return (
+      <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
+        <img
+          src="icons/poro_sleeping.png"
+          alt="Poro sleeping"
+          className="mx-auto h-32 w-32 opacity-75"
+        />
+        <p className="italic text-gray-500">
+          Select an item to see its build path tree
+        </p>
+      </div>
     )
   }
 }
