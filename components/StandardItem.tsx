@@ -13,6 +13,15 @@ import ReactDOM from 'react-dom'
 import { statProperties } from './StatProperties'
 import { StandardItemState } from '../types/FilterProps'
 
+// SVG imports
+import stealthIcon from '../public/icons/stealth.svg?url'
+import healthRegenIcon from '../public/icons/health-regeneration.svg?url'
+import manaRegenIcon from '../public/icons/mana-regeneration.svg?url'
+import abilityPowerIcon from '../public/icons/ability-power.svg?url'
+import attackDamageIcon from '../public/icons/attack-damage.svg?url'
+import trueDamageIcon from '../public/icons/true-damage.svg?url'
+import goldIcon from '../public/icons/gold.svg?url'
+
 export const StandardItem = ({
   item,
   transition,
@@ -33,7 +42,7 @@ export const StandardItem = ({
   const buttonRef = useRef(null)
   const popperRef = useRef(null)
   const [arrowRef, setArrowRef] = useState<HTMLDivElement | null>(null)
-  const { styles, attributes, update } = usePopper(
+  const { styles, attributes } = usePopper(
     buttonRef.current,
     popperRef.current,
     {
@@ -101,7 +110,7 @@ export const StandardItem = ({
                     );
                     background-size: 600% 600%;
 
-                    animation: scroll 15s linear infinite;
+                    animation: scroll 10s linear infinite;
                     @keyframes scroll {
                       0% {
                         background-position: 50% 0%;
@@ -123,7 +132,7 @@ export const StandardItem = ({
                     )
                     1;
                   box-sizing: content-box;
-                  animation: 5s rotate linear infinite;
+                  animation: 6s rotate linear infinite forwards;
                   @keyframes rotate {
                     to {
                       --angle: 360deg;
@@ -159,7 +168,12 @@ export const StandardItem = ({
                 ? cx(
                     'relative inline-flex shrink-0 items-center justify-center border border-yellow-700',
                     css`
-                      background: radial-gradient(#eab308, #a16207);
+                      background: linear-gradient(
+                        180deg,
+                        rgba(234, 179, 8, 1) 0%,
+                        rgba(161, 98, 7, 1) 50%,
+                        rgba(205, 46, 52, 1) 100%
+                      );
                       background-size: 400% 400%;
                       animation: Glow 3s ease infinite;
                       padding: 2px;
@@ -298,12 +312,8 @@ export const StandardItem = ({
                       {item.name}
                     </h3>
                     <p className="inline-flex items-center font-sans text-yellow-600">
-                      <img
-                        src="icons/gold.svg"
-                        alt="gold"
-                        className="mr-1 h-5 w-5"
-                      />
-                      {item.gold?.total}
+                      <img className="mr-1 h-5 w-5" src={goldIcon} alt="gold" />
+                      <span className="ml-1">{item.gold?.total}</span>
                     </p>
                   </div>
                   <div className="flex flex-col">
@@ -385,6 +395,17 @@ const Stats = ({ children }: any) => {
   )
 }
 
+const StatIcon = ({ src, alt }: { src: any; alt: string }) => {
+  return (
+    <img
+      className="mr-1 inline-flex h-3 w-3"
+      src={src}
+      alt={alt}
+      width={12}
+      height={12}
+    />
+  )
+}
 const Stat = ({ children = [], name }: any) => {
   const stat =
     statProperties.find((statChildren) => {
@@ -397,11 +418,7 @@ const Stat = ({ children = [], name }: any) => {
   return (
     <tr className="table-auto">
       <td>
-        <img
-          className="mr-1 h-3 w-3"
-          src={stat.imgSource}
-          alt={stat.statName}
-        />
+        <StatIcon src={stat.imgSource} alt={stat.statName} />
       </td>
       <td>
         <span className="font-sans font-bold text-yellow-600">{children}</span>
@@ -451,7 +468,7 @@ const ScaleLevel = ({ children }: any) => {
 const KeywordStealth = ({ children }: any) => {
   return (
     <span className="inline-flex flex-row items-baseline font-sans font-bold text-gray-300">
-      <img src="icons/blind.png" alt="stealth" className="mr-1 h-3 w-3" />
+      <StatIcon src={stealthIcon} alt="stealth" />
       {children}{' '}
     </span>
   )
@@ -465,11 +482,7 @@ const Rules = ({ children }: any) => {
 const Healing = ({ children }: any) => {
   return (
     <div className="inline-flex flex-row items-baseline whitespace-pre font-sans font-bold text-green-400">
-      <img
-        src="icons/health-regeneration.webp"
-        alt="health-regeneration"
-        className="mx-1 h-3 w-3"
-      />
+      <StatIcon src={healthRegenIcon} alt="health-regeneration" />
       {children}{' '}
     </div>
   )
@@ -479,11 +492,7 @@ const Healing = ({ children }: any) => {
 const ScaleMana = ({ children }: any) => {
   return (
     <div className="inline-flex flex-row items-baseline whitespace-pre font-sans font-bold text-blue-400">
-      <img
-        src="icons/mana-regeneration.webp"
-        alt="mana-regeneration"
-        className="mx-1 h-3 w-3"
-      />
+      <StatIcon src={manaRegenIcon} alt="mana-regeneration" />
       {children}{' '}
     </div>
   )
@@ -493,11 +502,7 @@ const ScaleMana = ({ children }: any) => {
 const MagicDamage = ({ children }: any) => {
   return (
     <div className="inline-flex flex-row items-baseline whitespace-pre-wrap font-sans font-bold text-blue-400">
-      <img
-        src="icons/ability-power.svg"
-        alt="magic-damage"
-        className="mx-1 h-3 w-3"
-      />
+      <StatIcon src={abilityPowerIcon} alt="magic-damage" />
       {children}{' '}
     </div>
   )
@@ -507,11 +512,7 @@ const MagicDamage = ({ children }: any) => {
 const PhysicalDamage = ({ children }: any) => {
   return (
     <span className="inline-flex items-baseline whitespace-pre-wrap font-sans font-bold text-red-400">
-      <img
-        src="icons/attack-damage.svg"
-        alt="attack-damage"
-        className="mx-1 h-3 w-3"
-      />
+      <StatIcon src={attackDamageIcon} alt="attack-damage" />
       {children}{' '}
     </span>
   )
@@ -521,11 +522,7 @@ const PhysicalDamage = ({ children }: any) => {
 const TrueDamage = ({ children }: any) => {
   return (
     <div className="inline-flex flex-row items-baseline whitespace-pre font-sans font-bold text-orange-200">
-      <img
-        src="icons/true-damage.webp"
-        alt="true-damage"
-        className="mr-1 h-3 w-3"
-      />
+      <StatIcon src={trueDamageIcon} alt="true-damage" />
       {children}{' '}
     </div>
   )

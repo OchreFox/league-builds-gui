@@ -19,6 +19,9 @@ export interface ItemsSchema {
   requiredChampion: RequiredChampion
   simpleDescription: null | string
   visible: boolean | null
+  instance: number | null
+  depth: number | null
+  parent: number | null
 }
 
 export enum Category {

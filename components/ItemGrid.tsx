@@ -8,16 +8,12 @@ import { AnimatePresence, AnimationProps, motion, Reorder } from 'framer-motion'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import fuzzysort from 'fuzzysort'
-import {
-  Category,
-  ItemsSchema,
-  RequiredChampion,
-  ChampionClass,
-} from '../types/Items'
+import { Category, ItemsSchema, ChampionClass } from '../types/Items'
 import { Rarity, ItemGridState } from '../types/FilterProps'
 import { ItemContainer } from './ItemContainer'
 import { RarityTitle } from './RarityTitle'
 import { useItems } from './hooks/useItems'
+import { isBasic, isEpic, isLegendary, isMythic } from '../utils/ItemRarity'
 
 export default function ItemGrid({
   goldOrderDirection,
@@ -59,24 +55,6 @@ export default function ItemGrid({
 
   if (itemsError) {
     console.error(itemsError.message)
-  }
-
-  // Filters to determine the rarity of an item
-  function isBasic(item: ItemsSchema) {
-    return item.tier === 1 && item.inStore
-  }
-  function isEpic(item: ItemsSchema) {
-    return item.tier === 2 && item.inStore
-  }
-  function isLegendary(item: ItemsSchema) {
-    return item.tier === 3 && item.mythic !== true && item.inStore
-  }
-  function isMythic(item: ItemsSchema) {
-    return (
-      item.mythic === true &&
-      item.requiredChampion === RequiredChampion.Empty &&
-      item.inStore
-    )
   }
 
   /**

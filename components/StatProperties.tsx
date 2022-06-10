@@ -1,97 +1,116 @@
+import movementSpeedIcon from '../public/icons/movement-speed.svg?url'
+import healthIcon from '../public/icons/health.svg?url'
+import criticalStrikeChanceIcon from '../public/icons/critical-strike.svg?url'
+import abilityPowerIcon from '../public/icons/ability-power.svg?url'
+import armorIcon from '../public/icons/armor.svg?url'
+import attackDamageIcon from '../public/icons/attack-damage.svg?url'
+import attackSpeedIcon from '../public/icons/attack-speed.svg?url'
+import magicResistIcon from '../public/icons/magic-resist.svg?url'
+import lifeStealIcon from '../public/icons/life-steal.svg?url'
+import manaIcon from '../public/icons/mana.svg?url'
+import manaRegenerationIcon from '../public/icons/mana-regeneration.svg?url'
+import armorPenetrationIcon from '../public/icons/armor-penetration.svg?url'
+import healthRegenerationIcon from '../public/icons/health-regeneration.svg?url'
+import abilityHasteIcon from '../public/icons/ability-haste.svg?url'
+import omniVampIcon from '../public/icons/omni-vamp.svg?url'
+import healAndShieldPower from '../public/icons/heal-and-shield-power.svg?url'
+import tenacityIcon from '../public/icons/tenacity.svg?url'
+import goldIcon from '../public/icons/gold.svg?url'
+
 export const statProperties = [
   {
     pattern: 'Movespeed',
     statName: 'Movement Speed',
-    imgSource: 'icons/movement-speed.svg',
+    imgSource: movementSpeedIcon,
   },
   {
     pattern: 'Health',
     statName: 'Health',
-    imgSource: 'icons/health.svg',
+    imgSource: healthIcon,
   },
   {
     pattern: 'CriticalStrikeChance',
     statName: 'Critical Strike Chance',
-    imgSource: 'icons/critical-strike.svg',
+    imgSource: criticalStrikeChanceIcon,
   },
   {
     pattern: 'AbilityPower',
     statName: 'Ability Power',
-    imgSource: 'icons/ability-power.svg',
+    imgSource: abilityPowerIcon,
   },
   {
     pattern: 'AttackDamage',
     statName: 'Attack Damage',
-    imgSource: 'icons/attack-damage.svg',
+    imgSource: attackDamageIcon,
   },
   {
     pattern: 'Mana',
     statName: 'Mana',
-    imgSource: 'icons/mana.svg',
+    imgSource: manaIcon,
   },
   {
     pattern: 'ManaRegen',
     statName: 'Mana Regen',
-    imgSource: 'icons/mana-regeneration.webp',
+    imgSource: manaRegenerationIcon,
   },
   {
     pattern: 'Armor',
     statName: 'Armor',
-    imgSource: 'icons/armor.svg',
+    imgSource: armorIcon,
   },
   {
     pattern: 'ArmorPenetration',
     statName: 'Armor Penetration',
-    imgSource: 'icons/armor-penetration.svg',
+    imgSource: armorPenetrationIcon,
   },
   {
     pattern: 'MagicResistance',
     statName: 'Magic Resist',
-    imgSource: 'icons/magic-resist.svg',
+    imgSource: magicResistIcon,
   },
   {
     pattern: 'AttackSpeed',
     statName: 'Attack Speed',
-    imgSource: 'icons/attack-speed.svg',
+    imgSource: attackSpeedIcon,
   },
   {
     pattern: 'HealthRegen',
     statName: 'Health Regeneration',
-    imgSource: 'icons/health-regeneration.svg',
+    imgSource: healthRegenerationIcon,
   },
   {
     pattern: 'AbilityHaste',
     statName: 'Ability Haste',
-    imgSource: 'icons/ability-haste.svg',
+    imgSource: abilityHasteIcon,
   },
   {
     pattern: 'Lifesteal',
     statName: 'Life Steal',
-    imgSource: 'icons/life-steal.svg',
+    imgSource: lifeStealIcon,
   },
   {
     pattern: 'Omnivamp',
     statName: 'Omnivamp',
-    imgSource: 'icons/omni-vamp.svg',
+    imgSource: omniVampIcon,
   },
   {
     pattern: 'HealAndShieldPower',
     statName: 'Heal and Shield Power',
-    imgSource: 'icons/heal-and-shield-power.svg',
+    imgSource: healAndShieldPower,
   },
   {
     pattern: 'Lethality',
     statName: 'Lethality',
-    imgSource: 'icons/armor-penetration.svg',
+    imgSource: armorPenetrationIcon,
   },
   {
     pattern: 'Tenacity',
     statName: 'Tenacity',
-    imgSource: 'icons/tenacity.svg',
+    imgSource: tenacityIcon,
   },
   {
     pattern: 'GoldPer10',
     statName: 'Gold Per 10 seconds',
-    imgSource: 'icons/gold.svg',
+    imgSource: goldIcon,
   },
 ]
