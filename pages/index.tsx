@@ -253,7 +253,6 @@ function Home() {
     <div className="relative min-h-screen bg-gradient-to-tr from-slate-900 via-brand-dark to-gray-900">
       <Head>
         <title>League Tools</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div
         className={`absolute inset-0 brightness-100 contrast-150 filter ${styles.noise}`}
@@ -319,7 +318,7 @@ function Home() {
             </motion.div>
             <div
               className={cx(
-                'z-10 col-span-2 -mt-2 grid grid-flow-col grid-cols-3 grid-rows-3 gap-1 border-2 border-yellow-900 px-4 py-3 shadow-xl',
+                'z-10 col-span-2 -mt-2 grid grid-flow-col grid-cols-2 grid-rows-2 gap-1 border-2 border-yellow-900 px-4 py-3 shadow-xl 2xl:grid-cols-3 2xl:grid-rows-3',
                 styles['container-background']
               )}
             >

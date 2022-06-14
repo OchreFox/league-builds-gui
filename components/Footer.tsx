@@ -23,12 +23,12 @@ export default function Footer() {
           <img
             className="mx-2 rounded-full"
             src="/icon.png"
-            alt="Ochrefox"
+            alt="OchreFox"
             width="30"
             height="30"
           />
           <img
-            src="/logo-white.svg"
+            src="/ochrefox-logo-white.svg"
             alt="Logo"
             className="mt-1 mr-2"
             width="90"
@@ -37,9 +37,9 @@ export default function Footer() {
         </a>
         <div className="mt-4 grid text-left text-sm text-gray-100 sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-700 sm:py-2 sm:pl-4">
           <p className="inline-flex items-center bg-black/25 font-monospace text-green-500">
-            {new Date().getFullYear()} - Made with &nbsp;
-            <Icon icon="twemoji:red-heart" inline={true} />
-            &nbsp; by OchreFox
+            {new Date().getFullYear()} - Made with
+            <Icon icon="twemoji:red-heart" inline={true} className="mx-2" />
+            by OchreFox
           </p>
           <p className="bg-black/25 font-monospace text-xs font-light text-green-300/50">
             Legal Disclaimer &gt;&gt; League Builds GUI isn't endorsed by Riot
