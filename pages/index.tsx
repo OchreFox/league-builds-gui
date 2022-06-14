@@ -1,20 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { Icon } from '@iconify/react'
 import Head from 'next/head'
-import JSONFetcher from '../components/JSONFetcher'
 import styles from '../styles/index.module.css'
 import Footer from '../components/Footer'
-import FilterItemsByType from '../components/filterItemsByType'
-import FilterItemsByClass from '../components/filterItemsByClass'
-import FilterItemsByRarity from '../components/filterItemsByRarity'
+import FilterItemsByType from '../components/FilterItemsByType'
+import FilterItemsByClass from '../components/FilterItemsByClass'
+import FilterItemsByRarity from '../components/FilterItemsByRarity'
 import SearchBar from '../components/SearchBar'
 import ItemGrid from '../components/ItemGrid'
-import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { Rarity, SortDirection } from '../types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from '../types/Items'
 import { ItemBuildTree } from '../components/ItemBuildTree'
+import { cx, css } from '@emotion/css'
+import PotatoModeSwitch from '../components/PotatoModeSwitch'
+import { PotatoModeContext } from '../components/hooks/PotatoModeStore'
 
 function Home() {
   const [classFilters, setClassFilters] = useState([
@@ -196,36 +197,57 @@ function Home() {
   const [autocompleteResults, setAutocompleteResults] =
     useState<Fuzzysort.KeysResults<ItemsSchema>>()
   const [selectedItem, setSelectedItem] = useState<ItemsSchema | null>(null)
+  const { state } = useContext(PotatoModeContext)
 
-  // fetch the latest version of API
-  // const { data: latestVersion, error: latestVersionError } = useSWR<
-  //   Array<String>
-  // >('https://ddragon.leagueoflegends.com/api/versions.json', JSONFetcher)
+  const easeInOutExpo = {
+    type: 'tween',
+    ease: [0.87, 0, 0.13, 1],
+    duration: 0.4,
+  }
 
-  // // fetch runes data from DDragon
-  // const { data: runesData, error: runesDataError } = useSWR<Array<String>>(
-  //   () =>
-  //     latestVersion &&
-  //     `https://ddragon.leagueoflegends.com/cdn/${latestVersion[0]}/data/en_US/runesReforged.json`,
-  //   JSONFetcher
-  // )
+  const bgTitleVariants = {
+    visible: {
+      opacity: 1,
+      x: 0,
+      marginLeft: ['2rem', '0rem'],
+      transition: {
+        staggerChildren: 1,
+        delay: 0.7,
+        ...easeInOutExpo,
+      },
+    },
+    hidden: {
+      opacity: 1,
+      x: 20,
+      transition: easeInOutExpo,
+    },
+  }
 
-  // if (latestVersionError) {
-  //   console.error(latestVersionError.message)
-  // }
-  // if (runesDataError) {
-  //   console.error(runesDataError.message)
-  // }
-
-  // useEffect(() => {
-  //   if (latestVersion) {
-  //     // Log in console the latest version from the API
-  //     console.log(latestVersion[0])
-  //   }
-  //   if (runesData) {
-  //     console.log(runesData)
-  //   }
-  // }, [latestVersion, runesData])
+  const titleVariants = {
+    initial: {
+      x: 0,
+      backgroundColor: 'rgb(0 0 0 / 0)',
+      transition: easeInOutExpo,
+      paddingLeft: '6rem',
+    },
+    animate: {
+      x: '1rem',
+      y: '-1rem',
+      paddingLeft: '1rem',
+      backgroundColor: 'rgb(0 0 0 / 0.5)',
+      transition: {
+        ...easeInOutExpo,
+        backgroundColor: {
+          delay: 1,
+          ...easeInOutExpo,
+        },
+        paddingLeft: {
+          delay: 1,
+          ...easeInOutExpo,
+        },
+      },
+    },
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-tr from-slate-900 via-brand-dark to-gray-900">
@@ -239,39 +261,77 @@ function Home() {
       {/* Main container */}
       <div className="relative flex min-h-screen w-full flex-col items-stretch">
         {/* Navbar and toolbar */}
-        <nav className="w-full flex-none flex-row px-12 pt-8">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col">
+        <nav className="w-full flex-none flex-row px-4 pt-8">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <motion.div
+              variants={bgTitleVariants}
+              initial="hidden"
+              animate="visible"
+              className="pattern-diagonal-lines-sm mt-2 mr-4 flex flex-col overflow-visible text-pink-800/50"
+            >
               <motion.h1
-                initial={{ opacity: 0, x: -1000 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{
-                  type: 'tween',
-                  ease: [0.87, 0, 0.13, 1],
-                  duration: 0.4,
-                }}
-                className="font-wide text-5xl font-black text-brand-default"
+                variants={titleVariants}
+                initial="initial"
+                animate="animate"
+                className={cx(
+                  'p-2 font-wide text-5xl font-black text-brand-default',
+                  !state.enabled && ' backdrop-blur-sm'
+                )}
               >
                 League Tools
               </motion.h1>
               <motion.h2
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: 'tween',
-                  ease: [0.87, 0, 0.13, 1],
-                  duration: 0.4,
+                initial={{
+                  opacity: 0,
+                  x: '-100%',
+                  y: 0,
+                  backgroundColor: 'rgb(0 0 0 / 0)',
                 }}
-                className="text-md mt-1 font-sans tracking-widest text-gray-400"
+                animate={{
+                  opacity: 1,
+                  x: ['13.5rem', '1rem'],
+                  y: '-1rem',
+                  paddingLeft: '1rem',
+                  backgroundColor: 'rgb(0 0 0 / 0.75)',
+                }}
+                transition={{
+                  ...easeInOutExpo,
+                  paddingLeft: {
+                    delay: 1,
+                    ...easeInOutExpo,
+                  },
+                  backgroundColor: {
+                    delay: 1,
+                    ...easeInOutExpo,
+                  },
+                  x: {
+                    delay: 1,
+                    ...easeInOutExpo,
+                  },
+                }}
+                className={cx(
+                  'text-md font-sans tracking-widest text-gray-400',
+                  !state.enabled && ' backdrop-blur-sm'
+                )}
               >
                 ITEM BUILDS
               </motion.h2>
+            </motion.div>
+            <div
+              className={cx(
+                'z-10 col-span-2 -mt-2 grid grid-flow-col grid-cols-3 grid-rows-3 gap-1 border-2 border-yellow-900 px-4 py-3 shadow-xl',
+                styles['container-background']
+              )}
+            >
+              <h3 className="font-body font-semibold text-gray-200 ">
+                SETTINGS
+              </h3>
+              <PotatoModeSwitch />
             </div>
-            <div className="col-span-2">Toolbar</div>
           </div>
         </nav>
         {/* Editor */}
-        <main className="mx-4 mt-4 mb-8 flex-1 md:mx-8 lg:mx-12">
+        <main className="mx-4 mt-4 mb-8 flex-1">
           <div className="flex h-full flex-col space-y-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
             {/* Item picker */}
             <div
@@ -297,8 +357,8 @@ function Home() {
                   />
                   {/* Sort by gold button */}
                   <div
-                    className={clsx(
-                      'border- ml-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border-yellow-900 p-0 text-white transition-colors duration-200 ease-out hover:bg-cyan-900',
+                    className={cx(
+                      'border- ml-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border-yellow-900 p-0 text-white transition-colors duration-200 ease-out hover:bg-cyan-900 motion-reduce:transition-none',
                       goldOrderDirection === SortDirection.Asc
                         ? 'bg-brand-default'
                         : 'bg-brand-dark'

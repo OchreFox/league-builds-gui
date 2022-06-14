@@ -1,10 +1,20 @@
+import { cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
+import { useContext } from 'react'
 import packageJson from '../package.json'
+import { PotatoModeContext } from './hooks/PotatoModeStore'
 
 export default function Footer() {
+  const { state } = useContext(PotatoModeContext)
+
   return (
-    <footer className="body-font font-display relative border-t-2 border-brand-default bg-gray-800/60 text-gray-100 backdrop-blur-xl print:hidden">
-      <div className="mx-auto flex flex-col items-center px-5 py-6 sm:flex-row sm:py-2">
+    <footer
+      className={cx(
+        'body-font font-display relative border-t-2 border-brand-default bg-gray-800/60 text-gray-100 print:hidden',
+        !state.enabled && 'backdrop-blur-xl'
+      )}
+    >
+      <div className="mx-auto flex flex-col items-center px-5 py-6  sm:flex-row sm:py-2">
         <a
           title="Home"
           href="https://ochrefox.net"

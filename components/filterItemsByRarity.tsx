@@ -23,7 +23,7 @@ export default function FilterItemsByRarity({
           rarityFilter === Rarity.Basic
             ? 'bg-brand-default text-white'
             : 'bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-black',
-          'relative inline-flex items-center rounded-l-md border border-yellow-900 px-4 py-2 text-sm font-medium transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500'
+          'relative inline-flex items-center rounded-l-md border border-yellow-900 px-4 py-2 text-sm font-medium transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-reduce:transition-none'
         )}
         onClick={() => {
           if (rarityFilter !== Rarity.Basic) {
@@ -49,7 +49,7 @@ export default function FilterItemsByRarity({
           rarityFilter === Rarity.Epic
             ? 'bg-brand-default text-white'
             : 'bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-black',
-          'relative -ml-px inline-flex items-center border border-yellow-900 px-4 py-2 text-sm font-medium transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500'
+          'relative -ml-px inline-flex items-center border border-yellow-900 px-4 py-2 text-sm font-medium transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-reduce:transition-none'
         )}
         onClick={() => {
           // If the tier isn't already the current one, set it to the current one
@@ -77,7 +77,7 @@ export default function FilterItemsByRarity({
           rarityFilter === Rarity.Legendary
             ? 'bg-brand-default text-white'
             : 'bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-black',
-          'relative -ml-px inline-flex items-center border border-yellow-900 px-4 py-2 text-sm font-bold transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500'
+          'relative -ml-px inline-flex items-center border border-yellow-900 px-4 py-2 text-sm font-bold transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-reduce:transition-none'
         )}
         onClick={() => {
           // If the tier isn't already the current one, set it to the current one
@@ -105,7 +105,7 @@ export default function FilterItemsByRarity({
           rarityFilter === Rarity.Mythic
             ? 'bg-brand-default text-white'
             : 'bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-black',
-          'relative -ml-px inline-flex items-center rounded-r-md border border-yellow-900  px-4 py-2 text-sm font-bold transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500'
+          'relative -ml-px inline-flex items-center rounded-r-md border border-yellow-900  px-4 py-2 text-sm font-bold transition-colors duration-200 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-reduce:transition-none'
         )}
         onClick={() => {
           // If the tier isn't already the current one, set it to the current one

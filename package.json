@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "analyze": "cross-env ANALYZE=true yarn build"
   },
   "dependencies": {
     "@dnd-kit/core": "^5.0.3",
@@ -16,10 +17,10 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@headlessui/react": "^1.6.1",
+    "@next/bundle-analyzer": "^12.1.6",
     "@popperjs/core": "^2.11.5",
     "@types/lodash": "^4.14.182",
     "ajv": "^8.11.0",
-    "clsx": "^1.1.1",
     "fast-xml-parser": "^4.0.7",
     "framer-motion": "^6.3.3",
     "fuse.js": "^6.6.2",
@@ -29,6 +30,7 @@
     "next": "latest",
     "next-compose-plugins": "^2.2.1",
     "next-images": "^1.8.4",
+    "pattern.css": "^1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-jsx-parser": "^1.29.0",
@@ -45,6 +47,7 @@
     "@types/react": "17.0.38",
     "autoprefixer": "^10.4.4",
     "babel-plugin-inline-react-svg": "^2.0.1",
+    "cross-env": "^7.0.3",
     "patch-package": "^6.4.7",
     "postcss": "^8.4.12",
     "postcss-flexbugs-fixes": "^5.0.2",

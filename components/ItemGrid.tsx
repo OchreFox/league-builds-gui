@@ -397,6 +397,7 @@ export default function ItemGrid({
                   transition={transitionVariant}
                   tier={1}
                   backgroundColor="bg-slate-900/25"
+                  fallbackBackgroundColor="bg-slate-900"
                 />
                 <motion.div
                   key="basicGrid"
@@ -441,6 +442,7 @@ export default function ItemGrid({
                   transition={transitionVariant}
                   tier={2}
                   backgroundColor="bg-purple-800/25"
+                  fallbackBackgroundColor="bg-purple-800"
                 />
                 <motion.div
                   key="epicGrid"
@@ -486,6 +488,7 @@ export default function ItemGrid({
                   transition={transitionVariant}
                   tier={3}
                   backgroundColor="bg-red-800/25"
+                  fallbackBackgroundColor="bg-red-800"
                 />
                 <motion.div
                   key="legendaryGrid"
@@ -551,6 +554,7 @@ export default function ItemGrid({
                       }
                     }
                   `}
+                  fallbackBackgroundColor="bg-orange-600"
                 />
                 <motion.div
                   key="mythicGrid"

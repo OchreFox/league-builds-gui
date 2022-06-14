@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import React from 'react'
+import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import { FilterByClassState, FilterByClassProps } from '../types/FilterProps'
 
@@ -63,21 +63,21 @@ export default function FilterItemsByClass({
                 transition={{ duration: 0.1, type: 'tween' }}
                 type="button"
                 title={item.name}
-                className={clsx(
+                className={cx(
                   item.isActive
                     ? 'border-brand-default'
-                    : 'border-transparent text-gray-500 transition-colors duration-100 ease-out hover:border-gray-500',
+                    : 'border-transparent text-gray-500 transition-colors duration-100 ease-out hover:border-gray-500 motion-reduce:transition-none',
                   'group inline-flex flex-col items-center justify-center border-b-2 py-2 px-1 text-sm font-medium'
                 )}
                 onClick={() => handleClick(item)}
               >
                 <img
                   alt={item.name}
-                  className={clsx(
+                  className={cx(
                     item.isActive
                       ? 'text-gray-500'
                       : 'text-gray-400 brightness-50 group-hover:text-gray-500 group-hover:brightness-75',
-                    ' flex-shrink-0 transition-all duration-100 ease-out',
+                    ' flex-shrink-0 transition-all duration-100 ease-out motion-reduce:transition-none',
                     item.name === 'All Classes' ? 'h-4 w-auto' : 'h-4 w-4'
                   )}
                   src={'icons/' + item.icon}

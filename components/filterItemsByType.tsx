@@ -1,14 +1,17 @@
-import React, { Fragment, useRef, useState } from 'react'
+import React, { Fragment, useContext, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { cx, css } from '@emotion/css'
 import { FilterByTypeState, FilterByTypeProps } from '../types/FilterProps'
 import { Menu, Transition } from '@headlessui/react'
 import { InlineIcon } from '@iconify/react'
+import { PotatoModeContext } from './hooks/PotatoModeStore'
 
 export default function FilterItemsByType({
   filterItems,
   setFilterItems,
 }: FilterByTypeState) {
+  const { state } = useContext(PotatoModeContext)
+
   const getItemClassnames = (item: FilterByTypeProps) => {
     let itemClassnames: string
     // Pressed button
@@ -20,13 +23,18 @@ export default function FilterItemsByType({
       }
     } else {
       // Unpressed button
-      itemClassnames =
-        'bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-black'
+      itemClassnames = cx(
+        'bg-transparent text-gray-600 hover:text-black group',
+        state.enabled
+          ? 'hover:bg-cyan-900 '
+          : 'after:absolute after:w-0 after:h-full after:left-0 after:top-0 after:transition-all after:duration-300 after:hover:bg-cyan-900 after:hover:w-full after:rounded-md'
+      )
     }
     // Base button
     return cx(
       itemClassnames,
-      'group flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium md:justify-start transition-all duration-100 ease-out'
+      'group flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium md:justify-start duration-100 ease-out relative',
+      state.enabled ? 'transition-none' : 'transition-all'
     )
   }
 
@@ -35,11 +43,13 @@ export default function FilterItemsByType({
     if (item.isActive) {
       imageClassnames = 'text-gray-500'
     } else {
-      imageClassnames = 'text-gray-400 brightness-50 group-hover:text-gray-500'
+      imageClassnames =
+        'text-gray-400 brightness-50 group-hover:text-gray-200 group-hover:brightness-100'
     }
     return cx(
       imageClassnames,
-      'flex-shrink-0 transition-colors duration-200 my-2 md:my-0 md:-ml-1 md:mr-3',
+      'flex-shrink-0 my-2 md:my-0 md:-ml-1 md:mr-3 z-10',
+      state.enabled ? 'transition-none' : 'transition duration-100',
       item.name === 'All Items' ? 'h-4 w-auto' : 'h-4 w-4'
     )
   }
@@ -142,7 +152,7 @@ export default function FilterItemsByType({
             )}
             <motion.button
               // Framer Motion onClick animation
-              // whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.1, type: 'tween' }}
               // Button styling
               type="button"

@@ -120,3 +120,10 @@ export interface FlatPercent {
   flat?: number
   percent?: number
 }
+
+export enum CSSProperty {
+  TRANSFORM = 'transform',
+  TRANSITION_PROPERTY = 'transition',
+  OPACITY = 'opacity',
+  ANIMATION = 'animation',
+}
