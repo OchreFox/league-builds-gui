@@ -21,7 +21,7 @@
     "@popperjs/core": "^2.11.5",
     "@types/lodash": "^4.14.182",
     "ajv": "^8.11.0",
-    "fast-xml-parser": "^4.0.7",
+    "fast-xml-parser": "^4.0.8",
     "framer-motion": "^6.3.3",
     "fuse.js": "^6.6.2",
     "fuzzy": "^0.1.3",
