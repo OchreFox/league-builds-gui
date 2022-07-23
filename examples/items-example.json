@@ -90,10 +90,7 @@
     "stats": { "FlatCritChanceMod": 0.15 },
     "maps": [11, 12, 21],
     "gold": { "base": 600, "purchasable": true, "total": 600, "sell": 420 },
-    "into": [
-      3124, 6676, 3086, 3031, 3036, 3072, 3095, 3139, 3508, 6671, 6672, 6673,
-      6675
-    ],
+    "into": [3124, 6676, 3086, 3031, 3036, 3072, 3095, 3139, 3508, 6671, 6672, 6673, 6675],
     "mythic": false,
     "categories": ["CriticalStrike"],
     "inStore": true,
@@ -157,8 +154,7 @@
     "maps": [11, 12, 21],
     "gold": { "base": 400, "purchasable": true, "total": 400, "sell": 280 },
     "into": [
-      6035, 6609, 1011, 3066, 3067, 3044, 3053, 3211, 3814, 3119, 3145, 3165,
-      3742, 3748, 3801, 4401, 4629, 4635, 6660
+      6035, 6609, 1011, 3066, 3067, 3044, 3053, 3211, 3814, 3119, 3145, 3165, 3742, 3748, 3801, 4401, 4629, 4635, 6660
     ],
     "mythic": false,
     "categories": ["Health"],
@@ -264,10 +260,7 @@
     "stats": { "FlatPhysicalDamageMod": 10 },
     "maps": [11, 12, 21],
     "gold": { "base": 350, "purchasable": true, "total": 350, "sell": 245 },
-    "into": [
-      3179, 3071, 1053, 3004, 3035, 3044, 3046, 3051, 3814, 3123, 3133, 3134,
-      3155, 6670, 6692
-    ],
+    "into": [3179, 3071, 1053, 3004, 3035, 3044, 3046, 3051, 3814, 3123, 3133, 3134, 3155, 6670, 6692],
     "mythic": false,
     "categories": ["Damage", "Lane"],
     "inStore": true,
@@ -288,10 +281,7 @@
     "stats": { "FlatPhysicalDamageMod": 25 },
     "maps": [11, 12, 21],
     "gold": { "base": 875, "purchasable": true, "total": 875, "sell": 613 },
-    "into": [
-      6035, 3077, 3091, 6676, 3031, 3053, 3139, 3153, 6029, 3181, 6333, 6671,
-      6672, 6675, 6695
-    ],
+    "into": [6035, 3077, 3091, 6676, 3031, 3053, 3139, 3153, 6029, 3181, 6333, 6671, 6672, 6675, 6695],
     "mythic": false,
     "categories": ["Damage"],
     "inStore": true,
@@ -418,8 +408,7 @@
     "maps": [11, 12, 21],
     "gold": { "base": 435, "purchasable": true, "total": 435, "sell": 305 },
     "into": [
-      6616, 3191, 3108, 3113, 3115, 3116, 3145, 3152, 3504, 3802, 4632, 3916,
-      4630, 4635, 4636, 4637, 4642, 4644, 6656
+      6616, 3191, 3108, 3113, 3115, 3116, 3145, 3152, 3504, 3802, 4632, 3916, 4630, 4635, 4636, 4637, 4642, 4644, 6656
     ],
     "mythic": false,
     "categories": ["SpellDamage"],
@@ -1161,13 +1150,7 @@
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2051_guardians_horn.png",
     "iconOverlay": false,
-    "nicknames": [
-      "Golden Arm of Kobe",
-      "Golden Bicep of Kobe",
-      "Horn",
-      "Horn of the ManWolf",
-      "ManWolf"
-    ],
+    "nicknames": ["Golden Arm of Kobe", "Golden Bicep of Kobe", "Horn", "Horn of the ManWolf", "ManWolf"],
     "requiredChampion": "",
     "simpleDescription": "Good starting item for tanks",
     "tier": 1,
@@ -1515,13 +1498,7 @@
     "gold": { "base": 1050, "purchasable": true, "total": 2900, "sell": 2030 },
     "from": [3070, 3133, 1036],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "Mana",
-      "CooldownReduction",
-      "OnHit",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "Mana", "CooldownReduction", "OnHit", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
@@ -1584,12 +1561,7 @@
     "gold": { "base": 550, "purchasable": true, "total": 2300, "sell": 1610 },
     "from": [3916, 4642],
     "mythic": false,
-    "categories": [
-      "SpellDamage",
-      "ManaRegen",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellDamage", "ManaRegen", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3011_enchanter_t3_chemtechfumigator.png",
@@ -1699,12 +1671,7 @@
     "gold": { "base": 650, "purchasable": true, "total": 2500, "sell": 1750 },
     "from": [3123, 3086],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "NonbootsMovement"
-    ],
+    "categories": ["Damage", "CriticalStrike", "AttackSpeed", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3033_marksman_t3_mortalreminder.png",
@@ -1812,13 +1779,7 @@
     "maps": [11, 12, 21],
     "gold": { "base": 3000, "purchasable": false, "total": 3000, "sell": 2100 },
     "mythic": false,
-    "categories": [
-      "Damage",
-      "Mana",
-      "CooldownReduction",
-      "OnHit",
-      "ArmorPenetration"
-    ],
+    "categories": ["Damage", "Mana", "CooldownReduction", "OnHit", "ArmorPenetration"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3042_marksman_t3_muramana.png",
@@ -1866,12 +1827,7 @@
     "gold": { "base": 850, "purchasable": true, "total": 2600, "sell": 1820 },
     "from": [1036, 3086, 1036],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "NonbootsMovement"
-    ],
+    "categories": ["Damage", "CriticalStrike", "AttackSpeed", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3046_marksman_t3_phantomdancer.png",
@@ -1913,15 +1869,7 @@
     "gold": { "base": 700, "purchasable": true, "total": 2400, "sell": 1680 },
     "from": [3067, 3024],
     "mythic": false,
-    "categories": [
-      "Health",
-      "Armor",
-      "Mana",
-      "Active",
-      "CooldownReduction",
-      "OnHit",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Armor", "Mana", "Active", "CooldownReduction", "OnHit", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3050_enchanter_t3_zekesconvergence.png",
@@ -2005,13 +1953,7 @@
     "gold": { "base": 850, "purchasable": true, "total": 2900, "sell": 2030 },
     "from": [3211, 3067],
     "mythic": false,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "HealthRegen",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "HealthRegen", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3065_tank_t3_spiritvisage.png",
@@ -2053,8 +1995,8 @@
     "gold": { "base": 400, "purchasable": true, "total": 800, "sell": 560 },
     "from": [1028],
     "into": [
-      3065, 2065, 6617, 3071, 3083, 6630, 3190, 3001, 3003, 3050, 3078, 3107,
-      3109, 3119, 3143, 4005, 4403, 8020, 4644, 6631, 6632, 6656, 8001
+      3065, 2065, 6617, 3071, 3083, 6630, 3190, 3001, 3003, 3050, 3078, 3107, 3109, 3119, 3143, 4005, 4403, 8020, 4644,
+      6631, 6632, 6656, 8001
     ],
     "mythic": false,
     "categories": ["Health", "CooldownReduction", "AbilityHaste"],
@@ -2082,14 +2024,7 @@
     "from": [6660, 3105],
     "into": [7004],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "Armor",
-      "Aura",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "Armor", "Aura", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3068_tank_t4_sunfireaegis.png",
@@ -2184,13 +2119,7 @@
     "gold": { "base": 100, "purchasable": true, "total": 3300, "sell": 2310 },
     "from": [3077, 1053, 3133],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "LifeSteal",
-      "CooldownReduction",
-      "SpellVamp",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "LifeSteal", "CooldownReduction", "SpellVamp", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
@@ -2279,15 +2208,7 @@
     "from": [3057, 3051, 3067],
     "into": [7018],
     "mythic": true,
-    "categories": [
-      "Health",
-      "Damage",
-      "AttackSpeed",
-      "CooldownReduction",
-      "OnHit",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Damage", "AttackSpeed", "CooldownReduction", "OnHit", "NonbootsMovement", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
@@ -2328,12 +2249,7 @@
     "gold": { "base": 500, "purchasable": true, "total": 3000, "sell": 2100 },
     "from": [1011, 3067, 3801],
     "mythic": false,
-    "categories": [
-      "Health",
-      "HealthRegen",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "HealthRegen", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
@@ -2358,12 +2274,7 @@
     "gold": { "base": 950, "purchasable": true, "total": 2600, "sell": 1820 },
     "from": [1042, 3086, 1042],
     "mythic": false,
-    "categories": [
-      "CriticalStrike",
-      "AttackSpeed",
-      "OnHit",
-      "NonbootsMovement"
-    ],
+    "categories": ["CriticalStrike", "AttackSpeed", "OnHit", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3085_marksman_t3_runaans.png",
@@ -2430,13 +2341,7 @@
     "gold": { "base": 775, "purchasable": true, "total": 3100, "sell": 2170 },
     "from": [3051, 1033, 1037],
     "mythic": false,
-    "categories": [
-      "SpellBlock",
-      "Damage",
-      "AttackSpeed",
-      "OnHit",
-      "NonbootsMovement"
-    ],
+    "categories": ["SpellBlock", "Damage", "AttackSpeed", "OnHit", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3091_fighter_t3_witsend.png",
@@ -2528,12 +2433,7 @@
     "gold": { "base": 700, "purchasable": true, "total": 2600, "sell": 1820 },
     "from": [3108, 4632],
     "mythic": false,
-    "categories": [
-      "SpellBlock",
-      "SpellDamage",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellBlock", "SpellDamage", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3102_mage_t3_bansheesveil.png",
@@ -2617,15 +2517,7 @@
     "gold": { "base": 400, "purchasable": true, "total": 2300, "sell": 1610 },
     "from": [3801, 3067, 1006],
     "mythic": false,
-    "categories": [
-      "Health",
-      "Armor",
-      "Aura",
-      "Active",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Armor", "Aura", "Active", "CooldownReduction", "NonbootsMovement", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3109_tank_t3_knightsvow.png",
@@ -2646,13 +2538,7 @@
     "gold": { "base": 600, "purchasable": true, "total": 2500, "sell": 1750 },
     "from": [3082, 3024],
     "mythic": false,
-    "categories": [
-      "Armor",
-      "Mana",
-      "Aura",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Armor", "Mana", "Aura", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3110_tank_t3_frozenheart.png",
@@ -2903,10 +2789,7 @@
     "maps": [11, 12, 21],
     "gold": { "base": 400, "purchasable": true, "total": 1100, "sell": 770 },
     "from": [1036, 1036],
-    "into": [
-      6609, 3071, 3004, 6630, 3074, 3142, 3156, 3508, 6333, 6632, 6675, 6691,
-      6693, 6694, 6696
-    ],
+    "into": [6609, 3071, 3004, 6630, 3074, 3142, 3156, 3508, 6333, 6632, 6675, 6691, 6693, 6694, 6696],
     "mythic": false,
     "categories": ["Damage", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
@@ -2974,14 +2857,7 @@
     "gold": { "base": 225, "purchasable": true, "total": 3000, "sell": 2100 },
     "from": [3140, 1018, 1037],
     "mythic": false,
-    "categories": [
-      "SpellBlock",
-      "Damage",
-      "CriticalStrike",
-      "Active",
-      "NonbootsMovement",
-      "Tenacity"
-    ],
+    "categories": ["SpellBlock", "Damage", "CriticalStrike", "Active", "NonbootsMovement", "Tenacity"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3139_marksman_t3_mercurialscimitar.png",
@@ -3044,14 +2920,7 @@
     "gold": { "base": 600, "purchasable": true, "total": 2700, "sell": 1890 },
     "from": [3082, 1029, 3067],
     "mythic": false,
-    "categories": [
-      "Health",
-      "Armor",
-      "Active",
-      "CooldownReduction",
-      "Slow",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Armor", "Active", "CooldownReduction", "Slow", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
@@ -3126,14 +2995,7 @@
     "gold": { "base": 525, "purchasable": true, "total": 3300, "sell": 2310 },
     "from": [1053, 1043, 1037],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "AttackSpeed",
-      "LifeSteal",
-      "Slow",
-      "OnHit",
-      "NonbootsMovement"
-    ],
+    "categories": ["Damage", "AttackSpeed", "LifeSteal", "Slow", "OnHit", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3153_fighter_t3_bladeoftheruinedking.png",
@@ -3196,13 +3058,7 @@
     "gold": { "base": 50, "purchasable": true, "total": 2600, "sell": 1820 },
     "from": [3191, 2420, 3108],
     "mythic": false,
-    "categories": [
-      "Armor",
-      "SpellDamage",
-      "Active",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Armor", "SpellDamage", "Active", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3157_mage_t3_zhonyashourglass.png",
@@ -3286,13 +3142,7 @@
     "gold": { "base": 500, "purchasable": true, "total": 2300, "sell": 1610 },
     "from": [1036, 3134, 1036],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "Vision",
-      "CooldownReduction",
-      "ArmorPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "Vision", "CooldownReduction", "ArmorPenetration", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
@@ -3364,15 +3214,7 @@
     "from": [3067, 3105],
     "into": [7019],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "Armor",
-      "Aura",
-      "Active",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "Armor", "Aura", "Active", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
@@ -3413,13 +3255,7 @@
     "gold": { "base": 1050, "purchasable": true, "total": 3200, "sell": 2240 },
     "from": [1029, 3105, 1033],
     "mythic": false,
-    "categories": [
-      "SpellBlock",
-      "Armor",
-      "Active",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellBlock", "Armor", "Active", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3193_tank_t3_gargoylestoneplate.png",
@@ -3461,14 +3297,7 @@
     "gold": { "base": 600, "purchasable": true, "total": 2300, "sell": 1610 },
     "from": [3114, 1057],
     "mythic": false,
-    "categories": [
-      "SpellBlock",
-      "ManaRegen",
-      "Active",
-      "CooldownReduction",
-      "Tenacity",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellBlock", "ManaRegen", "Active", "CooldownReduction", "Tenacity", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3222_enchanter_t3_mikaelsblessing.png",
@@ -3615,14 +3444,7 @@
     "gold": { "base": 400, "purchasable": true, "total": 2800, "sell": 1960 },
     "from": [3057, 3133, 1018],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "ManaRegen",
-      "CooldownReduction",
-      "OnHit",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "CriticalStrike", "ManaRegen", "CooldownReduction", "OnHit", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3508_marksman_t3_essencereaver.png",
@@ -3774,13 +3596,7 @@
     "from": [1052, 1027, 1052],
     "into": [6655, 6653, 4644, 6656],
     "mythic": false,
-    "categories": [
-      "SpellDamage",
-      "Mana",
-      "ManaRegen",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellDamage", "Mana", "ManaRegen", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3802_mage_tier2_lostchapter.png",
@@ -3820,14 +3636,7 @@
     "maps": [11],
     "gold": { "base": 400, "purchasable": true, "total": 400, "sell": 160 },
     "mythic": false,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "ManaRegen",
-      "Vision",
-      "GoldPer",
-      "Lane"
-    ],
+    "categories": ["Health", "SpellDamage", "ManaRegen", "Vision", "GoldPer", "Lane"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3850_mage_t1_spellthiefsedge.png",
@@ -3890,14 +3699,7 @@
     "maps": [11],
     "gold": { "base": 400, "purchasable": true, "total": 400, "sell": 160 },
     "mythic": false,
-    "categories": [
-      "Health",
-      "HealthRegen",
-      "Damage",
-      "Vision",
-      "GoldPer",
-      "Lane"
-    ],
+    "categories": ["Health", "HealthRegen", "Damage", "Vision", "GoldPer", "Lane"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3854_tank_t1_petriciteshoulderguard.png",
@@ -3960,14 +3762,7 @@
     "maps": [11],
     "gold": { "base": 400, "purchasable": true, "total": 400, "sell": 160 },
     "mythic": false,
-    "categories": [
-      "Health",
-      "HealthRegen",
-      "SpellDamage",
-      "Vision",
-      "GoldPer",
-      "Lane"
-    ],
+    "categories": ["Health", "HealthRegen", "SpellDamage", "Vision", "GoldPer", "Lane"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3858_tank_t1_relicshield.png",
@@ -4030,14 +3825,7 @@
     "maps": [11],
     "gold": { "base": 400, "purchasable": true, "total": 400, "sell": 160 },
     "mythic": false,
-    "categories": [
-      "Health",
-      "Damage",
-      "ManaRegen",
-      "Vision",
-      "GoldPer",
-      "Lane"
-    ],
+    "categories": ["Health", "Damage", "ManaRegen", "Vision", "GoldPer", "Lane"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3862_marksman_t1_spectralsickle.png",
@@ -4186,13 +3974,7 @@
     "from": [3067, 4642],
     "into": [7022],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "ManaRegen",
-      "CooldownReduction",
-      "NonbootsMovement"
-    ],
+    "categories": ["Health", "SpellDamage", "ManaRegen", "CooldownReduction", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4005_enchanter_t4_imperialmandate.png",
@@ -4308,13 +4090,7 @@
     "gold": { "base": 850, "purchasable": true, "total": 3000, "sell": 2100 },
     "from": [3108, 3113, 1028],
     "mythic": false,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "CooldownReduction", "NonbootsMovement", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4629_mage_t3_cosmicdrive.png",
@@ -4378,14 +4154,7 @@
     "from": [4635, 1026],
     "into": [7009],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "CooldownReduction",
-      "SpellVamp",
-      "MagicPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "CooldownReduction", "SpellVamp", "MagicPenetration", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
@@ -4427,13 +4196,7 @@
     "from": [1026, 3145, 1052],
     "into": [7010],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "CooldownReduction", "NonbootsMovement", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4636_mage_t4_nightharvester.png",
@@ -4474,13 +4237,7 @@
     "gold": { "base": 1100, "purchasable": true, "total": 1100, "sell": 770 },
     "into": [4643],
     "mythic": false,
-    "categories": [
-      "Health",
-      "Vision",
-      "Active",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Vision", "Active", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4638_enchanter_t3_watchfulsightstone.png",
@@ -4523,12 +4280,7 @@
     "from": [1004, 1052],
     "into": [2065, 6617, 3011, 4005],
     "mythic": false,
-    "categories": [
-      "SpellDamage",
-      "ManaRegen",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellDamage", "ManaRegen", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4642_enchanter_t2_bandleglassmirror.png",
@@ -4548,13 +4300,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 1100, "sell": 770 },
     "from": [4638],
     "mythic": false,
-    "categories": [
-      "Health",
-      "Vision",
-      "Active",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Vision", "Active", "CooldownReduction", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4643_enchanter_t3_vigilantsightstone.png",
@@ -4580,13 +4326,7 @@
     "from": [3067, 3802, 1052],
     "into": [7024],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "Mana",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "Mana", "NonbootsMovement", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4644_crown.png",
@@ -4758,15 +4498,7 @@
     "from": [6029, 3133, 3067],
     "into": [7015],
     "mythic": true,
-    "categories": [
-      "Health",
-      "Damage",
-      "LifeSteal",
-      "Active",
-      "CooldownReduction",
-      "SpellVamp",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Damage", "LifeSteal", "Active", "CooldownReduction", "SpellVamp", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6630_fighter_t4_goredrinker.png",
@@ -4872,14 +4604,7 @@
     "from": [3802, 1026],
     "into": [7013],
     "mythic": true,
-    "categories": [
-      "SpellDamage",
-      "Mana",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "MagicPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellDamage", "Mana", "CooldownReduction", "NonbootsMovement", "MagicPenetration", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
@@ -4904,15 +4629,7 @@
     "from": [3067, 3802, 1052],
     "into": [7014],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "Mana",
-      "Active",
-      "CooldownReduction",
-      "Slow",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "Mana", "Active", "CooldownReduction", "Slow", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6656_mage_t4_everfrost.png",
@@ -4958,15 +4675,7 @@
     "from": [6660, 1033, 1029],
     "into": [7005],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "Armor",
-      "Aura",
-      "CooldownReduction",
-      "Slow",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "Armor", "Aura", "CooldownReduction", "Slow", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t4_frostfiregauntlet.png",
@@ -5048,13 +4757,7 @@
     "from": [6670, 1018, 1037],
     "into": [7006],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "Active",
-      "NonbootsMovement"
-    ],
+    "categories": ["Damage", "CriticalStrike", "AttackSpeed", "Active", "NonbootsMovement"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6671_marksman_t4_galeforce.png",
@@ -5079,12 +4782,7 @@
     "from": [6670, 1018, 1037],
     "into": [7007],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "ArmorPenetration"
-    ],
+    "categories": ["Damage", "CriticalStrike", "AttackSpeed", "ArmorPenetration"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
@@ -5110,13 +4808,7 @@
     "from": [6670, 1018, 1053],
     "into": [7008],
     "mythic": true,
-    "categories": [
-      "Health",
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "LifeSteal"
-    ],
+    "categories": ["Health", "Damage", "CriticalStrike", "AttackSpeed", "LifeSteal"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
@@ -5136,12 +4828,7 @@
     "gold": { "base": 825, "purchasable": true, "total": 3400, "sell": 2380 },
     "from": [3133, 1037, 1018],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "CriticalStrike", "CooldownReduction", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6675_marksman_t3_navoriquickblades.png",
@@ -5205,14 +4892,7 @@
     "from": [3134, 3133],
     "into": [7002],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "Stealth",
-      "CooldownReduction",
-      "Slow",
-      "ArmorPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "Stealth", "CooldownReduction", "Slow", "ArmorPenetration", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6691_assassin_t4_duskbladeofdraktharr.png",
@@ -5233,13 +4913,7 @@
     "from": [3134, 1036, 1053],
     "into": [7001],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "LifeSteal",
-      "SpellVamp",
-      "NonbootsMovement",
-      "ArmorPenetration"
-    ],
+    "categories": ["Damage", "LifeSteal", "SpellVamp", "NonbootsMovement", "ArmorPenetration"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
@@ -5260,14 +4934,7 @@
     "from": [3134, 3133],
     "into": [7000],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "Active",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "ArmorPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "Active", "CooldownReduction", "NonbootsMovement", "ArmorPenetration", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6693_assassin_t4_prowlersclaw.png",
@@ -5287,12 +4954,7 @@
     "gold": { "base": 650, "purchasable": true, "total": 3200, "sell": 2240 },
     "from": [3133, 3035],
     "mythic": false,
-    "categories": [
-      "Damage",
-      "CooldownReduction",
-      "ArmorPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "CooldownReduction", "ArmorPenetration", "AbilityHaste"],
     "inStore": true,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
@@ -5355,14 +5017,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3100, "sell": 2170 },
     "from": [6693],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "Active",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "ArmorPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "Active", "CooldownReduction", "NonbootsMovement", "ArmorPenetration", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6693_assassin_t4_prowlersclaw.png",
@@ -5383,13 +5038,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3100, "sell": 2170 },
     "from": [6692],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "LifeSteal",
-      "SpellVamp",
-      "NonbootsMovement",
-      "ArmorPenetration"
-    ],
+    "categories": ["Damage", "LifeSteal", "SpellVamp", "NonbootsMovement", "ArmorPenetration"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
@@ -5410,14 +5059,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3100, "sell": 2170 },
     "from": [6691],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "Stealth",
-      "CooldownReduction",
-      "Slow",
-      "ArmorPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Damage", "Stealth", "CooldownReduction", "Slow", "ArmorPenetration", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6691_assassin_t4_duskbladeofdraktharr.png",
@@ -5478,14 +5120,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3200, "sell": 2240 },
     "from": [3068],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "Armor",
-      "Aura",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "Armor", "Aura", "CooldownReduction", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3068_tank_t4_sunfireaegis.png",
@@ -5510,15 +5145,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 2800, "sell": 1960 },
     "from": [6662],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "Armor",
-      "Aura",
-      "CooldownReduction",
-      "Slow",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "Armor", "Aura", "CooldownReduction", "Slow", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t4_frostfiregauntlet.png",
@@ -5543,13 +5170,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3400, "sell": 2380 },
     "from": [6671],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "Active",
-      "NonbootsMovement"
-    ],
+    "categories": ["Damage", "CriticalStrike", "AttackSpeed", "Active", "NonbootsMovement"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6671_marksman_t4_galeforce.png",
@@ -5574,12 +5195,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3400, "sell": 2380 },
     "from": [6672],
     "mythic": true,
-    "categories": [
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "ArmorPenetration"
-    ],
+    "categories": ["Damage", "CriticalStrike", "AttackSpeed", "ArmorPenetration"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
@@ -5605,13 +5221,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3400, "sell": 2380 },
     "from": [6673],
     "mythic": true,
-    "categories": [
-      "Health",
-      "Damage",
-      "CriticalStrike",
-      "AttackSpeed",
-      "LifeSteal"
-    ],
+    "categories": ["Health", "Damage", "CriticalStrike", "AttackSpeed", "LifeSteal"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
@@ -5632,14 +5242,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3200, "sell": 2240 },
     "from": [4633],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "CooldownReduction",
-      "SpellVamp",
-      "MagicPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "CooldownReduction", "SpellVamp", "MagicPenetration", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
@@ -5660,13 +5263,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3200, "sell": 2240 },
     "from": [4636],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "CooldownReduction", "NonbootsMovement", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4636_mage_t4_nightharvester.png",
@@ -5737,14 +5334,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3200, "sell": 2240 },
     "from": [6655],
     "mythic": true,
-    "categories": [
-      "SpellDamage",
-      "Mana",
-      "CooldownReduction",
-      "NonbootsMovement",
-      "MagicPenetration",
-      "AbilityHaste"
-    ],
+    "categories": ["SpellDamage", "Mana", "CooldownReduction", "NonbootsMovement", "MagicPenetration", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
@@ -5769,15 +5359,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 2800, "sell": 1960 },
     "from": [6656],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "Mana",
-      "Active",
-      "CooldownReduction",
-      "Slow",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "Mana", "Active", "CooldownReduction", "Slow", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6656_mage_t4_everfrost.png",
@@ -5798,15 +5380,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3300, "sell": 2310 },
     "from": [6630],
     "mythic": true,
-    "categories": [
-      "Health",
-      "Damage",
-      "LifeSteal",
-      "Active",
-      "CooldownReduction",
-      "SpellVamp",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Damage", "LifeSteal", "Active", "CooldownReduction", "SpellVamp", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6630_fighter_t4_goredrinker.png",
@@ -5895,15 +5469,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 3333, "sell": 2333 },
     "from": [3078],
     "mythic": true,
-    "categories": [
-      "Health",
-      "Damage",
-      "AttackSpeed",
-      "CooldownReduction",
-      "OnHit",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "Damage", "AttackSpeed", "CooldownReduction", "OnHit", "NonbootsMovement", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
@@ -5928,15 +5494,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 2500, "sell": 1750 },
     "from": [3190],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellBlock",
-      "Armor",
-      "Aura",
-      "Active",
-      "CooldownReduction",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellBlock", "Armor", "Aura", "Active", "CooldownReduction", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
@@ -6007,13 +5565,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 2500, "sell": 1750 },
     "from": [4005],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "ManaRegen",
-      "CooldownReduction",
-      "NonbootsMovement"
-    ],
+    "categories": ["Health", "SpellDamage", "ManaRegen", "CooldownReduction", "NonbootsMovement"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4005_enchanter_t4_imperialmandate.png",
@@ -6063,13 +5615,7 @@
     "gold": { "base": 0, "purchasable": false, "total": 2800, "sell": 1960 },
     "from": [4644],
     "mythic": true,
-    "categories": [
-      "Health",
-      "SpellDamage",
-      "Mana",
-      "NonbootsMovement",
-      "AbilityHaste"
-    ],
+    "categories": ["Health", "SpellDamage", "Mana", "NonbootsMovement", "AbilityHaste"],
     "inStore": false,
     "maxStacks": 1,
     "icon": "https://raw.communitydragon.org/12.9/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4644_crown.png",

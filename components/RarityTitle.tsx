@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
+import React, { useContext } from 'react'
+
 import { Rarity } from '../types/FilterProps'
 import { PotatoModeContext } from './hooks/PotatoModeStore'
 
@@ -23,8 +24,8 @@ export const RarityTitle = ({
 
   const getBackgroundColor = () => {
     if (backgroundColor) {
-      // Check if potato mode is enabled
-      if (state.enabled) {
+      // Check if potato mode is enabled or if browser doesn't support backdrop-filter
+      if (state.enabled || !CSS.supports('backdrop-filter', 'blur(2px)')) {
         return fallbackBackgroundColor || 'bg-black'
       }
       return backgroundColor

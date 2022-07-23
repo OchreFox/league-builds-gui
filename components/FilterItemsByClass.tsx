@@ -1,12 +1,10 @@
-import React from 'react'
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import { FilterByClassState, FilterByClassProps } from '../types/FilterProps'
+import React from 'react'
 
-export default function FilterItemsByClass({
-  filterItems,
-  setFilterItems,
-}: FilterByClassState) {
+import { FilterByClassProps, FilterByClassState } from '../types/FilterProps'
+
+export default function FilterItemsByClass({ filterItems, setFilterItems }: FilterByClassState) {
   const handleClick = (itemClicked: FilterByClassProps) => {
     // Create a temporary array that is a clone of the filterItems array
     const tempArray = [...filterItems]
@@ -51,10 +49,7 @@ export default function FilterItemsByClass({
       </div>
       <div className="hidden flex-col xl:flex">
         <div className=" border-b border-slate-800">
-          <nav
-            className="flex flex-row justify-around space-x-1"
-            aria-label="Tabs"
-          >
+          <nav className="flex flex-row justify-around space-x-1" aria-label="Tabs">
             {filterItems.map((item) => (
               <motion.button
                 key={item.name}

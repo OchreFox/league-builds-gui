@@ -1,14 +1,15 @@
-import React from 'react'
-import styled from '@emotion/styled'
 import { css, cx } from '@emotion/css'
+import styled from '@emotion/styled'
+import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import { statProperties } from './StatProperties'
-import stealthIcon from '../public/icons/stealth.svg?url'
-import healthRegenIcon from '../public/icons/health-regeneration.svg?url'
-import manaRegenIcon from '../public/icons/mana-regeneration.svg?url'
+import React, { SVGProps } from 'react'
+
 import abilityPowerIcon from '../public/icons/ability-power.svg?url'
 import attackDamageIcon from '../public/icons/attack-damage.svg?url'
+import healthRegenIcon from '../public/icons/health-regeneration.svg?url'
+import manaRegenIcon from '../public/icons/mana-regeneration.svg?url'
 import trueDamageIcon from '../public/icons/true-damage.svg?url'
+import { statProperties } from './StatProperties'
 
 // Description tooltip popper element
 export const Tooltip = styled(motion.div)`
@@ -58,19 +59,16 @@ export const setPopperBg = (enabled: boolean) => {
     return css`
       background: rgb(9, 22, 27);
     `
+  } else if (!CSS.supports('backdrop-filter', 'blur(2px)')) {
+    return css`
+      background: linear-gradient(180deg, rgba(221, 122, 57, 0.1) 0%, rgba(9, 22, 27, 0.9) 30%);
+    `
   } else {
     return css`
-      background: linear-gradient(
-        180deg,
-        rgba(221, 122, 57, 0.1) 0%,
-        rgba(9, 22, 27, 0.5) 30%
-      );
-      filter: drop-shadow(0px 2.8px 2.2px rgba(0, 0, 0, 0.042))
-        drop-shadow(0px 6.7px 5.3px rgba(0, 0, 0, 0.061))
-        drop-shadow(0px 12.5px 10px rgba(0, 0, 0, 0.075))
-        drop-shadow(0px 22.3px 17.9px rgba(0, 0, 0, 0.089))
-        drop-shadow(0px 41.8px 33.4px rgba(0, 0, 0, 0.108))
-        drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.15));
+      background: linear-gradient(180deg, rgba(221, 122, 57, 0.1) 0%, rgba(9, 22, 27, 0.5) 30%);
+      filter: drop-shadow(0px 2.8px 2.2px rgba(0, 0, 0, 0.042)) drop-shadow(0px 6.7px 5.3px rgba(0, 0, 0, 0.061))
+        drop-shadow(0px 12.5px 10px rgba(0, 0, 0, 0.075)) drop-shadow(0px 22.3px 17.9px rgba(0, 0, 0, 0.089))
+        drop-shadow(0px 41.8px 33.4px rgba(0, 0, 0, 0.108)) drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.15));
     `
   }
 }
@@ -111,15 +109,7 @@ export const Stats = ({ children }: any) => {
   )
 }
 export const StatIcon = ({ src, alt }: { src: any; alt: string }) => {
-  return (
-    <img
-      className="mr-1 inline-flex h-3 w-3"
-      src={src}
-      alt={alt}
-      width={12}
-      height={12}
-    />
-  )
+  return <img className="mr-1 inline-flex h-3 w-3" src={src} alt={alt} width={12} height={12} />
 }
 export const Stat = ({ children = [], name }: any) => {
   const stat =
@@ -143,9 +133,7 @@ export const Stat = ({ children = [], name }: any) => {
   )
 }
 export const Attention = ({ children }: any) => {
-  return (
-    <span className="mr-1 font-sans font-bold text-yellow-600">{children}</span>
-  )
+  return <span className="mr-1 font-sans font-bold text-yellow-600">{children}</span>
 }
 export const Active = ({ children }: any) => {
   return <span className="font-sans font-bold text-yellow-200">{children}</span>
@@ -168,15 +156,22 @@ export const RarityMythic = ({ children }: any) => {
   )
 }
 export const ScaleLevel = ({ children }: any) => {
-  return (
-    <span className="font-sans font-semibold text-cyan-400">{children}</span>
-  )
+  return <span className="font-sans font-semibold text-cyan-400">{children}</span>
 }
 export const KeywordStealth = ({ children }: any) => {
+  const invisibleKeywords = ['Invisible', 'Invisibility', 'Camouflage']
+  const isInvisible = invisibleKeywords.some((keyword) => String(children.props.children).includes(keyword))
   return (
-    <span className="inline-flex flex-row items-baseline font-sans font-bold text-gray-300">
-      <StatIcon src={stealthIcon} alt="stealth" />
-      {children}{' '}
+    <span className="mr-1 inline-flex flex-row items-baseline font-sans font-bold text-gray-300">
+      {/* <StatIcon src={stealthIcon} alt="stealth" /> */}
+      <Icon
+        icon={`heroicons-solid:eye${isInvisible ? '-off' : ''}`}
+        inline={true}
+        className="mr-1"
+        width={12}
+        height={12}
+      />
+      {children}
     </span>
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
-import { StandardItem } from './StandardItem'
+
 import { ItemContainerState } from '../types/FilterProps'
+import { StandardItem } from './StandardItem'
 
 export const ItemContainer = ({
   itemsCombined,
@@ -10,6 +11,7 @@ export const ItemContainer = ({
   selectedItem,
   setHoveredItem,
   setSelectedItem,
+  itemRefArray,
 }: ItemContainerState) => {
   if (!itemsCombined || itemsCombined.length === 0) {
     return null
@@ -26,6 +28,7 @@ export const ItemContainer = ({
           isMythic={mythic}
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
+          itemRefArray={itemRefArray}
         />
       ))}
     </>

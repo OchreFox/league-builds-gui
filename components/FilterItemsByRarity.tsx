@@ -1,12 +1,10 @@
-import React from 'react'
 import { cx } from '@emotion/css'
-import { FilterByRarityState, Rarity } from '../types/FilterProps'
 import { motion } from 'framer-motion'
+import React from 'react'
 
-export default function FilterItemsByRarity({
-  rarityFilter,
-  setRarityFilter,
-}: FilterByRarityState) {
+import { FilterByRarityState, Rarity } from '../types/FilterProps'
+
+export default function FilterItemsByRarity({ rarityFilter, setRarityFilter }: FilterByRarityState) {
   return (
     <span className="relative z-0 inline-flex grow rounded-md shadow-sm">
       <motion.button

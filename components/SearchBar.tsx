@@ -1,12 +1,9 @@
-import React, { useCallback, Fragment } from 'react'
-import { FilterBySearchState } from '../types/FilterProps'
 import { Combobox, Transition } from '@headlessui/react'
+import React, { Fragment, useCallback } from 'react'
 
-export default function SearchBar({
-  searchTerm,
-  setSearchTerm,
-  autocompleteResults,
-}: FilterBySearchState) {
+import { FilterBySearchState } from '../types/FilterProps'
+
+export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResults }: FilterBySearchState) {
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value)
@@ -46,12 +43,7 @@ export default function SearchBar({
             onChange={handleChange}
             autoComplete="off"
           />
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
+          <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
             <Combobox.Options className="absolute z-10 mt-1 grid max-h-60 w-full grid-cols-4 overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {autocompleteResults?.length === 0 && searchTerm !== '' ? (
                 <div className="px-4 py-2">

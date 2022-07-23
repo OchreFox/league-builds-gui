@@ -1,15 +1,13 @@
-import React, { Fragment, useContext, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { cx, css } from '@emotion/css'
-import { FilterByTypeState, FilterByTypeProps } from '../types/FilterProps'
+import { css, cx } from '@emotion/css'
 import { Menu, Transition } from '@headlessui/react'
 import { InlineIcon } from '@iconify/react'
+import { motion } from 'framer-motion'
+import React, { Fragment, useContext, useRef, useState } from 'react'
+
+import { FilterByTypeProps, FilterByTypeState } from '../types/FilterProps'
 import { PotatoModeContext } from './hooks/PotatoModeStore'
 
-export default function FilterItemsByType({
-  filterItems,
-  setFilterItems,
-}: FilterByTypeState) {
+export default function FilterItemsByType({ filterItems, setFilterItems }: FilterByTypeState) {
   const { state } = useContext(PotatoModeContext)
 
   const getItemClassnames = (item: FilterByTypeProps) => {
@@ -43,8 +41,7 @@ export default function FilterItemsByType({
     if (item.isActive) {
       imageClassnames = 'text-gray-500'
     } else {
-      imageClassnames =
-        'text-gray-400 brightness-50 group-hover:text-gray-200 group-hover:brightness-100'
+      imageClassnames = 'text-gray-400 brightness-50 group-hover:text-gray-200 group-hover:brightness-100'
     }
     return cx(
       imageClassnames,
@@ -80,10 +77,7 @@ export default function FilterItemsByType({
   }
 
   return (
-    <nav
-      className="flex select-none flex-col space-y-3 md:flex-col md:space-y-1"
-      aria-label="Filter items by type"
-    >
+    <nav className="flex select-none flex-col space-y-3 md:flex-col md:space-y-1" aria-label="Filter items by type">
       <Menu as="div" className="md:hidden">
         {({ open }) => (
           <Fragment>
@@ -112,24 +106,16 @@ export default function FilterItemsByType({
                     {(item.name === 'Attack Damage' ||
                       item.name === 'Health & Regeneration' ||
                       item.name === 'Ability Haste' ||
-                      item.name === 'Trinket') && (
-                      <div className="border-t-2 border-yellow-900" />
-                    )}
+                      item.name === 'Trinket') && <div className="border-t-2 border-yellow-900" />}
                     <Menu.Item>
                       <div
                         className={cx(
-                          item.isActive
-                            ? 'bg-slate-600 text-white'
-                            : 'bg-slate-800 text-gray-400',
+                          item.isActive ? 'bg-slate-600 text-white' : 'bg-slate-800 text-gray-400',
                           'group flex items-center  px-4 py-2 text-sm'
                         )}
                         onClick={() => handleClick(item)}
                       >
-                        <img
-                          alt={item.name}
-                          className={getImageClassnames(item)}
-                          src={'icons/' + item.icon}
-                        />
+                        <img alt={item.name} className={getImageClassnames(item)} src={'icons/' + item.icon} />
                         <span className="ml-2">{item.name}</span>
                       </div>
                     </Menu.Item>
@@ -140,16 +126,14 @@ export default function FilterItemsByType({
           </Fragment>
         )}
       </Menu>
-      <div className="hidden flex-col md:flex lg:space-y-1">
+      <div className="hidden flex-col md:flex lg:space-y-0.5">
         {filterItems.map((item) => (
           <React.Fragment key={item.name}>
             {/* Item classification separators */}
             {(item.name === 'Attack Damage' ||
               item.name === 'Health & Regeneration' ||
               item.name === 'Ability Haste' ||
-              item.name === 'Trinket') && (
-              <div className="border-t border-yellow-900" />
-            )}
+              item.name === 'Trinket') && <div className="border-t border-yellow-900" />}
             <motion.button
               // Framer Motion onClick animation
               whileTap={{ scale: 0.95 }}
@@ -164,14 +148,8 @@ export default function FilterItemsByType({
                 handleClick(item)
               }}
             >
-              <img
-                alt={item.name}
-                className={getImageClassnames(item)}
-                src={'icons/' + item.icon}
-              />
-              <span className="z-10 m-0 hidden md:ml-2 md:inline-block">
-                {item.name}
-              </span>
+              <img alt={item.name} className={getImageClassnames(item)} src={'icons/' + item.icon} />
+              <span className="z-10 m-0 hidden md:ml-2 md:inline-block">{item.name}</span>
             </motion.button>
           </React.Fragment>
         ))}

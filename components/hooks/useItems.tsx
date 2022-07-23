@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+
 import { ItemsSchema } from '../../types/Items'
 import JSONFetcher from '../JSONFetcher'
 

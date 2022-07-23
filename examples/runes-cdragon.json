@@ -107,10 +107,7 @@
     "shortDesc": "Gain 5% Heal and Shield Power.<br><br>Heals and shields you cast or receive are 10% stronger on targets below 40% health.",
     "longDesc": "Gain 5% Heal and Shield Power.<br><br>Heals and shields you cast or receive are 10% stronger on targets below 40% health.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Resolve/Revitalize/Revitalize.png",
-    "endOfGameStatDescs": [
-      "Bonus Healing: @eogvar1@",
-      "Bonus Shielding: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Bonus Healing: @eogvar1@", "Bonus Shielding: @eogvar2@"]
   },
   {
     "id": 8360,
@@ -140,10 +137,7 @@
     "shortDesc": "Damaging a low health champion inflicts <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword> and harvests a soul from the victim.",
     "longDesc": "Damaging a Champion below 50% health deals <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword> and harvests their soul, permanently increasing Dark Harvest's damage by 5.<br><br>Dark Harvest damage: 20-60 (based on level) (+5 damage per soul) (+0.25 bonus AD) (+0.15 AP)<br>Cooldown: 45s (resets to 1.5s on takedown)",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png",
-    "endOfGameStatDescs": [
-      "Total Damage Dealt: @eogvar1@",
-      "Total Souls Harvested: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Total Damage Dealt: @eogvar1@", "Total Souls Harvested: @eogvar2@"]
   },
   {
     "id": 8220,
@@ -193,10 +187,7 @@
     "shortDesc": "Your attacks and abilities send Aery to a target, damaging enemies or shielding allies.",
     "longDesc": "Damaging enemy champions with basic attacks or abilities sends Aery to them, dealing 10 - 40 based on level (+<scaleAP>0.1 AP</scaleAP>) (+<scaleAD>0.15 bonus AD</scaleAD>).<br><br>Empower or protecting allies with abilities sends Aery to them, shielding them for 35 - 80 based on level (+<scaleAP>0.25 AP</scaleAP>) (+<scaleAD>0.4 bonus AD</scaleAD>).<br><br>Aery cannot be sent out again until she returns to you.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Sorcery/SummonAery/SummonAery.png",
-    "endOfGameStatDescs": [
-      "Damage Dealt: @eogvar1@",
-      "Damage Shielded: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Damage Dealt: @eogvar1@", "Damage Shielded: @eogvar2@"]
   },
   {
     "id": 8237,
@@ -296,11 +287,7 @@
     "shortDesc": "Hitting an enemy champion 3 consecutive times makes them vulnerable, dealing bonus damage and causing them to take more damage from all sources for 6s.",
     "longDesc": "Hitting an enemy champion with 3 consecutive basic attacks deals 40 - 180 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>adaptive damage</font></lol-uikit-tooltipped-keyword> (based on level) and makes them vulnerable, increasing the damage they take by 8 - 12% from all sources for 6s.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Precision/PressTheAttack/PressTheAttack.png",
-    "endOfGameStatDescs": [
-      "Total Damage: @eogvar1@",
-      "Bonus Damage: @eogvar2@",
-      "Expose Damage: @eogvar3@"
-    ]
+    "endOfGameStatDescs": ["Total Damage: @eogvar1@", "Bonus Damage: @eogvar2@", "Expose Damage: @eogvar3@"]
   },
   {
     "id": 8435,
@@ -364,10 +351,7 @@
     "shortDesc": "<b>Unique</b> <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>takedowns</lol-uikit-tooltipped-keyword> grant additional gold the first time they are collected. ",
     "longDesc": "Gain an additional <gold>70 gold</gold> the next time you collect a <i>Bounty Hunter</i> stack. Increase the gold gained by <gold>20 gold</gold> for each <i>Bounty Hunter</i> stack, up to <gold>150 gold</gold>.<br><br><i>Bounty Hunter</i> stacks are earned the first time you get a takedown on each enemy champion.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Domination/TreasureHunter/TreasureHunter.png",
-    "endOfGameStatDescs": [
-      "Gold Collected: @eogvar1@",
-      "Total Stacks: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Gold Collected: @eogvar1@", "Total Stacks: @eogvar2@"]
   },
   {
     "id": 8120,
@@ -377,10 +361,7 @@
     "shortDesc": "When your wards expire, they leave behind a Ghost Poro. The Ghost Poro grants vision until discovered. Gain permanent AD or AP, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> for each Ghost Poro and when your Ghost Poro spots an enemy champion, plus bonus upon completion.",
     "longDesc": "When your wards expire, they leave behind a Ghost Poro, which grants vision for 90s. Nearby enemy champions scare the Ghost Poro away.<br><br>Gain an <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> bonus of 1.2 Attack Damage or 2 Ability Power for every Ghost Poro spawned and when your Ghost Poro spots an enemy champion up to 10 stacks. <br><br>After gaining 10 stacks, additionally gain 10 adaptive force.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Domination/GhostPoro/GhostPoro.png",
-    "endOfGameStatDescs": [
-      "Ghost Poros Spawned: @eogvar3@",
-      "Enemies Spotted: @eogvar1@"
-    ]
+    "endOfGameStatDescs": ["Ghost Poros Spawned: @eogvar3@", "Enemies Spotted: @eogvar1@"]
   },
   {
     "id": 8134,
@@ -390,10 +371,7 @@
     "shortDesc": "<b>Unique</b> <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>takedowns</lol-uikit-tooltipped-keyword> grant permanent Item <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_CDR'>Haste</lol-uikit-tooltipped-keyword> (includes Trinkets).",
     "longDesc": "Gain <attention>20</attention> <b>Item Haste</b> plus an additional <attention>6</attention> <b>Item Haste</b> per <i>Bounty Hunter</i> stack (includes Trinkets).<br><br><i>Bounty Hunter</i> stacks are earned the first time you get a takedown on each enemy champion.<br><br><rules>Item Haste affects all items with cooldowns. </rules>",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Domination/IngeniousHunter/IngeniousHunter.png",
-    "endOfGameStatDescs": [
-      "Total Stacks: @eogvar2@",
-      "Total Item Activations (Including Trinkets): @eogvar1@"
-    ]
+    "endOfGameStatDescs": ["Total Stacks: @eogvar2@", "Total Item Activations (Including Trinkets): @eogvar1@"]
   },
   {
     "id": 8351,
@@ -403,10 +381,7 @@
     "shortDesc": "Immobilizing an enemy champion will cause 3 glacial rays that slow nearby enemies and reduce their damage to your allies. Cooldown: 25s",
     "longDesc": "Immobilizing an enemy champion will cause 3 glacial rays to emanate from them towards you and other nearby champions, creating frozen zones for 3 (+ 100% of the immobilizing effect's duration) seconds that slow enemies for 30% (+9% per 10% Heal and Shield Power) (+3% per 100 Ability Power) (+4% per 100 bonus Attack Damage) and reduce their damage by 15% against your allies (not including yourself). <br><br>Cooldown: 25s",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Inspiration/GlacialAugment/GlacialAugment.png",
-    "endOfGameStatDescs": [
-      "Duration Enemy Champs Slowed: @eogvar1@s",
-      "Damage Reduced: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Duration Enemy Champs Slowed: @eogvar1@s", "Damage Reduced: @eogvar2@"]
   },
   {
     "id": 8242,
@@ -416,9 +391,7 @@
     "shortDesc": "Gain a small amount of tenacity that increases with missing health. ",
     "longDesc": "Gain 10% Tenacity and 10% Slow Resist. These values increase by up to an additional 20% Tenacity and 20% Slow Resist based on missing health. Maximum value achieved at 30% health. ",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Sorcery/Unflinching/Unflinching.png",
-    "endOfGameStatDescs": [
-      "Seconds in combat at max tenacity granted: @eogvar1@"
-    ]
+    "endOfGameStatDescs": ["Seconds in combat at max tenacity granted: @eogvar1@"]
   },
   {
     "id": 8401,
@@ -438,10 +411,7 @@
     "shortDesc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> restore 12% of your missing health and grant an additional 20 gold. ",
     "longDesc": "Takedowns restore 12% of your missing health and grant an additional 20 gold. <br><br><hr><br><i>'The most dangerous game brings the greatest glory.' <br>—Noxian Reckoner</i>",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Precision/Triumph.png",
-    "endOfGameStatDescs": [
-      "Total Health Restored: @eogvar1@",
-      "Total bonus gold granted: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Total Health Restored: @eogvar1@", "Total bonus gold granted: @eogvar2@"]
   },
   {
     "id": 8105,
@@ -451,10 +421,7 @@
     "shortDesc": "<b>Unique</b> <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>takedowns</lol-uikit-tooltipped-keyword> grant permanent <b>out of combat <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword></b>. ",
     "longDesc": "Gain <speed>5 Move Speed</speed> out of combat plus <speed>8</speed> per <i>Bounty Hunter</i> stack.<br><br><i>Bounty Hunter</i> stacks are earned the first time you get a takedown on each enemy champion.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Domination/RelentlessHunter/RelentlessHunter.png",
-    "endOfGameStatDescs": [
-      "Total Stacks: @eogvar2@",
-      "<speed>@eogvar1@% Move Speed</speed> increase"
-    ]
+    "endOfGameStatDescs": ["Total Stacks: @eogvar2@", "<speed>@eogvar1@% Move Speed</speed> increase"]
   },
   {
     "id": 8454,
@@ -494,10 +461,7 @@
     "shortDesc": "After <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Immobilize'>immobilizing</lol-uikit-tooltipped-keyword> an enemy champion gain defenses and later deal a burst of magic damage around you.",
     "longDesc": "After immobilizing an enemy champion, increase your Armor and Magic Resist by 35 + 80% of your Bonus Resists for 2.5s. Then explode, dealing magic damage to nearby enemies.<br><br>Damage: 25 - 120 (+8% of your bonus health)<br>Cooldown: 20s<br><br>Resistance bonus from Aftershock capped at: 80-150 (based on level)<br>",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Resolve/VeteranAftershock/VeteranAftershock.png",
-    "endOfGameStatDescs": [
-      "Total Damage Dealt: @eogvar1@",
-      "Total Damage Mitigated: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Total Damage Dealt: @eogvar1@", "Total Damage Mitigated: @eogvar2@"]
   },
   {
     "id": 8109,
@@ -617,10 +581,7 @@
     "shortDesc": "Hitting an enemy champion with an ability permanently increases your maximum mana by 25, up to 250 mana.<br><br>After reaching 250 bonus mana, restore 1% of your missing mana every 5 seconds.",
     "longDesc": "Hitting an enemy champion with an ability permanently increases your maximum mana by 25, up to 250 mana.<br><br>After reaching 250 bonus mana, restore 1% of your missing mana every 5 seconds.<br><br>Cooldown: 15 seconds",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Sorcery/ManaflowBand/ManaflowBand.png",
-    "endOfGameStatDescs": [
-      "Total bonus mana: @eogvar1@",
-      "Total mana restored: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Total bonus mana: @eogvar1@", "Total mana restored: @eogvar2@"]
   },
   {
     "id": 8451,
@@ -870,10 +831,7 @@
     "shortDesc": "Every 4s your next attack on a champion deals bonus magic damage, heals you, and permanently increases your health.",
     "longDesc": "Every 4s in combat, your next basic attack on a champion will:<li>Deal bonus magic damage equal to 4% of your max health</li><li>Heals you for 2% of your max health</li><li>Permanently increase your health by 5</li><br><rules><i>Ranged Champions:</i> Damage, healing, and permanent health gained reduced by 40%.</rules><br>",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Resolve/GraspOfTheUndying/GraspOfTheUndying.png",
-    "endOfGameStatDescs": [
-      "Total damage: @eogvar1@",
-      "Total Healing: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Total damage: @eogvar1@", "Total Healing: @eogvar2@"]
   },
   {
     "id": 9923,
@@ -940,10 +898,7 @@
     "shortDesc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemy Wards cause friendly Zombie Wards to sprout from their corpses. Gain permanent AD or AP, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> for each Zombie Ward spawned plus bonus upon completion.",
     "longDesc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemy Wards cause friendly Zombie Wards to sprout from their corpses.<br><br>Gain an <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> bonus of 1.2 Attack Damage or 2 Ability Power for every Zombie Ward spawned, up to 10. <br><br>After spawning 10 Zombie Wards, additionally gain 10 adaptive force.<br><br>Zombie Wards are visible, last for 120s and do not count towards your ward limit.",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Domination/ZombieWard/ZombieWard.png",
-    "endOfGameStatDescs": [
-      "Wards spawned: @eogvar1@",
-      "Adaptive Force Gained: @eogvar2@"
-    ]
+    "endOfGameStatDescs": ["Wards spawned: @eogvar1@", "Adaptive Force Gained: @eogvar2@"]
   },
   {
     "id": 8358,
@@ -953,11 +908,7 @@
     "shortDesc": "Periodically grants a single use of another random keystone.",
     "longDesc": "Periodically grants a single use of another random keystone.<br><br>5-3  second cooldown between using a keystone and gaining the next. (9-7 seconds for ranged users)<br><br><rules><br>After 40 seconds of not using a given keystone, Omnistone will re-roll when you exit champion combat.<br>Aftershock is only available to champions who have learned a basic spell that can trigger it.<br>Predator is only available to champions who have already purchased boots.<br></rules>",
     "iconPath": "/lol-game-data/assets/v1/perk-images/Styles/Inspiration/MasterKey/MasterKey.png",
-    "endOfGameStatDescs": [
-      "Keystones Used: @eogvar1@",
-      "Damage Dealt: @eogvar2@",
-      "Positive Buffs Granted: @eogvar3@"
-    ]
+    "endOfGameStatDescs": ["Keystones Used: @eogvar1@", "Damage Dealt: @eogvar2@", "Positive Buffs Granted: @eogvar3@"]
   },
   {
     "id": 8208,

@@ -1,5 +1,13 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, MutableRefObject, RefObject, SetStateAction } from 'react'
+
 import { Category, ChampionClass, ItemsSchema } from './Items'
+
+export type ItemRefArrayType = MutableRefObject<
+  {
+    itemId: number
+    ref: MutableRefObject<HTMLDivElement | null>
+  }[]
+>
 
 export type FilterByTypeProps = {
   name: string
@@ -24,17 +32,18 @@ export type FilterByClassState = {
   setFilterItems: Dispatch<SetStateAction<FilterByClassProps[]>>
 }
 
-export type ItemGridState = {
+export type ItemGridProps = {
   goldOrderDirection: SortDirection
-  tierFilter: Rarity
+  rarityFilter: Rarity
+  setRarityFilter: Dispatch<SetStateAction<Rarity>>
   typeFilters: FilterByTypeProps[]
   classFilters: FilterByClassProps[]
   searchFilter: string
-  setAutocompleteResults: Dispatch<
-    SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>
-  >
+  setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
   selectedItem: ItemsSchema | null
   setSelectedItem: Dispatch<SetStateAction<ItemsSchema | null>>
+  itemRefArray: ItemRefArrayType
+  itemGridRef: RefObject<HTMLDivElement>
 }
 
 export enum Rarity {
@@ -73,6 +82,7 @@ export type ItemContainerState = {
   selectedItem: ItemsSchema | null
   setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
   setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
+  itemRefArray: ItemRefArrayType
 }
 
 export type StandardItemState = {
@@ -83,4 +93,14 @@ export type StandardItemState = {
   selectedItem: ItemsSchema | null
   setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
   setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
+  itemRefArray: ItemRefArrayType
+}
+
+export type ItemBuildTreeProps = {
+  selectedItem: ItemsSchema | null
+  setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
+  itemRefArray: ItemRefArrayType
+  itemGridRef: RefObject<HTMLDivElement>
+  classFilters: FilterByClassProps[]
+  setClassFilters: Dispatch<SetStateAction<FilterByClassProps[]>>
 }

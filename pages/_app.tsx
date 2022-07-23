@@ -1,13 +1,18 @@
-import '../styles/globals.css'
-import 'pattern.css/dist/pattern.min.css'
 import type { AppProps } from 'next/app'
+
 import { MotionConfig } from 'framer-motion'
-import {
-  PotatoModeContext,
-  PotatoModeStore,
-} from '../components/hooks/PotatoModeStore'
+import { StateMachineProvider, createStore } from 'little-state-machine'
+import 'pattern.css/dist/pattern.min.css'
 import { useContext, useEffect, useState } from 'react'
+
+import { PotatoModeContext, PotatoModeStore } from '../components/hooks/PotatoModeStore'
+import '../styles/globals.css'
 import { ReducedMotionType } from '../types/Store'
+
+function log(store: any) {
+  console.log(store)
+  return store
+}
 
 function MyApp({ children }: { children: React.ReactNode }) {
   // Use the PotatoModeContext to get the state and set MotionConfig reducedMotion
@@ -24,11 +29,9 @@ function MyApp({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (state.enabled) {
       // Disable animations
-      console.log('Potato mode enabled')
       setMotionConfig('always')
     } else {
       // Enable animations
-      console.log('Potato mode disabled')
       setMotionConfig('never')
     }
   }, [state.enabled])
@@ -37,12 +40,28 @@ function MyApp({ children }: { children: React.ReactNode }) {
 }
 
 function App({ Component, pageProps }: AppProps) {
+  createStore(
+    {
+      itemBuild: {
+        title: '',
+        associatedMaps: [],
+        associatedChampions: [],
+        blocks: [],
+      },
+    },
+    {
+      middleWares: [log],
+    }
+  )
+
   return (
-    <PotatoModeStore>
-      <MyApp>
-        <Component {...pageProps} />
-      </MyApp>
-    </PotatoModeStore>
+    <StateMachineProvider>
+      <PotatoModeStore>
+        <MyApp>
+          <Component {...pageProps} />
+        </MyApp>
+      </PotatoModeStore>
+    </StateMachineProvider>
   )
 }
 

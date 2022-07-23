@@ -1,27 +1,48 @@
-import React, { useEffect } from 'react'
 import { css, cx } from '@emotion/css'
-import { ItemsSchema } from '../types/Items'
+import _ from 'lodash'
+import React, { useEffect, useState } from 'react'
+
+import { FilterByClassProps, ItemBuildTreeProps } from '../types/FilterProps'
+import { ChampionClass, ItemsSchema } from '../types/Items'
+import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
+import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGridComponents'
 import { useItems } from './hooks/useItems'
 
 export const ItemBuildTree = ({
   selectedItem,
-}: {
-  selectedItem: ItemsSchema | null
-}) => {
+  setSelectedItem,
+  itemRefArray,
+  itemGridRef,
+  classFilters,
+  setClassFilters,
+}: ItemBuildTreeProps) => {
   const { items } = useItems()
+  const [triggerSelection, setTriggerSelection] = useState<number | null>()
 
-  // Function to return the max depth of a tree
-  const getMaxDepth = (itemsArray: ItemsSchema[]) => {
-    if (!itemsArray || itemsArray.length === 0) {
-      return 0
-    }
-    let maxDepth = 0
-    itemsArray.forEach((item) => {
-      if (item.depth && item.depth > maxDepth) {
-        maxDepth = item.depth
+  function scrollIntoItem(item: ItemsSchema) {
+    const itemIndex = _.findIndex(itemRefArray.current, (x) => x.itemId === item.id)
+    if (itemIndex > -1) {
+      const itemRef = itemRefArray.current[itemIndex].ref.current
+      if (itemRef && itemGridRef.current) {
+        // Scroll to item in itemGridRef
+        itemGridRef.current.scrollTo({
+          top: itemRef.offsetTop - 100,
+          behavior: 'smooth',
+        })
       }
+    }
+  }
+
+  const handleClick = () => {
+    // Create a temporary array that is a clone of the filterItems array
+    const tempArray = [...classFilters]
+    // Set isActive to false for all items
+    tempArray.forEach((item) => {
+      item.isActive = false
     })
-    return maxDepth
+    // Set the first item to active
+    tempArray[0].isActive = true
+    setClassFilters(tempArray)
   }
 
   // Get recursive list of items from a base item
@@ -53,9 +74,11 @@ export const ItemBuildTree = ({
 
   // Recursive component to render item build tree as a nested list of items with depth
   const ItemBuildTreeItems = ({
+    baseItem,
     buildTree,
     depth,
   }: {
+    baseItem: ItemsSchema
     buildTree: ItemsSchema[]
     depth: number
   }) => {
@@ -66,27 +89,13 @@ export const ItemBuildTree = ({
       return null
     }
     const filteredBuildTree = buildTree.filter((item) => item.depth === depth)
-    const filteredChildren = buildTree.filter(
-      (item) => item.depth && item.depth > depth
-    )
+    const filteredChildren = buildTree.filter((item) => item.depth && item.depth > depth)
 
     return (
       <ul
         className={cx(
           'relative flex flex-col items-start justify-center space-y-8 from-yellow-600 to-yellow-700 before:bg-gradient-to-r',
-          depth > 0 &&
-            css`
-              &:before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: -2.5rem;
-                width: 1.1rem;
-                height: 2px;
-                filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1))
-                  drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
-              }
-            `
+          dynamicUnorderedListStyles({ depth })
         )}
       >
         {buildTree.map((item, index) => {
@@ -98,189 +107,15 @@ export const ItemBuildTree = ({
               key={item.id + '-' + index + 'build-tree'}
               className={cx(
                 'relative flex flex-row items-center justify-center space-x-6 drop-shadow before:bg-yellow-700 after:bg-yellow-700',
-                // Any item except the base item
-                depth > 0 &&
-                  css`
-                    &:before {
-                      content: '';
-                      position: absolute;
-                      top: 50%;
-                      left: 0%;
-                      transform: translate(-100%, 0);
-                      width: 1.5rem;
-                      height: 2px;
-                      z-index: -1;
-                    }
-                  `,
-                // Any item except the base item and with more than one child
-                depth > 0 &&
-                  buildTree.length > 1 &&
-                  css`
-                    &:after {
-                      content: '';
-                      position: absolute;
-                      left: -1.5rem;
-                      width: 2px;
-                      height: 160%;
-                    }
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 100%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 100%;
-                      }
-                    }
-                  `,
-                // More than one sibling on a same level but less than 2 children
-                depth > 0 &&
-                  filteredBuildTree.length > 1 &&
-                  getMaxDepth(buildTree) < 2 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 80%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 100%;
-                      }
-                    }
-                  `,
-                // Two siblings on a same level but less than 3 children
-                depth > 0 &&
-                  buildTree.length > 1 &&
-                  buildTree.length < 3 &&
-                  getMaxDepth(buildTree) < 3 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 100%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        top: 4px;
-                        transform: translateY(-50%);
-                        height: 90%;
-                      }
-                    }
-                  `,
-                // First level with 2 or less items and less than 3 children
-                depth === 1 &&
-                  filteredBuildTree.length <= 2 &&
-                  filteredChildren.length < 3 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 90%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 90%;
-                      }
-                    }
-                  `,
-                // First level with 2 or less items and more than 3 children
-                depth === 1 &&
-                  filteredBuildTree.length <= 2 &&
-                  filteredChildren.length >= 3 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 75%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 90%;
-                      }
-                    }
-                  `,
-                // First level with more than 2 items and one child
-                depth === 1 &&
-                  filteredBuildTree.length > 2 &&
-                  filteredChildren.length <= 1 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 100%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 100%;
-                      }
-                    }
-                  `,
-                // First level with more than 2 items and more than one child
-                depth === 1 &&
-                  filteredBuildTree.length > 2 &&
-                  filteredChildren.length > 1 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 110%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 100%;
-                      }
-                    }
-                  `,
-                // First level with more than 2 items with more than 1 child and les or equal than 3 children
-                depth === 1 &&
-                  filteredBuildTree.length > 2 &&
-                  filteredChildren.length > 1 &&
-                  filteredChildren.length <= 3 &&
-                  css`
-                    &:first-of-type {
-                      &:after {
-                        transform: translateY(50%);
-                        height: 100%;
-                      }
-                    }
-                    &:last-of-type {
-                      &:after {
-                        transform: translateY(-50%);
-                        height: 100%;
-                      }
-                    }
-                  `,
-                // First level with more than 2 items and more than 3 children in total
-                depth === 1 &&
-                  filteredBuildTree.length > 2 &&
-                  filteredChildren.length > 3 &&
-                  css`
-                    &:after {
-                      content: '';
-                      position: absolute;
-                      left: -1.5rem;
-                      width: 2px;
-                      height: 140%;
-                    }
-                  `
+                dynamicListItemStyles({
+                  depth,
+                  buildTree,
+                  filteredBuildTree,
+                  filteredChildren,
+                })
               )}
             >
-              <ItemBuildTreeItem item={item} index={index} depth={depth} />
+              <ItemBuildTreeItem item={item} index={index} depth={depth} baseItem={baseItem} />
             </li>
           )
         })}
@@ -292,39 +127,52 @@ export const ItemBuildTree = ({
     item,
     index,
     depth,
+    baseItem,
   }: {
     item: ItemsSchema
     index: number
     depth: number
+    baseItem: ItemsSchema
   }) => {
     if (!items) {
       return null
     }
     return (
-      <>
-        <img
-          key={item.id + '-' + item.name + '-' + index}
-          src={item.icon ?? ''}
-          alt={item.name ?? ''}
-          className="mr-4 h-10 w-10 border border-black object-cover ring-1 ring-yellow-700"
-          width={40}
-          height={40}
-        />
-        {item.from && item.from.length > 0 && (
-          <ItemBuildTreeItems
-            buildTree={getItemBuildTree(item)}
-            depth={depth + 1}
+      <div
+        key={index}
+        className="-m-1 flex cursor-pointer items-center px-2 py-2 text-center"
+        onClick={(e) => {
+          console.log('clicked', item.name, baseItem.id)
+          setTriggerSelection(baseItem.id)
+          setSelectedItem(item)
+          scrollIntoItem(item)
+          e.stopPropagation()
+        }}
+      >
+        <div
+          className={cx(
+            'group mt-6 flex flex-col items-center justify-center',
+            item.from && item.from.length > 0 && 'mr-10'
+          )}
+        >
+          <img
+            key={item.id + '-' + item.name + '-' + index}
+            src={item.icon ?? ''}
+            alt={item.name ?? ''}
+            className=" h-10 w-10 border border-black object-cover ring-1 ring-yellow-700"
+            width={40}
+            height={40}
           />
+          <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+        </div>
+        {item.from && item.from.length > 0 && (
+          <ItemBuildTreeItems buildTree={getItemBuildTree(item)} depth={depth + 1} baseItem={baseItem} />
         )}
-      </>
+      </div>
     )
   }
 
-  const GetItems = ({
-    baseItem,
-  }: {
-    baseItem: ItemsSchema
-  }): JSX.Element | null => {
+  const GetItemTree = ({ baseItem }: { baseItem: ItemsSchema }): JSX.Element | null => {
     if (!items || !baseItem) {
       return null
     }
@@ -348,14 +196,91 @@ export const ItemBuildTree = ({
         `}
       >
         <h3 className="mb-4">{baseItem.name}</h3>
-        <ItemBuildTreeItems buildTree={itemBuildTree} depth={0} />
+        <ItemBuildTreeItems buildTree={itemBuildTree} depth={0} baseItem={baseItem} />
       </div>
+    )
+  }
+
+  const GetItemBuilds = ({ baseItem }: { baseItem: ItemsSchema }) => {
+    if (!items || !baseItem || !baseItem.into) {
+      return null
+    }
+
+    var itemBuilds: ItemsSchema[] = []
+    baseItem.into.forEach((itemId) => {
+      const item = Object.values(items).find((x) => x.id === itemId && x.inStore && x.tier > 0)
+      if (item) {
+        itemBuilds.push(item)
+      }
+    })
+    if (itemBuilds.length === 0) {
+      return null
+    }
+    const activeChampionClass = getActiveChampionClass(classFilters)
+    let filteredItemBuilds = itemBuilds.filter((x) => {
+      return isFromChampionClass(x, activeChampionClass)
+    })
+    const delta = itemBuilds.length - filteredItemBuilds.length
+    // Sort the item builds by gold cost
+    filteredItemBuilds = _.orderBy(filteredItemBuilds, ['gold.total'], ['asc'])
+
+    // Return a list of items in the baseItem.ItemsSchema array
+    return (
+      <>
+        <p className={cx('mt-4 text-sm text-gray-400', delta === 0 && 'mb-4')}>
+          Builds into
+          <b className="text-gray-200">
+            {' '}
+            {filteredItemBuilds.length} {getPluralFromItems(filteredItemBuilds)}
+          </b>
+        </p>
+        {delta > 0 && (
+          <p className="mb-4 cursor-pointer text-xs italic text-cyan-400 hover:underline" onClick={handleClick}>
+            <b className="text-cyan-200"> {delta} </b>
+            <span>more {getPluralFromItems(delta)} hidden by champion class filters</span>
+          </p>
+        )}
+        <div className="grid grid-cols-5 gap-2">
+          {filteredItemBuilds.map((item, index) => {
+            if (!item) {
+              return null
+            }
+            return (
+              <div
+                key={index}
+                className={cx(
+                  'group -m-1 flex cursor-pointer flex-col items-center bg-gray-900 p-2 text-center',
+                  triggerSelection === item.id && 'border-2 border-dashed border-yellow-500/75'
+                )}
+                onClick={() => {
+                  setSelectedItem(item)
+                  // Find the item in itemRefArray and scroll to it
+                  // Get index
+                  scrollIntoItem(item)
+                }}
+              >
+                <img
+                  key={'into-' + item.id + '-' + item.name}
+                  src={item.icon ?? ''}
+                  alt={item.name ?? ''}
+                  className="h-10 w-10 border border-black object-cover ring-1 ring-yellow-700 duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125"
+                  width={40}
+                  height={40}
+                />
+                <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+              </div>
+            )
+          })}
+        </div>
+      </>
     )
   }
 
   useEffect(() => {
     if (selectedItem) {
       console.log(selectedItem)
+    } else {
+      setTriggerSelection(null)
     }
   }, [selectedItem])
 
@@ -367,11 +292,10 @@ export const ItemBuildTree = ({
     return (
       items && (
         <>
-          <h3 className="font-body text-lg font-semibold text-gray-200">
-            BUILD PATH
-          </h3>
+          <h3 className="font-body text-lg font-semibold text-gray-200">BUILD PATH</h3>
+          <GetItemBuilds baseItem={selectedItem} />
           <div className="flex h-full w-full flex-col items-center justify-center">
-            <GetItems baseItem={selectedItem} />
+            <GetItemTree baseItem={selectedItem} />
           </div>
         </>
       )
@@ -379,14 +303,8 @@ export const ItemBuildTree = ({
   } else {
     return (
       <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
-        <img
-          src="icons/poro_sleeping.png"
-          alt="Poro sleeping"
-          className="mx-auto h-32 w-32 opacity-75"
-        />
-        <p className="italic text-gray-500">
-          Select an item to see its build path tree
-        </p>
+        <img src="icons/poro_sleeping.png" alt="Poro sleeping" className="mx-auto h-32 w-32 opacity-75" />
+        <p className="italic text-gray-500">Select an item to see its build path tree</p>
       </div>
     )
   }

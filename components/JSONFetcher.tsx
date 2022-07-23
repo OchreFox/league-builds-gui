@@ -1,7 +1,4 @@
-export default async function JSONFetcher<JSON = any>(
-  input: RequestInfo,
-  init?: RequestInit
-): Promise<JSON> {
+export default async function JSONFetcher<JSON = any>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
   const res = await fetch(input, init)
 
   if (!res.ok) {

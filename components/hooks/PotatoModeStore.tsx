@@ -1,11 +1,7 @@
 // Hook to expose context state of potato mode
+import React, { ReactNode, createContext, useEffect, useReducer } from 'react'
 
-import React, { createContext, useEffect, useReducer, ReactNode } from 'react'
-import {
-  ActionType,
-  PotatoModeInterface,
-  PotatoModeType,
-} from '../../types/Store'
+import { ActionType, PotatoModeInterface, PotatoModeType } from '../../types/Store'
 
 // Reducer
 const Reducer = (state: PotatoModeInterface, action: ActionType) => {
@@ -41,11 +37,11 @@ const PotatoModeStore = ({ children }: { children: ReactNode }) => {
 
   // Get potato mode from localStorage
   useEffect(() => {
-    const storedState = localStorage.getItem('potatoMode')
-    if (storedState) {
+    const potatoMode = localStorage.getItem('potatoMode')
+    if (potatoMode) {
       dispatch({
         type: 'SET_POTATO_MODE_LOCAL',
-        payload: JSON.parse(storedState),
+        payload: JSON.parse(potatoMode),
       })
     }
   }, [])
@@ -54,11 +50,7 @@ const PotatoModeStore = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     localStorage.setItem('potatoMode', JSON.stringify(state))
   }, [state])
-  return (
-    <PotatoModeContext.Provider value={{ state, dispatch }}>
-      {children}
-    </PotatoModeContext.Provider>
-  )
+  return <PotatoModeContext.Provider value={{ state, dispatch }}>{children}</PotatoModeContext.Provider>
 }
 
 export { PotatoModeContext, PotatoModeStore }

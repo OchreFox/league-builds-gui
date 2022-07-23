@@ -12,11 +12,7 @@ export function isLegendary(item: ItemsSchema) {
   return item.tier === 3 && item.mythic !== true && item.inStore
 }
 export function isMythic(item: ItemsSchema) {
-  return (
-    item.mythic === true &&
-    item.requiredChampion === RequiredChampion.Empty &&
-    item.inStore
-  )
+  return item.mythic === true && item.requiredChampion === RequiredChampion.Empty && item.inStore
 }
 
 export function getRarity(item: ItemsSchema): Rarity {
