@@ -1,9 +1,12 @@
+import Image from 'next/image'
+
 import { css, cx } from '@emotion/css'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 
 import { FilterByClassProps, ItemBuildTreeProps } from '../types/FilterProps'
 import { ChampionClass, ItemsSchema } from '../types/Items'
+import { StaticallyLoader } from '../utils/ImageLoader'
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
 import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGridComponents'
 import { useItems } from './hooks/useItems'
@@ -155,14 +158,17 @@ export const ItemBuildTree = ({
             item.from && item.from.length > 0 && 'mr-10'
           )}
         >
-          <img
-            key={item.id + '-' + item.name + '-' + index}
-            src={item.icon ?? ''}
-            alt={item.name ?? ''}
-            className=" h-10 w-10 border border-black object-cover ring-1 ring-yellow-700"
-            width={40}
-            height={40}
-          />
+          <div className="h-10 w-10 border border-black object-cover ring-1 ring-yellow-700">
+            <Image
+              key={item.id + '-' + item.name + '-' + index}
+              src={item.icon ?? ''}
+              alt={item.name ?? ''}
+              loader={StaticallyLoader}
+              width={50}
+              height={50}
+            />
+          </div>
+
           <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
         </div>
         {item.from && item.from.length > 0 && (
@@ -259,14 +265,16 @@ export const ItemBuildTree = ({
                   scrollIntoItem(item)
                 }}
               >
-                <img
-                  key={'into-' + item.id + '-' + item.name}
-                  src={item.icon ?? ''}
-                  alt={item.name ?? ''}
-                  className="h-10 w-10 border border-black object-cover ring-1 ring-yellow-700 duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125"
-                  width={40}
-                  height={40}
-                />
+                <div className="h-10 w-10 border border-black object-cover ring-1 ring-yellow-700 duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125">
+                  <Image
+                    loader={StaticallyLoader}
+                    key={'into-' + item.id + '-' + item.name}
+                    src={item.icon ?? ''}
+                    alt={item.name ?? ''}
+                    width={40}
+                    height={40}
+                  />
+                </div>
                 <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
               </div>
             )
