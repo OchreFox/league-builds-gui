@@ -4,8 +4,8 @@ import { css, cx } from '@emotion/css'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 
-import { FilterByClassProps, ItemBuildTreeProps } from '../types/FilterProps'
-import { ChampionClass, ItemsSchema } from '../types/Items'
+import { ItemBuildTreeProps } from '../types/FilterProps'
+import { ItemsSchema } from '../types/Items'
 import { StaticallyLoader } from '../utils/ImageLoader'
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
 import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGridComponents'
@@ -212,7 +212,7 @@ export const ItemBuildTree = ({
       return null
     }
 
-    var itemBuilds: ItemsSchema[] = []
+    let itemBuilds: ItemsSchema[] = []
     baseItem.into.forEach((itemId) => {
       const item = Object.values(items).find((x) => x.id === itemId && x.inStore && x.tier > 0)
       if (item) {
@@ -271,8 +271,8 @@ export const ItemBuildTree = ({
                     key={'into-' + item.id + '-' + item.name}
                     src={item.icon ?? ''}
                     alt={item.name ?? ''}
-                    width={40}
-                    height={40}
+                    width={50}
+                    height={50}
                   />
                 </div>
                 <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>

@@ -16,6 +16,7 @@ export const ItemContainer = ({
   if (!itemsCombined || itemsCombined.length === 0) {
     return null
   }
+
   return (
     <>
       {itemsCombined.map((item, index) => (

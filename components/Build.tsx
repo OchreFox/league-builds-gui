@@ -1,20 +1,19 @@
-import { Icon } from '@iconify/react'
 import React from 'react'
 import SimpleBar from 'simplebar-react'
 
-const BuildSection = ({ icon, children }: { icon: JSX.Element; children: JSX.Element }) => {
+const BuildSection = ({ children }: { children: JSX.Element }) => {
   return (
     <div className="h-full w-full border border-yellow-900 ">
       <div className="relative">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">{icon}</div>
+        {/* <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">{icon}</div> */}
         <input
           type="text"
           name="build-header"
-          className="block w-full bg-brand-default py-1 pl-10 text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+          className="border-b-2 border-yellow-900 block w-full bg-yellow-900/50 focus:bg-brand-dark py-1 px-2 text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           placeholder="Section Title"
         />
       </div>
-      {children}
+      <div className="px-2 py-3">{children}</div>
     </div>
   )
 }
@@ -24,8 +23,10 @@ const Build = () => {
     <div className="absolute h-full w-full">
       <SimpleBar className="m-4 h-full overflow-y-auto">
         {/* Build Title */}
-        <BuildSection icon={<Icon icon="tabler:edit" className="h-5 w-5 text-white" />}>
-          <div className="p-3">content</div>
+        <BuildSection>
+          <p className="text-center text-gray-400">
+            <em>Drag and drop items here</em>
+          </p>
         </BuildSection>
       </SimpleBar>
     </div>

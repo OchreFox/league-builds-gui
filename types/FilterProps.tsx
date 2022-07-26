@@ -5,7 +5,7 @@ import { Category, ChampionClass, ItemsSchema } from './Items'
 export type ItemRefArrayType = MutableRefObject<
   {
     itemId: number
-    ref: MutableRefObject<HTMLDivElement | null>
+    ref: MutableRefObject<HTMLLIElement | null>
   }[]
 >
 

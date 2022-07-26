@@ -1,7 +1,10 @@
+import Image from 'next/image'
+
 import { Combobox, Transition } from '@headlessui/react'
 import React, { Fragment, useCallback } from 'react'
 
 import { FilterBySearchState } from '../types/FilterProps'
+import { StaticallyLoader } from '../utils/ImageLoader'
 
 export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResults }: FilterBySearchState) {
   const handleChange = useCallback(
@@ -11,7 +14,7 @@ export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResul
     [setSearchTerm]
   )
   return (
-    <div className="w-full ">
+    <div className="w-full flex flex-col space-y-2">
       <label htmlFor="search" className="sr-only">
         Search items
       </label>
@@ -56,11 +59,15 @@ export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResul
                     value={result.obj.name}
                     className="relative m-1 flex cursor-default select-none items-center rounded-md border border-gray-300 py-2 px-2 text-gray-900 hover:bg-gray-200"
                   >
-                    <img
-                      src={result.obj.icon ?? ''}
-                      alt={result.obj.name ?? ''}
-                      className="mr-2 h-8 w-8 border border-black object-cover ring-1 ring-yellow-700"
-                    />
+                    <div className="mr-2 border border-black object-cover ring-1 ring-yellow-700 flex h-8 w-8 shrink-0">
+                      <Image
+                        loader={StaticallyLoader}
+                        width={50}
+                        height={50}
+                        src={result.obj.icon ?? ''}
+                        alt={result.obj.name ?? ''}
+                      />
+                    </div>
                     {result.obj.name}
                   </Combobox.Option>
                 ))

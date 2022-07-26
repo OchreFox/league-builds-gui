@@ -165,7 +165,7 @@ export const BuildMaker = () => {
               transition={easeInOutExpo}
             >
               <div className="relative flex h-full w-full items-center justify-center text-center">
-                <div className="absolute inset-0 z-10 px-6 py-4">
+                <div className="z-10 px-6 py-2">
                   <div className="flex" onClick={(e) => e.stopPropagation()}>
                     <select
                       className="z-10 rounded-l-lg border border-gray-600 bg-gray-700 py-2.5 px-4 font-sans text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-brand-light"
@@ -185,7 +185,6 @@ export const BuildMaker = () => {
                     </select>
                     <div className="relative w-full">
                       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        {/* Heroicon name: solid/search */}
                         <svg
                           className="h-5 w-5 text-gray-400"
                           xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +208,7 @@ export const BuildMaker = () => {
                     </div>
                   </div>
                 </div>
-                <div className="absolute bottom-0 right-0 mb-1 mr-1 flex w-full items-center justify-center font-sans text-xs font-normal text-white/50 transition duration-100 group-hover:text-white">
+                <div className="flex items-center justify-center font-sans text-xs font-normal text-white/50 transition duration-100 group-hover:text-white">
                   <Icon className="" icon="tabler:x" width="16" height="16" /> CLOSE
                 </div>
               </div>

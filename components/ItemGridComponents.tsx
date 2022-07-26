@@ -119,3 +119,39 @@ export function getPluralFromItems(x: any): string {
   }
   return x === 1 ? 'item' : 'items'
 }
+
+export const gridContainerVariants = {
+  enter: {
+    opacity: 0,
+    y: 20,
+  },
+  center: {
+    opacity: 1,
+    y: 0,
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+  },
+}
+
+export const titleVariants = {
+  enter: {
+    opacity: 0,
+    x: -100,
+  },
+  center: {
+    opacity: 1,
+    x: 0,
+  },
+  exit: {
+    opacity: 0,
+    x: -100,
+  },
+}
+
+export const transitionVariant = {
+  type: 'tween',
+  ease: [0.87, 0, 0.13, 1],
+  duration: 0.4,
+}
