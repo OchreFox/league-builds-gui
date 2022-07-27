@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 
 import { ItemBuildTreeProps } from '../types/FilterProps'
 import { ItemsSchema } from '../types/Items'
-import { StaticallyLoader } from '../utils/ImageLoader'
+import { CustomLoader } from '../utils/ImageLoader'
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
 import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGridComponents'
 import { useItems } from './hooks/useItems'
@@ -163,7 +163,7 @@ export const ItemBuildTree = ({
               key={item.id + '-' + item.name + '-' + index}
               src={item.icon ?? ''}
               alt={item.name ?? ''}
-              loader={StaticallyLoader}
+              loader={CustomLoader}
               width={50}
               height={50}
             />
@@ -267,7 +267,7 @@ export const ItemBuildTree = ({
               >
                 <div className="h-10 w-10 border border-black object-cover ring-1 ring-yellow-700 duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125">
                   <Image
-                    loader={StaticallyLoader}
+                    loader={CustomLoader}
                     key={'into-' + item.id + '-' + item.name}
                     src={item.icon ?? ''}
                     alt={item.name ?? ''}

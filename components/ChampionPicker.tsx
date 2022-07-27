@@ -9,7 +9,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 import { ChampionsSchema, DefaultChampion, Tag } from '../types/Champions'
-import { StaticallyLoader } from '../utils/ImageLoader'
+import { CustomLoader } from '../utils/ImageLoader'
 import Build from './Build'
 import { PotatoModeContext } from './hooks/PotatoModeStore'
 import { useChampions } from './hooks/useChampions'
@@ -152,15 +152,16 @@ export const ChampionPicker = ({
             `
           )}
         >
-          <div className="m-4 grid grid-cols-6">
+          <ul className="m-4 grid grid-cols-6">
             {championsData &&
               filteredChampions &&
               Object.values(filteredChampions).map((champion) => (
-                <motion.div
+                <motion.li
                   layout
+                  id={'champion-' + champion.id}
                   key={'champion-' + champion.id}
                   className={cx(
-                    'group mx-2 flex cursor-pointer flex-col items-center justify-center py-2 hover:bg-white/40',
+                    'group mx-2 flex cursor-pointer flex-col items-center justify-center list-none py-2 hover:bg-white/40',
                     !potatoMode.enabled && 'transition-colors duration-100',
                     selectedChampion.id === champion.id && 'bg-white/20'
                   )}
@@ -174,12 +175,12 @@ export const ChampionPicker = ({
                     )}
                   >
                     <Image
-                      loader={StaticallyLoader}
+                      loader={CustomLoader}
                       width={64}
                       height={64}
                       src={champion.icon}
                       placeholder="blur"
-                      blurDataURL="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMy4wLjMsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAzNjAgMzYwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzNjAgMzYwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8cGF0aCBkPSJNMjA5LjQsMzMuNGMtMjQuMi04LjQtNDMuNy03LjQtNjguNywzLjNjLTIzLjgsMTAuNC00OCwzMi40LTU4LjMsNTMuNWMtOS45LDIwLjQtMTAuOSwyNy4zLTEyLjYsNzguNQ0KCQljLTAuNywyNS41LTIuMiw0OC44LTMsNTEuOGMtMi4zLDctOS4zLDE4LjktMTIuNiwyMS44Yy0zLjgsMy0zLjMsNi41LDIuNSwyMWM2LjYsMTcsMTguMiwzNS4zLDI5LDQ2YzEwLjQsMTAuNCwyOSwyMC4yLDQxLjcsMjEuNw0KCQlsOC44LDEuMmwtNS04LjFjLTE1LjItMjQuNy0xNy40LTYwLjMtNS44LTk3YzIuMy03LjEsMy44LTEzLjYsMy4zLTE0LjRjLTAuNS0wLjgtMy0yLTUuNS0yLjZjLTcuNC0xLjgtMTguNC05LjEtMjQuNS0xNi4yDQoJCWMtOS44LTExLjQtMTEuMy0yNC43LTQuOC00MC45bDIuOC03bDguOSwxYzE5LjIsMi4zLDM4LjQsMTMuMiw1MC4yLDI4LjVsNyw4LjhsLTAuMiwzOS42bC0wLjMsMzkuNmw0LjMsNS4zDQoJCWMyLjUsMi44LDYuNSw2LjYsOS4xLDguNGw0LjYsMy4zbDguNC03LjZsOC40LTcuNnYtNDAuOXYtNDEuMWw0LjYtNi41YzEyLjYtMTcuNCwzNi42LTMwLjUsNTUuOS0zMC41YzQuOCwwLDUuNiwwLjcsNy45LDcuOA0KCQljNCwxMS40LDMuNSwyNS0xLjIsMzMuOGMtNC41LDguMy0xNS45LDE3LjctMjYuMywyMS41Yy04LjQsMy4xLTguNCwzLjUtMi4yLDIzLjhjNC4xLDEzLjIsNC42LDE3LjQsNC44LDM4LjkNCgkJYzAuMiwyNi44LTEuMywzMy42LTExLjQsNTAuNWwtNS44LDkuNmw4LjYtMS4yYzEyLjctMS41LDMxLjUtMTEuMyw0MS43LTIxLjdjNC44LTQuOCwxMi4yLTE0LjIsMTYuNC0yMC45DQoJCWM3LjQtMTEuOSwxNy43LTM1LjYsMTcuNy00MC42YzAtMS4zLTMtNi4xLTYuNi0xMC44Yy0zLjUtNC41LTcuMy0xMS4xLTguNC0xNC40Yy0xLTMuNS0yLjUtMjYuNS0zLjEtNTMuM2MtMS0zNC4zLTIuMi00OS44LTQtNTcuMQ0KCQlDMjc2LjQsNzYuNSwyNDcuNCw0Ni41LDIwOS40LDMzLjR6Ii8+DQo8L2c+DQo8L3N2Zz4NCg=="
+                      blurDataURL={champion.placeholder}
                     />
                   </div>
                   <p
@@ -191,9 +192,9 @@ export const ChampionPicker = ({
                   >
                     {champion.name}
                   </p>
-                </motion.div>
+                </motion.li>
               ))}
-          </div>
+          </ul>
         </SimpleBar>
       </motion.div>
     </div>

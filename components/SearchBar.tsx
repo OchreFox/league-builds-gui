@@ -4,7 +4,7 @@ import { Combobox, Transition } from '@headlessui/react'
 import React, { Fragment, useCallback } from 'react'
 
 import { FilterBySearchState } from '../types/FilterProps'
-import { StaticallyLoader } from '../utils/ImageLoader'
+import { CustomLoader } from '../utils/ImageLoader'
 
 export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResults }: FilterBySearchState) {
   const handleChange = useCallback(
@@ -61,7 +61,7 @@ export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResul
                   >
                     <div className="mr-2 border border-black object-cover ring-1 ring-yellow-700 flex h-8 w-8 shrink-0">
                       <Image
-                        loader={StaticallyLoader}
+                        loader={CustomLoader}
                         width={50}
                         height={50}
                         src={result.obj.icon ?? ''}

@@ -53,6 +53,7 @@ export interface ChampionsSchema {
   powerSpikes: PowerSpike[]
   burst: number | null
   preToughness: number | null
+  placeholder: string
 }
 
 export enum AdaptiveType {

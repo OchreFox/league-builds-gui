@@ -22,6 +22,7 @@ export interface ItemsSchema {
   instance: number | null
   depth: number | null
   parent: number | null
+  placeholder: string
 }
 
 export enum Category {

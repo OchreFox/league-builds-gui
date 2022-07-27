@@ -185,7 +185,7 @@ const Header = () => {
                   width: 1536px; /* Image width (512px) times 3 */
                   height: 100%;
                   background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 100%),
-                    url('/effects/lcu_magic_3_horizontal.png');
+                    url('/effects/lcu_magic_3_horizontal.webp');
                   background-repeat: repeat;
                   background-position: center;
                   z-index: -1;
@@ -208,7 +208,7 @@ const Header = () => {
                   left: 0;
                   width: 1536px; /* Image width (512px) times 3 */
                   height: 100%;
-                  background-image: url('/effects/lcu_magic_5_horizontal.png');
+                  background-image: url('/effects/lcu_magic_5_horizontal.webp');
                   background-repeat: repeat;
                   background-position: center;
                   z-index: -2;
