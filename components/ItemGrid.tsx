@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
 import _ from 'lodash'
 import React, { Fragment, createRef, useEffect, useRef, useState } from 'react'
@@ -14,7 +14,6 @@ import {
   getActiveCategories,
   getActiveChampionClass,
   getPluralFromItems,
-  gridContainerVariants,
   includesCategory,
   isFromChampionClass,
   isInStore,
@@ -35,6 +34,7 @@ export default function ItemGrid({
   searchFilter,
   setAutocompleteResults,
   selectedItem,
+  activeItem,
   setSelectedItem,
   itemRefArray,
   itemGridRef,
@@ -236,246 +236,211 @@ export default function ItemGrid({
   }, [items, goldOrderDirection, rarityFilter, typeFilters, classFilters, searchFilter])
 
   return (
-    <AnimatePresence>
-      <SimpleBar
-        className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
-        scrollableNodeProps={{ ref: itemGridRef }}
-      >
-        {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
-          <Fragment key="noItems">
-            <motion.h3
+    <SimpleBar
+      className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
+      scrollableNodeProps={{ ref: itemGridRef }}
+    >
+      {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
+        <Fragment key="noItems">
+          <motion.h3
+            variants={titleVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionVariant}
+            className={cx(
+              'mb-2 text-center font-body font-semibold text-gray-200',
+              rarityFilter !== Rarity.Epic && 'mt-6'
+            )}
+          >
+            No items match your filters.
+          </motion.h3>
+          <motion.img
+            variants={titleVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionVariant}
+            src="icons/poro_question.png"
+            alt="Poro question mark"
+            className="mx-auto h-32 w-32 brightness-200"
+          />
+        </Fragment>
+      )}
+      {basicItemsCount > 0 &&
+        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Basic ? (
+          <React.Fragment key="basicContainer">
+            <RarityTitle
+              rarity={Rarity.Basic}
               variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
               transition={transitionVariant}
-              className={cx(
-                'mb-2 text-center font-body font-semibold text-gray-200',
-                rarityFilter !== Rarity.Epic && 'mt-6'
-              )}
-            >
-              No items match your filters.
-            </motion.h3>
-            <motion.img
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transitionVariant}
-              src="icons/poro_question.png"
-              alt="Poro question mark"
-              className="mx-auto h-32 w-32 brightness-200"
+              tier={1}
+              backgroundColor="bg-slate-900/25"
+              fallbackBackgroundColor="bg-slate-900"
             />
-          </Fragment>
-        )}
-        {basicItemsCount > 0 &&
-          (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Basic ? (
-            <React.Fragment key="basicContainer">
-              <RarityTitle
-                rarity={Rarity.Basic}
-                variants={titleVariants}
-                transition={transitionVariant}
-                tier={1}
-                backgroundColor="bg-slate-900/25"
-                fallbackBackgroundColor="bg-slate-900"
-              />
-              <motion.ul
-                key="basicGrid"
-                variants={gridContainerVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
-              >
-                {/* Loop through the items object */}
-                <ItemContainer
-                  itemsCombined={basicItems}
-                  transition={transitionVariant}
-                  hoveredItem={hoveredItem}
-                  selectedItem={selectedItem}
-                  setHoveredItem={setHoveredItem}
-                  setSelectedItem={setSelectedItem}
-                  itemRefArray={itemRefArray}
-                />
-              </motion.ul>
-            </React.Fragment>
-          ) : (
-            <motion.p
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
+            {/* Loop through the items object */}
+            <ItemContainer
+              gridKey="basicGrid"
+              itemsCombined={basicItems}
               transition={transitionVariant}
-              key="basicItemsHidden"
-              className="mb-2 cursor-pointer italic text-gray-400 underline-offset-1 hover:underline"
-              onClick={() => setRarityFilter(Rarity.Basic)}
-            >
-              {basicItemsCount} basic {getPluralFromItems(basicItemsCount)} hidden.
-            </motion.p>
-          ))}
+              hoveredItem={hoveredItem}
+              selectedItem={selectedItem}
+              activeItem={activeItem}
+              setHoveredItem={setHoveredItem}
+              setSelectedItem={setSelectedItem}
+              itemRefArray={itemRefArray}
+            />
+          </React.Fragment>
+        ) : (
+          <motion.p
+            variants={titleVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionVariant}
+            key="basicItemsHidden"
+            className="mb-2 cursor-pointer italic text-gray-400 underline-offset-1 hover:underline"
+            onClick={() => setRarityFilter(Rarity.Basic)}
+          >
+            {basicItemsCount} basic {getPluralFromItems(basicItemsCount)} hidden.
+          </motion.p>
+        ))}
 
-        {epicItemsCount > 0 &&
-          (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Epic ? (
-            <React.Fragment key="epicContainer">
-              <RarityTitle
-                rarity={Rarity.Epic}
-                variants={titleVariants}
-                transition={transitionVariant}
-                tier={2}
-                backgroundColor="bg-purple-800/25"
-                fallbackBackgroundColor="bg-purple-800"
-              />
-              <motion.ul
-                key="epicGrid"
-                variants={gridContainerVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
-              >
-                {/* Loop through the epic items */}
-                <ItemContainer
-                  itemsCombined={epicItems}
-                  transition={transitionVariant}
-                  hoveredItem={hoveredItem}
-                  selectedItem={selectedItem}
-                  setHoveredItem={setHoveredItem}
-                  setSelectedItem={setSelectedItem}
-                  itemRefArray={itemRefArray}
-                />
-              </motion.ul>
-            </React.Fragment>
-          ) : (
-            <motion.p
+      {epicItemsCount > 0 &&
+        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Epic ? (
+          <React.Fragment key="epicContainer">
+            <RarityTitle
+              rarity={Rarity.Epic}
               variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
               transition={transitionVariant}
-              key="epicItemsHidden"
-              className="mb-2 cursor-pointer italic text-gray-400 decoration-purple-700 underline-offset-1 hover:underline"
-              onClick={() => setRarityFilter(Rarity.Epic)}
-            >
-              {epicItemsCount} <span className="text-purple-500">epic</span> {getPluralFromItems(epicItemsCount)}{' '}
-              hidden.
-            </motion.p>
-          ))}
+              tier={2}
+              backgroundColor="bg-purple-800/25"
+              fallbackBackgroundColor="bg-purple-800"
+            />
+            {/* Loop through the epic items */}
+            <ItemContainer
+              gridKey="epicGrid"
+              itemsCombined={epicItems}
+              transition={transitionVariant}
+              hoveredItem={hoveredItem}
+              selectedItem={selectedItem}
+              activeItem={activeItem}
+              setHoveredItem={setHoveredItem}
+              setSelectedItem={setSelectedItem}
+              itemRefArray={itemRefArray}
+            />
+          </React.Fragment>
+        ) : (
+          <motion.p
+            variants={titleVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionVariant}
+            key="epicItemsHidden"
+            className="mb-2 cursor-pointer italic text-gray-400 decoration-purple-700 underline-offset-1 hover:underline"
+            onClick={() => setRarityFilter(Rarity.Epic)}
+          >
+            {epicItemsCount} <span className="text-purple-500">epic</span> {getPluralFromItems(epicItemsCount)} hidden.
+          </motion.p>
+        ))}
 
-        {legendaryItemsCount > 0 &&
-          (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Legendary ? (
-            <React.Fragment key="legendaryContainer">
-              <RarityTitle
-                rarity={Rarity.Legendary}
-                variants={titleVariants}
-                transition={transitionVariant}
-                tier={3}
-                backgroundColor="bg-red-800/25"
-                fallbackBackgroundColor="bg-red-800"
-              />
-              <motion.ul
-                key="legendaryGrid"
-                variants={gridContainerVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
-              >
-                {/* Loop through the items object */}
-                <ItemContainer
-                  itemsCombined={legendaryItems}
-                  transition={transitionVariant}
-                  hoveredItem={hoveredItem}
-                  selectedItem={selectedItem}
-                  setHoveredItem={setHoveredItem}
-                  setSelectedItem={setSelectedItem}
-                  itemRefArray={itemRefArray}
-                />
-              </motion.ul>
-            </React.Fragment>
-          ) : (
-            <motion.p
+      {legendaryItemsCount > 0 &&
+        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Legendary ? (
+          <React.Fragment key="legendaryContainer">
+            <RarityTitle
+              rarity={Rarity.Legendary}
               variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
               transition={transitionVariant}
-              key="legendaryItemsHidden"
-              className="mb-2 cursor-pointer italic text-gray-400 decoration-red-800 underline-offset-1 hover:underline"
-              onClick={() => setRarityFilter(Rarity.Legendary)}
-            >
-              {legendaryItemsCount} <span className="text-red-600">legendary</span>{' '}
-              {getPluralFromItems(legendaryItemsCount)} hidden.
-            </motion.p>
-          ))}
+              tier={3}
+              backgroundColor="bg-red-800/25"
+              fallbackBackgroundColor="bg-red-800"
+            />
+            {/* Loop through the items object */}
+            <ItemContainer
+              gridKey="legendaryGrid"
+              itemsCombined={legendaryItems}
+              transition={transitionVariant}
+              hoveredItem={hoveredItem}
+              selectedItem={selectedItem}
+              activeItem={activeItem}
+              setHoveredItem={setHoveredItem}
+              setSelectedItem={setSelectedItem}
+              itemRefArray={itemRefArray}
+            />
+          </React.Fragment>
+        ) : (
+          <motion.p
+            variants={titleVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionVariant}
+            key="legendaryItemsHidden"
+            className="mb-2 cursor-pointer italic text-gray-400 decoration-red-800 underline-offset-1 hover:underline"
+            onClick={() => setRarityFilter(Rarity.Legendary)}
+          >
+            {legendaryItemsCount} <span className="text-red-600">legendary</span>{' '}
+            {getPluralFromItems(legendaryItemsCount)} hidden.
+          </motion.p>
+        ))}
 
-        {mythicItemsCount > 0 &&
-          (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Mythic ? (
-            <React.Fragment key="mythicContainer">
-              <RarityTitle
-                rarity={Rarity.Mythic}
-                variants={titleVariants}
-                transition={transitionVariant}
-                tier={3}
-                backgroundColor={css`
-                  background: radial-gradient(rgb(234 179 8 / 25%), rgb(161 98 7 / 25%));
-                  background-size: 400% 400%;
-                  animation: Glow 3s ease infinite;
+      {mythicItemsCount > 0 &&
+        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Mythic ? (
+          <React.Fragment key="mythicContainer">
+            <RarityTitle
+              rarity={Rarity.Mythic}
+              variants={titleVariants}
+              transition={transitionVariant}
+              tier={3}
+              backgroundColor={css`
+                background: radial-gradient(rgb(234 179 8 / 25%), rgb(161 98 7 / 25%));
+                background-size: 400% 400%;
+                animation: Glow 3s ease infinite;
 
-                  @keyframes Glow {
-                    0% {
-                      background-position: 50% 0;
-                    }
-                    50% {
-                      background-position: 50% 100%;
-                    }
-                    100% {
-                      background-position: 50% 0;
-                    }
+                @keyframes Glow {
+                  0% {
+                    background-position: 50% 0;
                   }
-                `}
-                fallbackBackgroundColor="bg-orange-600"
-              />
-              <motion.ul
-                key="mythicGrid"
-                variants={gridContainerVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
-              >
-                {/* Loop through the items object */}
-                <ItemContainer
-                  itemsCombined={mythicItems}
-                  transition={transitionVariant}
-                  mythic={true}
-                  hoveredItem={hoveredItem}
-                  selectedItem={selectedItem}
-                  setHoveredItem={setHoveredItem}
-                  setSelectedItem={setSelectedItem}
-                  itemRefArray={itemRefArray}
-                />
-              </motion.ul>
-            </React.Fragment>
-          ) : (
-            <motion.p
-              variants={titleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
+                  50% {
+                    background-position: 50% 100%;
+                  }
+                  100% {
+                    background-position: 50% 0;
+                  }
+                }
+              `}
+              fallbackBackgroundColor="bg-orange-600"
+            />
+            {/* Loop through the items object */}
+            <ItemContainer
+              gridKey="mythicGrid"
+              itemsCombined={mythicItems}
               transition={transitionVariant}
-              key="mythicItemsHidden"
-              className="mb-2 cursor-pointer italic text-gray-400 decoration-orange-800 underline-offset-1 hover:underline"
-              onClick={() => setRarityFilter(Rarity.Mythic)}
-            >
-              {mythicItemsCount} <span className="text-orange-600">mythic</span> {getPluralFromItems(mythicItemsCount)}{' '}
-              hidden.
-            </motion.p>
-          ))}
-      </SimpleBar>
-    </AnimatePresence>
+              mythic={true}
+              hoveredItem={hoveredItem}
+              selectedItem={selectedItem}
+              activeItem={activeItem}
+              setHoveredItem={setHoveredItem}
+              setSelectedItem={setSelectedItem}
+              itemRefArray={itemRefArray}
+            />
+          </React.Fragment>
+        ) : (
+          <motion.p
+            variants={titleVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionVariant}
+            key="mythicItemsHidden"
+            className="mb-2 cursor-pointer italic text-gray-400 decoration-orange-800 underline-offset-1 hover:underline"
+            onClick={() => setRarityFilter(Rarity.Mythic)}
+          >
+            {mythicItemsCount} <span className="text-orange-600">mythic</span> {getPluralFromItems(mythicItemsCount)}{' '}
+            hidden.
+          </motion.p>
+        ))}
+    </SimpleBar>
   )
 }

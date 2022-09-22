@@ -1,9 +1,17 @@
 import Head from 'next/head'
 
+import {
+  DndContext,
+  DragEndEvent,
+  DragStartEvent,
+  MouseSensor,
+  UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import { cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import { MutableRefObject, createRef, useCallback, useRef, useState } from 'react'
-import { DragDropContext, DragStart, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 
 import { BuildMaker } from '../components/BuildMaker'
 import FilterItemsByClass from '../components/FilterItemsByClass'
@@ -198,24 +206,36 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [autocompleteResults, setAutocompleteResults] = useState<Fuzzysort.KeysResults<ItemsSchema>>()
   const [selectedItem, setSelectedItem] = useState<ItemsSchema | null>(null)
+  // Current dragged item
+  const [activeItem, setActiveItem] = useState<UniqueIdentifier | null>(null)
   // Array of itemRefs
   const itemRefArray = useRef<
     Array<{
       itemId: number
-      ref: MutableRefObject<HTMLLIElement | null>
+      ref: MutableRefObject<HTMLElement | null>
     }>
   >([])
   // Ref to item grid
   const itemGridRef = createRef<HTMLDivElement>()
 
-  const onDragStart = useCallback((initial: DragStart, provided: ResponderProvided) => {
-    console.log(initial)
-  }, [])
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 15,
+      },
+    })
+  )
 
-  const onDragEnd = useCallback((result: DropResult, provided: ResponderProvided) => {
-    // the only one that is required
-    console.log(result)
-  }, [])
+  function handleDragStart(event: DragStartEvent) {
+    setActiveItem(event.active.id)
+    console.log(event.active.id)
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    setActiveItem(null)
+    console.log(event.active.id)
+    console.log(event.active.data)
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-tr from-slate-900 via-brand-dark to-gray-900">
@@ -233,9 +253,9 @@ function Home() {
           </div>
         </nav>
         {/* Editor */}
-        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-          <main className="mx-4 mt-4 mb-8 flex-1">
-            <div className="flex h-full flex-col space-y-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
+        <main className="mx-4 mt-4 mb-8 flex-1">
+          <div className="flex h-full flex-col space-y-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
+            <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
               {/* Item picker */}
               <div
                 className={`${styles['smooth-shadow']} ${styles['container-background']} col-span-2 flex flex-col border-2 border-yellow-900 px-4 py-3 md:grid md:grid-cols-9 md:grid-rows-1 md:gap-2`}
@@ -298,6 +318,7 @@ function Home() {
                     searchFilter={searchTerm}
                     setAutocompleteResults={setAutocompleteResults}
                     selectedItem={selectedItem}
+                    activeItem={activeItem}
                     setSelectedItem={setSelectedItem}
                     itemRefArray={itemRefArray}
                     itemGridRef={itemGridRef}
@@ -317,13 +338,13 @@ function Home() {
               </div>
               {/* Build maker */}
               <div
-                className={`${styles['smooth-shadow']} ${styles['container-background']} border-2 border-yellow-900 bg-slate-900/60  text-white`}
+                className={`${styles['smooth-shadow']} ${styles['container-background']} border-2 border-yellow-900 bg-slate-900/60 text-white h-full col-span-1`}
               >
                 <BuildMaker />
               </div>
-            </div>
-          </main>
-        </DragDropContext>
+            </DndContext>
+          </div>
+        </main>
         {/* Footer */}
         <Footer />
       </div>

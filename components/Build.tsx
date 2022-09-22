@@ -1,7 +1,42 @@
+import { GlobalState, useStateMachine } from 'little-state-machine'
 import React from 'react'
 import SimpleBar from 'simplebar-react'
 
-const BuildSection = ({ children }: { children: JSX.Element }) => {
+import { Block } from '../types/Build'
+import { ItemsSchema } from '../types/Items'
+import { Droppable } from './Droppable'
+
+const appendBuildBlock = (state: GlobalState, payload: Block) => {
+  return {
+    itemBuild: {
+      ...state.itemBuild,
+      blocks: [...state.itemBuild.blocks, payload],
+    },
+  }
+}
+
+const editBuildBlock = (state: GlobalState, payload: Block, index: number) => {
+  let newBlocks = state.itemBuild.blocks
+  newBlocks[index] = payload
+
+  return {
+    itemBuild: {
+      ...state.itemBuild,
+      blocks: newBlocks,
+    },
+  }
+}
+
+const resetBuild = (state: GlobalState) => {
+  return {
+    itemBuild: {
+      ...state.itemBuild,
+      blocks: [],
+    },
+  }
+}
+
+const BuildSection = ({ id, children }: { id: number; children: JSX.Element }) => {
   return (
     <div className="h-full w-full border border-yellow-900 ">
       <div className="relative">
@@ -19,14 +54,21 @@ const BuildSection = ({ children }: { children: JSX.Element }) => {
 }
 
 const Build = () => {
+  const { actions, state } = useStateMachine({
+    appendBuildBlock,
+    editBuildBlock
+  })
+
   return (
     <div className="absolute h-full w-full">
       <SimpleBar className="m-4 h-full overflow-y-auto">
         {/* Build Title */}
-        <BuildSection>
-          <p className="text-center text-gray-400">
-            <em>Drag and drop items here</em>
-          </p>
+        <BuildSection id={1}>
+          <Droppable id={1}>
+            <p className="text-center text-gray-400">
+              <em>Drag and drop items here</em>
+            </p>
+          </Droppable>
         </BuildSection>
       </SimpleBar>
     </div>

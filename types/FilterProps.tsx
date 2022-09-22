@@ -1,3 +1,4 @@
+import { UniqueIdentifier } from '@dnd-kit/core'
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from 'react'
 
 import { Category, ChampionClass, ItemsSchema } from './Items'
@@ -5,7 +6,7 @@ import { Category, ChampionClass, ItemsSchema } from './Items'
 export type ItemRefArrayType = MutableRefObject<
   {
     itemId: number
-    ref: MutableRefObject<HTMLLIElement | null>
+    ref: MutableRefObject<HTMLElement | null>
   }[]
 >
 
@@ -41,6 +42,7 @@ export type ItemGridProps = {
   searchFilter: string
   setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
   selectedItem: ItemsSchema | null
+  activeItem: UniqueIdentifier | null
   setSelectedItem: Dispatch<SetStateAction<ItemsSchema | null>>
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
@@ -75,11 +77,13 @@ export type FilterBySearchState = {
 }
 
 export type ItemContainerState = {
+  gridKey: string
   itemsCombined: ItemsSchema[]
   transition: any
   mythic: boolean
   hoveredItem: number | null
   selectedItem: ItemsSchema | null
+  activeItem: UniqueIdentifier | null
   setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
   setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
   itemRefArray: ItemRefArrayType

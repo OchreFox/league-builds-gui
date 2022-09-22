@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/future/image'
 
 import { css, cx } from '@emotion/css'
 import React from 'react'
