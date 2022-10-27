@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 import { ItemBuildTreeProps } from '../types/FilterProps'
 import { ItemsSchema } from '../types/Items'
-import { CustomLoader } from '../utils/ImageLoader'
+import { CustomLoader } from '../utils/CustomLoader'
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
 import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGridComponents'
 import { useItems } from './hooks/useItems'

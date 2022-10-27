@@ -6,7 +6,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { ChampionsSchema } from '../../types/Champions'
-import { CustomLoader } from '../../utils/ImageLoader'
+import { CustomLoader } from '../../utils/CustomLoader'
 import { easeInOutExpo } from '../../utils/Transition'
 import { easeOutExpo } from '../BuildMakerComponents'
 import { addSelectedChampion, removeSelectedChampion } from '../store/appSlice'
@@ -88,13 +88,13 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
               blurDataURL={champion.placeholder}
             />
           ) : (
-            <Image
+            <img
               width={60}
               height={60}
               src="/icons/champion-square.svg"
               alt={champion.name}
-              placeholder="blur"
-              blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO0rgcAAPsAvCZ+DFUAAAAASUVORK5CYII="
+              // placeholder="blur"
+              // blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO0rgcAAPsAvCZ+DFUAAAAASUVORK5CYII="
             />
           )}
         </div>

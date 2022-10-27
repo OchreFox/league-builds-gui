@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Tag } from '../../types/Champions'
-import { CustomLoader } from '../../utils/ImageLoader'
+import { CustomLoader } from '../../utils/CustomLoader'
 import { easeInOutExpo } from '../../utils/Transition'
 import {
   ChampionPickerHover,

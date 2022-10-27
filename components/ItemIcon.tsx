@@ -5,7 +5,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { CSSProperty, ItemsSchema } from '../types/Items'
-import { CustomLoader } from '../utils/ImageLoader'
+import { CustomLoader } from '../utils/CustomLoader'
 import { selectPotatoMode } from './store/potatoModeSlice'
 
 export const ItemIcon = ({

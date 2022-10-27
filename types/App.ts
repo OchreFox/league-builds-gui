@@ -21,3 +21,10 @@ export interface AppState {
   championPicker: ChampionPickerState
   itemPicker: ItemPickerState
 }
+
+export type LoaderOptions = {
+  src: string
+  width?: number
+  height?: number
+  quality?: number
+}
