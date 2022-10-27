@@ -19,7 +19,6 @@ module.exports = {
     return config
   },
   images: {
-    loader: 'custom',
-    loaderFile: './utils/ImageLoader.tsx',
+    unoptimized: true,
   },
 }
