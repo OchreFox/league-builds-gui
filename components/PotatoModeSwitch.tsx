@@ -1,30 +1,31 @@
 import { cx } from '@emotion/css'
 import { Switch } from '@headlessui/react'
 import { useContext } from 'react'
+import { useSelector } from 'react-redux'
 
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectPotatoMode, setPotatoMode, unsetPotatoMode } from './store/potatoModeSlice'
+import { useAppDispatch } from './store/store'
 
 export default function PotatoModeSwitch() {
-  // Get the context state from the provider
-  const { state, dispatch } = useContext(PotatoModeContext)
+  const dispatch = useAppDispatch()
+  const potatoMode = useSelector(selectPotatoMode)
 
-  // Toggle the state
   const toggleState = () => {
-    if (state.enabled) {
-      dispatch({ type: 'UNSET_POTATO_MODE' })
+    if (potatoMode) {
+      dispatch(setPotatoMode())
     } else {
-      dispatch({ type: 'SET_POTATO_MODE' })
+      dispatch(unsetPotatoMode())
     }
   }
 
   return (
     <Switch.Group as="div" className="flex items-center">
       <Switch
-        checked={state.enabled}
+        checked={potatoMode}
         onChange={toggleState}
         onClick={toggleState}
         className={cx(
-          state.enabled ? 'bg-brand-default' : 'bg-gray-500',
+          potatoMode ? 'bg-brand-default' : 'bg-gray-500',
           'relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 motion-reduce:transition-none'
         )}
       >
@@ -33,7 +34,7 @@ export default function PotatoModeSwitch() {
           aria-hidden="true"
           className={cx(
             'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-            state.enabled && 'translate-x-5'
+            potatoMode && 'translate-x-5'
           )}
         />
       </Switch>

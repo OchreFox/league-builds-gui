@@ -1,15 +1,23 @@
+import { ChampionsSchema } from './Champions'
+
+// For the Settings component
 export interface ItemBuildSettings {
   title: string
   associatedMaps: number[]
 }
 export interface ItemBuild extends ItemBuildSettings {
   associatedChampions: number[]
-  blocks: Block[]
+  blocks: BlockState[]
 }
 
 export interface Block {
   items: Item[]
   type: string
+}
+
+/** @internal Used for UI */
+export interface BlockState extends Block {
+  id?: string
 }
 
 export interface Item {

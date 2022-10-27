@@ -1,16 +1,16 @@
 import { css, cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import _ from 'lodash'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import JsxParser from 'react-jsx-parser'
 import { usePopper } from 'react-popper'
+import { useSelector } from 'react-redux'
 
 // SVG imports
 import goldIcon from '../public/icons/gold.svg?url'
 import { StandardItemState } from '../types/FilterProps'
 import { CSSProperty } from '../types/Items'
-import { Draggable } from './Draggable'
 import {
   Active,
   Attention,
@@ -35,18 +35,11 @@ import {
   setPopperBg,
 } from './ItemComponents'
 import { ItemIcon } from './ItemIcon'
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectItemPicker, setItemPickerHoveredItem, setItemPickerSelectedItem } from './store/appSlice'
+import { selectPotatoMode } from './store/potatoModeSlice'
+import { useAppDispatch } from './store/store'
 
-export const StandardItem = ({
-  item,
-  transition,
-  hoveredItem,
-  isMythic,
-  selectedItem,
-  setHoveredItem,
-  setSelectedItem,
-  itemRefArray,
-}: StandardItemState) => {
+export const StandardItem = ({ item, transition, isMythic, itemRefArray }: StandardItemState) => {
   if (!item.icon) {
     console.warn('No src for item:', item.name)
     return null
@@ -54,7 +47,10 @@ export const StandardItem = ({
   if (!item.visible) {
     return null
   }
-  const { state } = useContext(PotatoModeContext)
+  const dispatch = useAppDispatch()
+  const potatoMode = useSelector(selectPotatoMode)
+  const { selectedItem, hoveredItem } = useSelector(selectItemPicker)
+
   const [showPopper, setShowPopper] = useState(false)
   const [mouseEnter, setMouseEnter] = useState(false)
   const [buttonClick, setButtonClick] = useState(false)
@@ -80,7 +76,7 @@ export const StandardItem = ({
   })
 
   function usePotatoMode(value: string, propertyType: CSSProperty) {
-    if (state.enabled) {
+    if (potatoMode) {
       switch (propertyType) {
         case CSSProperty.OPACITY:
           return `1;`
@@ -97,11 +93,11 @@ export const StandardItem = ({
     if (mouseEnter && !buttonClick) {
       const timer = setTimeout(() => {
         setShowPopper(true)
-        setHoveredItem(item.id)
+        dispatch(setItemPickerHoveredItem(item.id))
       }, 500)
       return () => clearTimeout(timer)
     } else {
-      setHoveredItem(null)
+      dispatch(setItemPickerHoveredItem(null))
       setShowPopper(false)
     }
   }, [mouseEnter, buttonClick])
@@ -109,7 +105,7 @@ export const StandardItem = ({
   useEffect(() => {
     if (buttonClick) {
       setShowPopper(false)
-      setHoveredItem(null)
+      dispatch(setItemPickerHoveredItem(null))
     }
   }, [buttonClick])
 
@@ -124,109 +120,108 @@ export const StandardItem = ({
 
   return (
     <li className="relative list-none" ref={addToRefs}>
-      <Draggable id={item.id} data={item}>
-        <motion.div
-          layout
-          transition={transition}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          key={item.id}
-          className={cx(
-            'group -m-1 flex flex-col items-center px-2 py-2 text-center',
-            css`
-              border: 2px solid rgba(0, 0, 0, 0);
-            `,
-            selectedItem !== null &&
-              selectedItem.id === item.id &&
-              cx(
-                css`
-                  &:before {
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    top: 0;
-                    left: 0;
-                    z-index: -1;
-                    background: linear-gradient(
-                      180deg,
-                      rgba(0, 0, 0, 0) 0%,
-                      rgba(204, 41, 54, 0.75) 50%,
-                      rgba(0, 0, 0, 0) 100%
-                    );
-                    background-size: 600% 600%;
+      <motion.div
+        layout
+        transition={transition}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        key={item.id}
+        className={cx(
+          'group -m-1 flex flex-col items-center px-2 py-2 text-center',
+          css`
+            border: 2px solid rgba(0, 0, 0, 0);
+          `,
+          selectedItem !== null &&
+            selectedItem.id === item.id &&
+            cx(
+              css`
+                &:before {
+                  content: '';
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  top: 0;
+                  left: 0;
+                  z-index: -1;
+                  background: linear-gradient(
+                    180deg,
+                    rgba(0, 0, 0, 0) 0%,
+                    rgba(204, 41, 54, 0.75) 50%,
+                    rgba(0, 0, 0, 0) 100%
+                  );
+                  background-size: 600% 600%;
 
-                    animation: ${usePotatoMode('scroll 10s linear infinite;', CSSProperty.ANIMATION)} @keyframes scroll {
-                      0% {
-                        background-position: 50% 0%;
-                      }
-                      100% {
-                        background-position: 50% -600%;
-                      }
+                  animation: ${usePotatoMode('scroll 10s linear infinite;', CSSProperty.ANIMATION)} @keyframes scroll {
+                    0% {
+                      background-position: 50% 0%;
+                    }
+                    100% {
+                      background-position: 50% -600%;
                     }
                   }
+                }
 
-                  border: 2px solid;
-                  box-sizing: content-box;
-                  @supports (background: paint(something)) {
-                    border-image: linear-gradient(var(--angle), #12c2e9, #b9f5ff, #c471ed, #14fff5, #f64f59) 1;
-                    animation: ${usePotatoMode('6s rotate linear infinite forwards;', CSSProperty.ANIMATION)} @keyframes
-                      rotate {
-                      to {
-                        --angle: 360deg;
-                      }
-                    }
-                    @property --angle {
-                      syntax: '<angle>';
-                      initial-value: 0deg;
-                      inherits: false;
-                    }
-                  }
-                  /* Rotate the gradient */
-                  --angle: 0deg;
+                border: 2px solid;
+                box-sizing: content-box;
+                @supports (background: paint(something)) {
                   border-image: linear-gradient(var(--angle), #12c2e9, #b9f5ff, #c471ed, #14fff5, #f64f59) 1;
                   animation: ${usePotatoMode('6s rotate linear infinite forwards;', CSSProperty.ANIMATION)} @keyframes
                     rotate {
-                    from {
-                      --angle: 0deg;
-                    }
                     to {
                       --angle: 360deg;
                     }
                   }
-                `
-              )
-          )}
-          ref={buttonRef}
-          onMouseEnter={() => {
-            setMouseEnter(true)
-          }}
-          onMouseLeave={() => {
-            setMouseEnter(false)
-          }}
-          onClick={() => {
-            // Toggle selectedItem
-            if (selectedItem !== null && selectedItem.id === item.id) {
-              setSelectedItem(null)
-            } else {
-              setSelectedItem(item)
-            }
-          }}
-          onMouseDown={() => {
-            setButtonClick(true)
-          }}
-          onMouseUp={() => {
-            setButtonClick(false)
-          }}
-        >
-          {/* Mythic item overlay */}
-          <div
-            className={
-              isMythic
-                ? cx(
-                    'relative inline-flex shrink-0 items-center justify-center border border-yellow-700',
-                    css`
+                  @property --angle {
+                    syntax: '<angle>';
+                    initial-value: 0deg;
+                    inherits: false;
+                  }
+                }
+                /* Rotate the gradient */
+                --angle: 0deg;
+                border-image: linear-gradient(var(--angle), #12c2e9, #b9f5ff, #c471ed, #14fff5, #f64f59) 1;
+                animation: ${usePotatoMode('6s rotate linear infinite forwards;', CSSProperty.ANIMATION)} @keyframes
+                  rotate {
+                  from {
+                    --angle: 0deg;
+                  }
+                  to {
+                    --angle: 360deg;
+                  }
+                }
+              `
+            )
+        )}
+        ref={buttonRef}
+        onMouseEnter={() => {
+          setMouseEnter(true)
+        }}
+        onMouseLeave={() => {
+          setMouseEnter(false)
+        }}
+        onClick={() => {
+          // Toggle selectedItem
+          if (selectedItem !== null && selectedItem.id === item.id) {
+            dispatch(setItemPickerSelectedItem(null))
+          } else {
+            dispatch(setItemPickerSelectedItem(item))
+          }
+        }}
+        onMouseDown={() => {
+          setButtonClick(true)
+        }}
+        onMouseUp={() => {
+          setButtonClick(false)
+        }}
+      >
+        {/* Mythic item overlay */}
+        <div
+          className={
+            isMythic
+              ? cx(
+                  'relative inline-flex shrink-0 items-center justify-center border border-yellow-700',
+                  css`
                       background: linear-gradient(
                         180deg,
                         rgba(234, 179, 8, 1) 0%,
@@ -248,9 +243,9 @@ export const StandardItem = ({
                         }
                       }
                     `,
-                    hoveredItem !== null &&
-                      item.id !== hoveredItem &&
-                      css`
+                  hoveredItem !== null &&
+                    item.id !== hoveredItem &&
+                    css`
                         opacity: ${usePotatoMode('0.5;', CSSProperty.OPACITY)}
                         transition-property: ${usePotatoMode(
                           'color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;',
@@ -258,36 +253,29 @@ export const StandardItem = ({
                         )};
                         transition-duration: 100ms;
                       `
-                  )
-                : ''
-            }
-          >
-            <ItemIcon
-              state={state}
-              isMythic={isMythic}
-              hoveredItem={hoveredItem}
-              item={item}
-              usePotatoMode={usePotatoMode}
-            />
-          </div>
-          <p
-            className={cx(
-              'font-sans text-gray-200 group-hover:text-yellow-200',
-              hoveredItem !== null &&
-                item.id !== hoveredItem &&
-                css`
+                )
+              : ''
+          }
+        >
+          <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} usePotatoMode={usePotatoMode} />
+        </div>
+        <p
+          className={cx(
+            'font-sans text-gray-200 group-hover:text-yellow-200',
+            hoveredItem !== null &&
+              item.id !== hoveredItem &&
+              css`
                   opacity: ${usePotatoMode('0.5;', CSSProperty.OPACITY)}
                   transition-property: ${usePotatoMode(
                     'color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;',
                     CSSProperty.TRANSITION_PROPERTY
                   )};
                 `
-            )}
-          >
-            {item.gold?.total}
-          </p>
-        </motion.div>
-      </Draggable>
+          )}
+        >
+          {item.gold?.total}
+        </p>
+      </motion.div>
       {showPopper
         ? createPortal(
             <Tooltip
@@ -299,17 +287,26 @@ export const StandardItem = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               key={'popper-' + item.id}
-              className={cx(!state.enabled && 'backdrop-blur-md', setPopperBg(state.enabled))}
+              className={cx(!potatoMode && 'backdrop-blur-md', setPopperBg(potatoMode))}
             >
               <div ref={setArrowRef} style={styles.arrow} id="arrow" key={'arrow-' + item.id} />
               {/* Item information */}
-              <div className="flex flex-col" key={'popper-content-' + item.id}>
-                <div className="flex justify-between border-b border-yellow-900 pb-1">
-                  <h3 className="font-body font-semibold text-gray-200">{item.name}</h3>
-                  <p className="inline-flex items-center font-sans text-yellow-600">
-                    <img className="mr-1 h-5 w-5" src={goldIcon} alt="gold" />
-                    <span className="ml-1">{item.gold?.total}</span>
-                  </p>
+              <div className="flex flex-col w-full" key={'popper-content-' + item.id}>
+                <div className="flex w-full">
+                  <ItemIcon
+                    isMythic={isMythic}
+                    hoveredItem={hoveredItem}
+                    item={item}
+                    usePotatoMode={usePotatoMode}
+                    size={35}
+                  />
+                  <div className="flex justify-between border-b border-yellow-900 pb-1 ml-4 w-full">
+                    <h3 className="font-body font-semibold text-gray-200">{item.name}</h3>
+                    <p className="inline-flex items-center font-sans font-bold text-yellow-600">
+                      <img className="mr-1 h-5 w-5" src={goldIcon} alt="gold" />
+                      <span className="ml-1">{item.gold?.total}</span>
+                    </p>
+                  </div>
                 </div>
                 <div className="flex flex-col">
                   {item.description && (

@@ -52,6 +52,18 @@ export const Tooltip = styled(motion.div)`
       clip-path: polygon(0 100%, 100% 100%, 100% 0);
     }
   }
+  &[data-popper-placement^='left'] > #arrow {
+    right: calc(5px + var(--parent-padding) * -1);
+    :after {
+      box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-top: none;
+      border-left: none;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+      transform: rotate(-45deg);
+    }
+  }
 `
 
 export const setPopperBg = (enabled: boolean) => {
@@ -122,13 +134,13 @@ export const Stat = ({ children = [], name }: any) => {
   }
   return (
     <tr className="table-auto">
-      <td>
+      <td className="align-baseline">
         <StatIcon src={stat.imgSource} alt={stat.statName} />
       </td>
-      <td>
+      <td className="align-baseline">
         <span className="font-sans font-bold text-yellow-600">{children}</span>
       </td>
-      <td className="pl-2">{stat.statName}</td>
+      <td className="pl-2 align-baseline">{stat.statName}</td>
     </tr>
   )
 }

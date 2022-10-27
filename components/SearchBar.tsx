@@ -13,6 +13,7 @@ export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResul
     },
     [setSearchTerm]
   )
+
   return (
     <div className="w-full flex flex-col space-y-2">
       <label htmlFor="search" className="sr-only">

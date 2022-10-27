@@ -1,18 +1,20 @@
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import { GlobalState, useStateMachine } from 'little-state-machine'
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import * as yup from 'yup'
 
 import styles from '../styles/index.module.scss'
-import { ItemBuildSettings } from '../types/Build'
+import { ItemBuild, ItemBuildSettings } from '../types/Build'
 import { easeInOutExpo } from '../utils/Transition'
 import PotatoModeSwitch from './PotatoModeSwitch'
 import ResetAlert from './ResetAlert'
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from './store/itemBuildSlice'
+import { selectPotatoMode } from './store/potatoModeSlice'
+import { useAppDispatch } from './store/store'
 
 // const schema: yup.ObjectSchema<ItemBuildSettings> = yup.object({
 //   title: yup.string().required(),
@@ -20,49 +22,20 @@ import { PotatoModeContext } from './hooks/PotatoModeStore'
 
 // })
 
-const updateAssociatedMaps = (state: GlobalState, payload: number[]) => {
-  return {
-    itemBuild: {
-      ...state.itemBuild,
-      associatedMaps: payload,
-    },
-  }
-}
-
-const updateTitle = (state: GlobalState, payload: string) => {
-  return {
-    itemBuild: {
-      ...state.itemBuild,
-      title: payload,
-    },
-  }
-}
-
-const deleteState = (_state: GlobalState) => {
-  return {
-    itemBuild: {
-      title: '',
-      associatedMaps: [],
-      associatedChampions: [],
-      blocks: [],
-    },
-  }
-}
-
 const Settings = () => {
-  const { actions, state } = useStateMachine({
-    updateAssociatedMaps,
-    updateTitle,
-    deleteState,
-  })
-  const { state: potatoMode } = useContext(PotatoModeContext)
+  const dispatch = useAppDispatch()
+  const itemBuild = useSelector(selectItemBuild)
+  const potatoMode = useSelector(selectPotatoMode)
+
   const [showResetAlert, setShowResetAlert] = useState(false)
   const [showCopyMessage, setShowCopyMessage] = useState(false)
   const [mouseHover, setMouseHover] = useState(false)
   const [downloadContent, setDownloadContent] = useState('#')
   const [downloadTitle, setDownloadTitle] = useState('My Build.json')
+
   const copyButtonRef = useRef<HTMLButtonElement>(null)
   const downloadButtonRef = useRef<HTMLAnchorElement>(null)
+
   const {
     register,
     handleSubmit,
@@ -73,31 +46,51 @@ const Settings = () => {
   const onSubmit: SubmitHandler<ItemBuildSettings> = (data) => console.log(data)
 
   const toggleMap = (payload: number) => {
-    if (state.itemBuild.associatedMaps.includes(payload)) {
+    if (itemBuild.associatedMaps.includes(payload)) {
       // Remove map from array
-      let result = state.itemBuild.associatedMaps.filter((map) => map !== payload)
-      actions.updateAssociatedMaps(result)
+      let result = itemBuild.associatedMaps.filter((map) => map !== payload)
+      dispatch(setAssociatedMaps(result))
     } else {
-      let result = [...state.itemBuild.associatedMaps]
+      let result = [...itemBuild.associatedMaps]
       result.push(payload)
-      actions.updateAssociatedMaps(result)
+      dispatch(setAssociatedMaps(result))
+    }
+  }
+
+  const deleteIdFromBlocks = (state: ItemBuild) => {
+    // Delete the id property from the state.itemBuild.blocks
+    // This is to prevent the id from being saved in the json file
+    let newBlocks = []
+    for (const block of state.blocks) {
+      let newBlock = { ...block }
+      delete newBlock.id
+      newBlocks.push(newBlock)
+    }
+    return {
+      itemBuild: {
+        ...state,
+        blocks: newBlocks,
+      },
     }
   }
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    actions.updateTitle(e.target.value)
+    // actions.updateTitle(e.target.value)
+    dispatch(setTitle(e.target.value))
   }
 
   const handleCopyButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     handleSubmit(onSubmit)
     setShowCopyMessage(true)
-    navigator.clipboard.writeText(JSON.stringify(state.itemBuild))
+    let modifiedState = deleteIdFromBlocks(itemBuild)
+    navigator.clipboard.writeText(JSON.stringify(modifiedState.itemBuild))
   }
 
   const resetBuild = () => {
     console.log('Resetting build...')
-    actions.deleteState()
+    // actions.deleteState()
+    dispatch(resetItemBuild())
     reset()
   }
 
@@ -109,11 +102,14 @@ const Settings = () => {
         copyButtonRef.current?.blur()
       }, 3000)
     }
-    if (state.itemBuild) {
-      setDownloadTitle(`${state.itemBuild.title.trim()}.json` || 'My Build.json')
-      setDownloadContent(`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(state.itemBuild, null, 2))}`)
+    if (itemBuild) {
+      let modifiedState = deleteIdFromBlocks(itemBuild)
+      setDownloadTitle(`${itemBuild.title.trim()}.json` || 'My Build.json')
+      setDownloadContent(
+        `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(modifiedState.itemBuild, null, 2))}`
+      )
     }
-  }, [mouseHover, showCopyMessage, state.itemBuild])
+  }, [mouseHover, showCopyMessage, itemBuild])
 
   useEffect(() => {
     if (errors) {
@@ -142,11 +138,11 @@ const Settings = () => {
             name="title"
             className={cx(
               'mt-1 flex w-full rounded-md bg-gray-700 py-1 px-2 text-white shadow-sm focus:border-brand-default focus:ring-brand-default sm:text-sm',
-              !potatoMode.enabled && 'transition duration-100'
+              !potatoMode && 'transition duration-100'
             )}
             placeholder="Enter a name..."
             onChange={(e) => handleTitleChange(e)}
-            defaultValue={state.itemBuild.title}
+            defaultValue={itemBuild.title}
           />
         </div>
         {/* Associated maps */}
@@ -159,7 +155,7 @@ const Settings = () => {
                 className="absolute h-8 w-8"
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: state.itemBuild.associatedMaps.includes(11) ? 1 : 0,
+                  opacity: itemBuild?.associatedMaps?.includes(11) ? 1 : 0,
                 }}
                 transition={easeInOutExpo}
               />
@@ -170,7 +166,7 @@ const Settings = () => {
                 initial={{ opacity: 1 }}
                 whileHover={{ opacity: 0 }}
                 animate={{
-                  opacity: state.itemBuild.associatedMaps.includes(11) ? 0 : 1,
+                  opacity: itemBuild?.associatedMaps?.includes(11) ? 0 : 1,
                 }}
                 transition={easeInOutExpo}
               />
@@ -183,7 +179,7 @@ const Settings = () => {
                 className="absolute h-8 w-8"
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: state.itemBuild.associatedMaps.includes(12) ? 1 : 0,
+                  opacity: itemBuild?.associatedMaps?.includes(12) ? 1 : 0,
                 }}
                 transition={easeInOutExpo}
               />
@@ -194,7 +190,7 @@ const Settings = () => {
                 initial={{ opacity: 1 }}
                 whileHover={{ opacity: 0 }}
                 animate={{
-                  opacity: state.itemBuild.associatedMaps.includes(12) ? 0 : 1,
+                  opacity: itemBuild?.associatedMaps?.includes(12) ? 0 : 1,
                 }}
                 transition={easeInOutExpo}
               />
@@ -209,7 +205,7 @@ const Settings = () => {
               ref={copyButtonRef}
               className={cx(
                 'relative grow overflow-hidden rounded-md border-2 border-brand-light px-2 text-sm font-medium text-white shadow-sm hover:bg-brand-light focus:bg-green-400 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
-                !potatoMode.enabled && 'transition duration-100'
+                !potatoMode && 'transition duration-100'
               )}
               onClick={(e) => handleCopyButton(e)}
               onBlur={() => setShowCopyMessage(false)}
@@ -241,7 +237,7 @@ const Settings = () => {
               download={downloadTitle}
               className={cx(
                 'flex grow items-center justify-center rounded-md border-2 border-brand-light px-2 text-sm font-medium text-white shadow-sm hover:bg-brand-light focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
-                !potatoMode.enabled && 'transition duration-100'
+                !potatoMode && 'transition duration-100'
               )}
             >
               <Icon icon="tabler:file-export" className="mr-1 h-5 w-5" inline={true} />
@@ -252,14 +248,14 @@ const Settings = () => {
             type="submit"
             className={cx(
               'flex items-center justify-center rounded-md border-2 border-transparent border-brand-dark px-6 text-base font-medium text-white shadow-sm hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
-              !potatoMode.enabled && 'transition duration-100'
+              !potatoMode && 'transition duration-100'
             )}
             onClick={(e) => {
               e.preventDefault()
               setShowResetAlert(true)
             }}
           >
-            <Icon icon="tabler:x" className="mr-1 h-6 w-6" inline={true} />
+            <Icon icon="tabler:trash" className="mr-1 h-6 w-6" inline={true} />
             Reset Build
           </button>
         </div>

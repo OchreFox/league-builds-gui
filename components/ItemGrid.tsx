@@ -33,9 +33,6 @@ export default function ItemGrid({
   classFilters,
   searchFilter,
   setAutocompleteResults,
-  selectedItem,
-  activeItem,
-  setSelectedItem,
   itemRefArray,
   itemGridRef,
 }: ItemGridProps) {
@@ -55,8 +52,6 @@ export default function ItemGrid({
   const [mythicItemsCount, setMythicItemsCount] = useState(0)
   // Data initialization flag
   const [dataInitialized, setDataInitialized] = useState(false)
-  // Current hovered item
-  const [hoveredItem, setHoveredItem] = useState<number | null>(null)
 
   // Previous refs
   const previousValues = useRef({
@@ -283,11 +278,6 @@ export default function ItemGrid({
               gridKey="basicGrid"
               itemsCombined={basicItems}
               transition={transitionVariant}
-              hoveredItem={hoveredItem}
-              selectedItem={selectedItem}
-              activeItem={activeItem}
-              setHoveredItem={setHoveredItem}
-              setSelectedItem={setSelectedItem}
               itemRefArray={itemRefArray}
             />
           </React.Fragment>
@@ -322,11 +312,6 @@ export default function ItemGrid({
               gridKey="epicGrid"
               itemsCombined={epicItems}
               transition={transitionVariant}
-              hoveredItem={hoveredItem}
-              selectedItem={selectedItem}
-              activeItem={activeItem}
-              setHoveredItem={setHoveredItem}
-              setSelectedItem={setSelectedItem}
               itemRefArray={itemRefArray}
             />
           </React.Fragment>
@@ -361,11 +346,6 @@ export default function ItemGrid({
               gridKey="legendaryGrid"
               itemsCombined={legendaryItems}
               transition={transitionVariant}
-              hoveredItem={hoveredItem}
-              selectedItem={selectedItem}
-              activeItem={activeItem}
-              setHoveredItem={setHoveredItem}
-              setSelectedItem={setSelectedItem}
               itemRefArray={itemRefArray}
             />
           </React.Fragment>
@@ -418,11 +398,6 @@ export default function ItemGrid({
               itemsCombined={mythicItems}
               transition={transitionVariant}
               mythic={true}
-              hoveredItem={hoveredItem}
-              selectedItem={selectedItem}
-              activeItem={activeItem}
-              setHoveredItem={setHoveredItem}
-              setSelectedItem={setSelectedItem}
               itemRefArray={itemRefArray}
             />
           </React.Fragment>

@@ -1,10 +1,11 @@
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { Dialog, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 import React, { Fragment, useContext, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import styles from '../styles/index.module.scss'
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectPotatoMode } from './store/potatoModeSlice'
 
 export default function ResetAlert({
   open,
@@ -15,7 +16,7 @@ export default function ResetAlert({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   resetBuild: () => void
 }) {
-  const { state: potatoMode } = useContext(PotatoModeContext)
+  const potatoMode = useSelector(selectPotatoMode)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -33,7 +34,7 @@ export default function ResetAlert({
             <Dialog.Overlay
               className={cx(
                 'fixed inset-0 bg-black/60 bg-opacity-75 transition-opacity',
-                !potatoMode.enabled && '[@supports(backdrop-filter:blur(0))]:backdrop-blur'
+                !potatoMode && '[@supports(backdrop-filter:blur(0))]:backdrop-blur'
               )}
             />
           </Transition.Child>

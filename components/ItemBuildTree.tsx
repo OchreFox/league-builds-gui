@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { css, cx } from '@emotion/css'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { ItemBuildTreeProps } from '../types/FilterProps'
 import { ItemsSchema } from '../types/Items'
@@ -10,15 +11,13 @@ import { CustomLoader } from '../utils/ImageLoader'
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
 import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGridComponents'
 import { useItems } from './hooks/useItems'
+import { selectItemPicker, setItemPickerSelectedItem } from './store/appSlice'
+import { useAppDispatch } from './store/store'
 
-export const ItemBuildTree = ({
-  selectedItem,
-  setSelectedItem,
-  itemRefArray,
-  itemGridRef,
-  classFilters,
-  setClassFilters,
-}: ItemBuildTreeProps) => {
+export const ItemBuildTree = ({ itemRefArray, itemGridRef, classFilters, setClassFilters }: ItemBuildTreeProps) => {
+  const dispatch = useAppDispatch()
+  const { selectedItem } = useSelector(selectItemPicker)
+
   const { items } = useItems()
   const [triggerSelection, setTriggerSelection] = useState<number | null>()
 
@@ -147,7 +146,7 @@ export const ItemBuildTree = ({
         onClick={(e) => {
           console.log('clicked', item.name, baseItem.id)
           setTriggerSelection(baseItem.id)
-          setSelectedItem(item)
+          dispatch(setItemPickerSelectedItem(item))
           scrollIntoItem(item)
           e.stopPropagation()
         }}
@@ -259,7 +258,7 @@ export const ItemBuildTree = ({
                   triggerSelection === item.id && 'border-2 border-dashed border-yellow-500/75'
                 )}
                 onClick={() => {
-                  setSelectedItem(item)
+                  dispatch(setItemPickerSelectedItem(item))
                   // Find the item in itemRefArray and scroll to it
                   // Get index
                   scrollIntoItem(item)

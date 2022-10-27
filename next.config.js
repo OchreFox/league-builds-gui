@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
+
 module.exports = {
-  experimental: {
-    images: {
-      allowFutureImage: true,
-    },
-  },
   webpack: (config) => {
     config.module.rules.push(
       {
@@ -21,8 +17,5 @@ module.exports = {
     )
 
     return config
-  },
-  images: {
-    loader: 'custom',
   },
 }

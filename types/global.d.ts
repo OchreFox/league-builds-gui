@@ -1,5 +1,7 @@
 import 'little-state-machine'
 
+import Block from './Build'
+
 declare module 'little-state-machine' {
   interface GlobalState {
     itemBuild: {
@@ -9,14 +11,4 @@ declare module 'little-state-machine' {
       blocks: Block[]
     }
   }
-}
-
-export interface Block {
-  items: Item[]
-  type: string
-}
-
-export interface Item {
-  id: string
-  count: number
 }

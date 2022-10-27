@@ -12,6 +12,7 @@
     "omni",
     "omnivamp",
     "Onhit",
+    "Pixi",
     "popperjs",
     "quicktype",
     "Regen",
@@ -23,5 +24,7 @@
     "trivago",
     "uncrush",
     "webp"
-  ]
+  ],
+  "docwriter.style": "Auto-detect",
+  "svg.preview.background": "dark-transparent"
 }

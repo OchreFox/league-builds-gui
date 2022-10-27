@@ -2,11 +2,12 @@ import { css, cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import { motion, useAnimation } from 'framer-motion'
 import React, { useContext, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectPotatoMode } from './store/potatoModeSlice'
 
 const Header = () => {
-  const { state } = useContext(PotatoModeContext)
+  const potatoMode = useSelector(selectPotatoMode)
 
   const [isAnimationPlaying, setIsAnimationPlaying] = useState(false)
   const titleControls = useAnimation()
@@ -140,14 +141,14 @@ const Header = () => {
         whileHover="whileHover"
         className="pattern-diagonal-lines-sm group relative mt-2 mr-4 flex w-full flex-col overflow-visible text-pink-800/50"
         onHoverStart={() => {
-          if (!isAnimationPlaying && !state.enabled) {
+          if (!isAnimationPlaying && !potatoMode) {
             setAnimationPlaying(true)
             titleControls.start(titleVariants.whileHover)
             subtitleControls.start(subtitleVariants.whileHover)
           }
         }}
         onHoverEnd={() => {
-          if (isAnimationPlaying && !state.enabled) {
+          if (isAnimationPlaying && !potatoMode) {
             setAnimationPlaying(false)
             titleControls.start(titleVariants.default)
             subtitleControls.start(subtitleVariants.default)
@@ -159,7 +160,7 @@ const Header = () => {
             icon="tabler:menu-2"
             className={cx(
               'absolute z-10 -ml-4 text-gray-500 group-hover:font-bold group-hover:text-white',
-              !state.enabled && 'transition duration-200'
+              !potatoMode && 'transition duration-200'
             )}
             width={30}
           />
@@ -170,8 +171,8 @@ const Header = () => {
           animate={titleControls}
           className={cx(
             'p-2 font-wide text-5xl font-black text-brand-default',
-            !state.enabled && ' backdrop-blur-sm',
-            !state.enabled &&
+            !potatoMode && ' backdrop-blur-sm',
+            !potatoMode &&
               css`
                 overflow: hidden;
                 background-image: linear-gradient(90deg, rgba(0, 189, 255, 0) 50%, rgba(0, 189, 255, 0.2) 100%);
@@ -248,7 +249,7 @@ const Header = () => {
               `
           )}
         >
-          {!state.enabled && (
+          {!potatoMode && (
             <video
               src="/effects/vfx-vertical-magic-loop.webm"
               loop
@@ -285,7 +286,7 @@ const Header = () => {
           variants={subtitleVariants}
           initial="initial"
           animate={subtitleControls}
-          className={cx('text-md font-sans tracking-widest text-gray-400', !state.enabled && ' backdrop-blur-sm')}
+          className={cx('text-md font-sans tracking-widest text-gray-400', !potatoMode && ' backdrop-blur-sm')}
         >
           ITEM BUILDS
         </motion.h2>

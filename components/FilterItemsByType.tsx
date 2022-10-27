@@ -1,14 +1,15 @@
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { Menu, Transition } from '@headlessui/react'
 import { InlineIcon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import React, { Fragment, useContext, useRef, useState } from 'react'
+import React, { Fragment } from 'react'
+import { useSelector } from 'react-redux'
 
 import { FilterByTypeProps, FilterByTypeState } from '../types/FilterProps'
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectPotatoMode } from './store/potatoModeSlice'
 
 export default function FilterItemsByType({ filterItems, setFilterItems }: FilterByTypeState) {
-  const { state } = useContext(PotatoModeContext)
+  const potatoMode = useSelector(selectPotatoMode)
 
   const getItemClassnames = (item: FilterByTypeProps) => {
     let itemClassnames: string
@@ -23,7 +24,7 @@ export default function FilterItemsByType({ filterItems, setFilterItems }: Filte
       // Unpressed button
       itemClassnames = cx(
         'bg-transparent text-gray-600 hover:text-black group',
-        state.enabled
+        potatoMode
           ? 'hover:bg-cyan-900 '
           : 'after:absolute after:w-0 after:h-full after:left-0 after:top-0 after:transition-all after:duration-300 after:hover:bg-cyan-900 after:hover:w-full after:rounded-md'
       )
@@ -32,7 +33,7 @@ export default function FilterItemsByType({ filterItems, setFilterItems }: Filte
     return cx(
       itemClassnames,
       'group flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium md:justify-start duration-100 ease-out relative',
-      state.enabled ? 'transition-none' : 'transition-all'
+      potatoMode ? 'transition-none' : 'transition-all'
     )
   }
 
@@ -46,7 +47,7 @@ export default function FilterItemsByType({ filterItems, setFilterItems }: Filte
     return cx(
       imageClassnames,
       'flex-shrink-0 my-2 md:my-0 md:-ml-1 md:mr-3 z-10',
-      state.enabled ? 'transition-none' : 'transition duration-100',
+      potatoMode ? 'transition-none' : 'transition duration-100',
       item.name === 'All Items' ? 'h-4 w-auto' : 'h-4 w-4'
     )
   }

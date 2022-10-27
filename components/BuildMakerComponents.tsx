@@ -3,25 +3,21 @@ import { average, prominent } from 'color.js'
 import { Variants, motion } from 'framer-motion'
 import tinycolor from 'tinycolor2'
 
+import { AdditionalChampionProps } from '../types/Champions'
 import { easeInOutExpo } from '../utils/Transition'
 
-export type ResponseType = {
-  championSplash: string
-  colors: string[] | any
-}
-
-export const getChampionSplash = async (championId: number): Promise<ResponseType> => {
+export const getChampionSplash = async (championId: number): Promise<AdditionalChampionProps> => {
   if (championId <= 0) {
     return {
-      championSplash: '',
+      splash: '',
       colors: [],
     }
   }
   const baseUrl =
     'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes'
   const championSplash = `${baseUrl}/${championId}/${championId}000.jpg`
-  let response: ResponseType = {
-    championSplash: championSplash,
+  let response: AdditionalChampionProps = {
+    splash: championSplash,
     colors: [],
   }
 

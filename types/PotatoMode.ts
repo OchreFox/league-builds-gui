@@ -1,16 +1,16 @@
 import { Dispatch } from 'react'
 
-export interface PotatoModeInterface {
+export interface PotatoModeState {
   enabled: boolean
 }
 
 export type ActionType = {
-  type: string
+  type: 'SET_POTATO_MODE' | 'UNSET_POTATO_MODE' | 'SET_POTATO_MODE_LOCAL'
   payload?: any
 }
 
 export type PotatoModeType = {
-  state: PotatoModeInterface
+  state: PotatoModeState
   dispatch: Dispatch<ActionType>
 }
 

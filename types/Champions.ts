@@ -55,6 +55,11 @@ export interface ChampionsSchema {
   preToughness: number | null
   placeholder: string
 }
+export interface AdditionalChampionProps {
+  splash?: string | null
+  colors?: string[] | any
+}
+export type Champion = ChampionsSchema & AdditionalChampionProps
 
 export enum AdaptiveType {
   MagicDamage = 'MAGIC_DAMAGE',
@@ -145,7 +150,7 @@ export enum Tag {
   Tank = 'Tank',
 }
 
-export const DefaultChampion: ChampionsSchema = {
+export const DefaultChampionSchema: ChampionsSchema = {
   id: -1,
   name: 'Select a champion',
   title: 'Click to select',
@@ -194,4 +199,11 @@ export const DefaultChampion: ChampionsSchema = {
   adaptiveType: null,
   attributeRatings: null,
   price: null,
+  placeholder: '',
+}
+
+export const DefaultChampion: Champion = {
+  ...DefaultChampionSchema,
+  splash: '',
+  colors: [],
 }

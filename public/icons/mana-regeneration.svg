@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.54 10.31"><polygon points="5.94 2.02 8.54 2.02 7.24 0 5.94 2.02" fill="#bd9e59"/><path d="M5.59,10.51a3,3,0,0,1-3-1.84c-.7-1.73,1-4.43,3-8,2,3.58,3.68,6.27,3,8A3.06,3.06,0,0,1,5.59,10.51Z" transform="translate(-2.46 -0.2)" fill="#bd9e59" fill-rule="evenodd"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.54 10.31">
+    <polygon points="5.9,2 8.5,2 7.2,0 5.9,2" fill="#bd9e59" />
+    <path
+        d="M 5.3 10 C 4.1 10 3 9.4 2.5 8.3 c -0.6 -1.6 0.9 -4.2 2.8 -7.6 c 1.8 3.4 3.4 5.9 2.8 7.6 C 7.6 9.3 6.5 10 5.3 10 Z"
+        transform="matrix(1,0,0,1,-2.5,-0.2)" fill="#bd9e59" fill-rule="evenodd" />
+</svg>

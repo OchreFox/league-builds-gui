@@ -1,18 +1,19 @@
 import { cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
+import { useSelector } from 'react-redux'
 
 import packageJson from '../package.json'
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectPotatoMode } from './store/potatoModeSlice'
 
 export default function Footer() {
-  const { state } = useContext(PotatoModeContext)
+  const potatoMode = useSelector(selectPotatoMode)
 
   return (
     <footer
       className={cx(
         'body-font font-display relative border-t-2 border-brand-default bg-gray-800/60 text-gray-100 print:hidden',
-        !state.enabled && 'backdrop-blur-xl'
+        !potatoMode && 'backdrop-blur-xl'
       )}
     >
       <div className="mx-auto flex flex-col items-center px-5 py-6  sm:flex-row sm:py-2">

@@ -1,9 +1,10 @@
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import React, { useContext } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Rarity } from '../types/FilterProps'
-import { PotatoModeContext } from './hooks/PotatoModeStore'
+import { selectPotatoMode } from './store/potatoModeSlice'
 
 export const RarityTitle = ({
   rarity,
@@ -20,12 +21,12 @@ export const RarityTitle = ({
   backgroundColor?: string
   fallbackBackgroundColor?: string
 }) => {
-  const { state } = useContext(PotatoModeContext)
+  const potatoMode = useSelector(selectPotatoMode)
 
   const getBackgroundColor = () => {
     if (backgroundColor) {
       // Check if potato mode is enabled or if browser doesn't support backdrop-filter
-      if (state.enabled || !CSS.supports('backdrop-filter', 'blur(2px)')) {
+      if (potatoMode || !CSS.supports('backdrop-filter', 'blur(2px)')) {
         return fallbackBackgroundColor || 'bg-black'
       }
       return backgroundColor
@@ -44,7 +45,7 @@ export const RarityTitle = ({
       transition={transition}
       className={cx(
         'sticky top-0 z-10 -mx-2 mb-2 border-b border-yellow-900 px-2 py-1 font-body font-semibold uppercase text-gray-200 shadow-2xl',
-        !state.enabled && 'backdrop-blur',
+        !potatoMode && 'backdrop-blur',
         getBackgroundColor()
       )}
     >

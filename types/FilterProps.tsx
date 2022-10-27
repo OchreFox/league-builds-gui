@@ -1,4 +1,3 @@
-import { UniqueIdentifier } from '@dnd-kit/core'
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from 'react'
 
 import { Category, ChampionClass, ItemsSchema } from './Items'
@@ -41,9 +40,6 @@ export type ItemGridProps = {
   classFilters: FilterByClassProps[]
   searchFilter: string
   setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
-  selectedItem: ItemsSchema | null
-  activeItem: UniqueIdentifier | null
-  setSelectedItem: Dispatch<SetStateAction<ItemsSchema | null>>
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
 }
@@ -81,28 +77,17 @@ export type ItemContainerState = {
   itemsCombined: ItemsSchema[]
   transition: any
   mythic: boolean
-  hoveredItem: number | null
-  selectedItem: ItemsSchema | null
-  activeItem: UniqueIdentifier | null
-  setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
-  setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
   itemRefArray: ItemRefArrayType
 }
 
 export type StandardItemState = {
   item: ItemsSchema
   transition: any
-  hoveredItem: number | null
   isMythic: boolean
-  selectedItem: ItemsSchema | null
-  setHoveredItem: React.Dispatch<React.SetStateAction<number | null>>
-  setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
   itemRefArray: ItemRefArrayType
 }
 
 export type ItemBuildTreeProps = {
-  selectedItem: ItemsSchema | null
-  setSelectedItem: React.Dispatch<React.SetStateAction<ItemsSchema | null>>
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
   classFilters: FilterByClassProps[]
