@@ -1,12 +1,7 @@
 import { addListener, createListenerMiddleware } from '@reduxjs/toolkit'
 import type { TypedAddListener, TypedStartListening } from '@reduxjs/toolkit'
 
-import {
-  addAssociatedChampion,
-  addSelectedChampion,
-  removeAssociatedChampion,
-  removeSelectedChampion,
-} from './itemBuildSlice'
+import { addAssociatedChampion, removeAssociatedChampion } from './itemBuildSlice'
 import { AppDispatch, RootState } from './store'
 
 export const listenerMiddleware = createListenerMiddleware()
