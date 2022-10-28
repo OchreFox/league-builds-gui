@@ -13,17 +13,29 @@ export const ItemIcon = ({
   isMythic,
   hoveredItem,
   item,
-  usePotatoMode,
   className,
 }: {
   size?: number
   isMythic: boolean
   hoveredItem: number | null
   item: ItemsSchema
-  usePotatoMode(value: string, propertyType: CSSProperty): string
   className?: string
 }) => {
   const potatoMode = useSelector(selectPotatoMode)
+
+  function usePotatoMode(value: string, propertyType: CSSProperty) {
+    if (potatoMode) {
+      switch (propertyType) {
+        case CSSProperty.OPACITY:
+          return `1;`
+        case CSSProperty.TRANSFORM:
+        case CSSProperty.ANIMATION:
+        case CSSProperty.TRANSITION_PROPERTY:
+          return `none;`
+      }
+    }
+    return value
+  }
   return (
     <div
       className={cx(

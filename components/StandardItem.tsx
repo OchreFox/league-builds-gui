@@ -40,13 +40,6 @@ import { selectPotatoMode } from './store/potatoModeSlice'
 import { useAppDispatch } from './store/store'
 
 export const StandardItem = ({ item, transition, isMythic, itemRefArray }: StandardItemState) => {
-  if (!item.icon) {
-    console.warn('No src for item:', item.name)
-    return null
-  }
-  if (!item.visible) {
-    return null
-  }
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const { selectedItem, hoveredItem } = useSelector(selectItemPicker)
@@ -118,6 +111,13 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
     }
   }
 
+  if (!item.icon) {
+    console.warn('No src for item:', item.name)
+    return null
+  }
+  if (!item.visible) {
+    return null
+  }
   return (
     <li className="relative list-none" ref={addToRefs}>
       <>
@@ -258,7 +258,7 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
                 : ''
             }
           >
-            <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} usePotatoMode={usePotatoMode} />
+            <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} />
           </div>
           <p
             className={cx(
@@ -294,13 +294,7 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
                 {/* Item information */}
                 <div className="flex flex-col w-full" key={'popper-content-' + item.id}>
                   <div className="flex w-full">
-                    <ItemIcon
-                      isMythic={isMythic}
-                      hoveredItem={hoveredItem}
-                      item={item}
-                      usePotatoMode={usePotatoMode}
-                      size={35}
-                    />
+                    <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} size={35} />
                     <div className="flex justify-between border-b border-yellow-900 pb-1 ml-4 w-full">
                       <h3 className="font-body font-semibold text-gray-200">{item.name}</h3>
                       <p className="inline-flex items-center font-sans font-bold text-yellow-600">
