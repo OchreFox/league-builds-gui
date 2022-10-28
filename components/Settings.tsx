@@ -12,6 +12,7 @@ import { ItemBuild, ItemBuildSettings } from '../types/Build'
 import { easeInOutExpo } from '../utils/Transition'
 import PotatoModeSwitch from './PotatoModeSwitch'
 import ResetAlert from './ResetAlert'
+import { resetApp } from './store/appSlice'
 import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from './store/itemBuildSlice'
 import { selectPotatoMode } from './store/potatoModeSlice'
 import { useAppDispatch } from './store/store'
@@ -91,6 +92,7 @@ const Settings = () => {
     console.log('Resetting build...')
     // actions.deleteState()
     dispatch(resetItemBuild())
+    dispatch(resetApp())
     reset()
   }
 

@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js'
 import { CustomPIXIComponent, CustomPIXIComponentBehavior } from 'react-pixi-fiber'
 
 interface EmitterProps {
-  image: string
+  images: string[]
   config: EmitterConfigV1
   [props: string]: any
 }
@@ -17,15 +17,16 @@ export const behavior: CustomPIXIComponentBehavior<PIXI.Container<PIXI.DisplayOb
     oldProps: EmitterProps | undefined,
     newProps: EmitterProps
   ) {
-    const { image, config } = newProps
+    const { images, config } = newProps
 
     // If there is an emitter, don't create a new one. Very important to avoid memory leaks
     if (instance.children.length > 0) {
       return
     }
+    const textures = images.map((image) => PIXI.Texture.from(image))
 
     // Create a new config for the EmitterConfigV3 format
-    const newConfig = upgradeConfig(config, [PIXI.Texture.from(image)])
+    const newConfig = upgradeConfig(config, textures)
     // Create an emitter and add it to the container
     const emitter = new Emitter(instance, newConfig)
 

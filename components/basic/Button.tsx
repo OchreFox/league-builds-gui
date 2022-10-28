@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { easeInOutExpo } from '../../utils/Transition'
 
 export interface ButtonProps {
-  label: string
+  label?: string | undefined
   icon: string | IconifyIcon
   background: string
   color: string
@@ -16,7 +16,7 @@ export interface ButtonProps {
   bgClick: string
   colorReactive?: string
   layoutId?: string
-  rounded: 'rounded-full' | 'rounded-md'
+  rounded: 'rounded-full' | 'rounded-md' | 'rounded-none'
   handleClick?: () => void
 }
 
@@ -95,8 +95,8 @@ const Button = ({
         initial={{ y: 0 }}
         animate={{ y: reactive && buttonClick ? '-200%' : 0 }}
       >
-        <Icon icon={icon} className="mr-1 h-5 w-5" inline={true} />
-        <span>{label}</span>
+        <Icon icon={icon} className={cx('h-5 w-5', label && 'mr-1')} inline={true} />
+        {label && <span>{label}</span>}
       </motion.span>
       {reactive && (
         <motion.span

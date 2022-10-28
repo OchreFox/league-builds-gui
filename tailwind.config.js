@@ -23,6 +23,10 @@ module.exports = {
           dark: '#cc2936',
         },
       },
+      transitionTimingFunction: {
+        'ease-in-out-expo': 'cubic-bezier(0.87, 0, 0.13, 1)',
+        'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
     },
   },
   plugins: [],

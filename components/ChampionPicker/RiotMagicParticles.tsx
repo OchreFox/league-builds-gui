@@ -34,7 +34,7 @@ const riotMagicEmitterConfig = {
   noRotation: false,
   rotationSpeed: {
     min: 10,
-    max: 0,
+    max: 500,
   },
   lifetime: {
     min: 0.5,
@@ -60,11 +60,6 @@ const riotMagicEmitterConfig = {
 
 const RiotMagicParticles = ({ width = 150, height = 150 }: { width: number; height: number }) => {
   // Monitor if the container gets new children
-  const containerRef = React.useRef<Container>(null)
-
-  // React.useEffect(() => {
-  //   console.log(width, height)
-  // }, [])
 
   return (
     <Stage
@@ -76,9 +71,9 @@ const RiotMagicParticles = ({ width = 150, height = 150 }: { width: number; heig
         height: height,
       }}
     >
-      <Container ref={containerRef}>
+      <Container>
         <RiotMagicEmitter
-          image="/effects/particle.png"
+          images={['/effects/particle.png']}
           config={{
             ...riotMagicEmitterConfig,
             pos: {

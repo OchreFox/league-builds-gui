@@ -9,11 +9,12 @@ import FilterItemsByClass from '../components/FilterItemsByClass'
 import FilterItemsByRarity from '../components/FilterItemsByRarity'
 import FilterItemsByType from '../components/FilterItemsByType'
 import Footer from '../components/Footer'
-import Header from '../components/Header'
+import Header from '../components/Header/Header'
 import { ItemBuildTree } from '../components/ItemBuildTree'
 import ItemGrid from '../components/ItemGrid'
 import SearchBar from '../components/SearchBar'
 import Settings from '../components/Settings'
+import SlideoverOverlay from '../components/layout/SlideoverOverlay'
 import { resetItemBuild } from '../components/store/itemBuildSlice'
 import styles from '../styles/index.module.scss'
 import { Rarity, SortDirection } from '../types/FilterProps'
@@ -213,6 +214,7 @@ function Home() {
       <Head>
         <title>League Tools | Item Builds</title>
       </Head>
+      <SlideoverOverlay />
       <div className={`absolute inset-0 brightness-100 contrast-150 filter ${styles.noise}`} />
       {/* Main container */}
       <div className="relative flex min-h-screen w-full flex-col items-stretch">
@@ -309,6 +311,7 @@ function Home() {
             </div>
           </div>
         </main>
+
         {/* Footer */}
         <Footer />
       </div>

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { Champion } from '../../types/Champions'
 import { easeOutExpo } from '../BuildMakerComponents'
 import { selectChampionPicker } from '../store/appSlice'
+import { selectPotatoMode } from '../store/potatoModeSlice'
 import styles from './ChampionPickerCardBackground.module.scss'
 
 const ChampionImage = ({
@@ -114,6 +115,8 @@ const ChampionPickerCardBackground = ({ champions }: { champions: Champion[] }) 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const ref = useRef<HTMLDivElement>(null)
 
+  const potatoMode = useSelector(selectPotatoMode)
+
   const handleMouseMove = (e: React.MouseEvent) => {
     // Do a horizontal parallax effect
     // Reset the position if the mouse leaves the element
@@ -128,22 +131,22 @@ const ChampionPickerCardBackground = ({ champions }: { champions: Champion[] }) 
 
   return (
     <div ref={ref} className={styles.container} onMouseMove={handleMouseMove}>
-      {champions && champions.length > 0 ? (
-        champions.map(
-          (champion, index) =>
-            index <= 3 && (
-              <ChampionImage
-                key={index}
-                image={champion.splash ?? ''}
-                index={index}
-                length={champions.length}
-                mousePosition={mousePosition}
-              />
-            )
-        )
-      ) : (
-        <video src="/effects/vfx-vertical-magic-loop.webm" loop autoPlay muted className={styles.videobg} />
-      )}
+      {champions && champions.length > 0
+        ? champions.map(
+            (champion, index) =>
+              index <= 3 && (
+                <ChampionImage
+                  key={index}
+                  image={champion.splash ?? ''}
+                  index={index}
+                  length={champions.length}
+                  mousePosition={mousePosition}
+                />
+              )
+          )
+        : !potatoMode && (
+            <video src="/effects/vfx-vertical-magic-loop.webm" loop autoPlay muted className={styles.videobg} />
+          )}
     </div>
   )
 }

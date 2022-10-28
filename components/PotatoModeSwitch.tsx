@@ -11,7 +11,7 @@ export default function PotatoModeSwitch() {
   const potatoMode = useSelector(selectPotatoMode)
 
   const toggleState = () => {
-    if (potatoMode) {
+    if (!potatoMode) {
       dispatch(setPotatoMode())
     } else {
       dispatch(unsetPotatoMode())

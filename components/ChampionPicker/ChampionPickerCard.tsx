@@ -149,7 +149,9 @@ const ChampionPickerCard = () => {
           animate={{ opacity: hover ? 1 : 0 }}
           transition={easeOutExpo}
         >
-          {size.width > 0 && size.height > 0 && <RiotMagicParticles width={size.width} height={size.height} />}
+          {!potatoMode && size.width > 0 && size.height > 0 && (
+            <RiotMagicParticles width={size.width} height={size.height} />
+          )}
         </motion.div>
         <motion.div
           variants={titleHoverVariants}

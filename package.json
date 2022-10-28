@@ -16,6 +16,7 @@
     "@emotion/css": "^11.10.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@giscus/react": "^2.2.0",
     "@headlessui/react": "^1.7.3",
     "@hookform/resolvers": "^2.9.10",
     "@next/bundle-analyzer": "^13.0.0",

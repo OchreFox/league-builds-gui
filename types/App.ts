@@ -16,10 +16,15 @@ export interface ItemPickerState {
   draggedItem: number | null
 }
 
+export interface MenuState {
+  show: boolean
+}
+
 export interface AppState {
   selectedChampions: Champion[]
   championPicker: ChampionPickerState
   itemPicker: ItemPickerState
+  menu: MenuState
 }
 
 export type LoaderOptions = {

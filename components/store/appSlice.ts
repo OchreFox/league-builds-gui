@@ -21,12 +21,18 @@ const initialState: AppState = {
     selectedItem: null,
     draggedItem: null,
   },
+  menu: {
+    show: false,
+  },
 }
 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
+    resetApp: (_state) => {
+      return initialState
+    },
     setSelectedChampions: (state, action: PayloadAction<Champion[]>) => {
       state.selectedChampions = action.payload
     },
@@ -67,6 +73,9 @@ export const appSlice = createSlice({
     setItemPickerDraggedItem: (state, action: PayloadAction<number | null>) => {
       state.itemPicker.draggedItem = action.payload
     },
+    setMenuShow: (state, action: PayloadAction<boolean>) => {
+      state.menu.show = action.payload
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -81,8 +90,10 @@ export const appSlice = createSlice({
 export const selectSelectedChampions = (state: RootState) => state.app.selectedChampions
 export const selectChampionPicker = (state: RootState) => state.app.championPicker
 export const selectItemPicker = (state: RootState) => state.app.itemPicker
+export const selectMenu = (state: RootState) => state.app.menu
 
 export const {
+  resetApp,
   setSelectedChampions,
   addSelectedChampion,
   removeSelectedChampion,
@@ -96,4 +107,5 @@ export const {
   setItemPickerHoveredItem,
   setItemPickerSelectedItem,
   setItemPickerDraggedItem,
+  setMenuShow,
 } = appSlice.actions
