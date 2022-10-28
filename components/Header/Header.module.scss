@@ -78,11 +78,10 @@
   width: 100%;
   right: 0px;
   transform: rotate(90deg) translateX(-55%);
-  filter: saturate(0);
+  filter: saturate(0) hue-rotate(35deg);
   opacity: 0;
   z-index: -1;
   mix-blend-mode: screen;
-  filter: hue-rotate(35deg);
   animation: slide-in-right 0.5 linear;
   animation-delay: 1s;
   animation-fill-mode: forwards;

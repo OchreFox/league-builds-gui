@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Block, BlockState, Item } from '../types/Build'
 import { ItemsSchema } from '../types/Items'
 import { easeInOutExpo } from '../utils/Transition'
-import { Tooltip, setPopperBg } from './ItemComponents'
+import { Tooltip, setPopperBg } from './ItemGrid/ItemComponents'
 import { selectPotatoMode } from './store/potatoModeSlice'
 
 const buildVariant = {

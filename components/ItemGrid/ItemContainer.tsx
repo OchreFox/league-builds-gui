@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import React, { useState } from 'react'
 import { ReactSortable } from 'react-sortablejs'
+import { ItemContainerState } from 'types/FilterProps'
 
-import { ItemContainerState } from '../types/FilterProps'
 import { gridContainerVariants, transitionVariant } from './ItemGridComponents'
 import { StandardItem } from './StandardItem'
 

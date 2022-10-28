@@ -1,8 +1,7 @@
 import fuzzy from 'fuzzy'
 import _ from 'lodash'
-
-import { FilterByClassProps, FilterByTypeProps, SortDirection } from '../types/FilterProps'
-import { Category, ChampionClass, ItemsSchema } from '../types/Items'
+import { FilterByClassProps, FilterByTypeProps, SortDirection } from 'types/FilterProps'
+import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
 /**
  * Function to determine if an item includes a category from an array of categories

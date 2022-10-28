@@ -1,3 +1,4 @@
+import { useItems } from '@/hooks/useItems'
 import { css, cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
@@ -5,10 +6,12 @@ import _ from 'lodash'
 import React, { Fragment, createRef, useEffect, useRef, useState } from 'react'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
+import { ItemGridProps, Rarity } from 'types/FilterProps'
+import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
-import { ItemGridProps, Rarity } from '../types/FilterProps'
-import { Category, ChampionClass, ItemsSchema } from '../types/Items'
-import { isBasic, isEpic, isLegendary, isMythic } from '../utils/ItemRarity'
+import { isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
+
+import { RarityTitle } from '../RarityTitle'
 import { ItemContainer } from './ItemContainer'
 import {
   getActiveCategories,
@@ -22,8 +25,6 @@ import {
   titleVariants,
   transitionVariant,
 } from './ItemGridComponents'
-import { RarityTitle } from './RarityTitle'
-import { useItems } from './hooks/useItems'
 
 export default function ItemGrid({
   goldOrderDirection,
