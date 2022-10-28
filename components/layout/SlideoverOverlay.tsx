@@ -73,12 +73,12 @@ export default function SlideoverOverlay() {
                         Share your feedback!
                       </h1>
                       <Giscus
-                        id="comments"
+                        id="Feedback"
                         repo="OchreFox/league-builds-gui"
                         repoId="R_kgDOHWrllg"
                         category="Feedback"
                         categoryId="DIC_kwDOHWrlls4CPVXt"
-                        mapping="url"
+                        mapping="pathname"
                         reactionsEnabled="0"
                         emitMetadata="0"
                         inputPosition="top"
