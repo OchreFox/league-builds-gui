@@ -45,7 +45,7 @@ export default function SlideoverOverlay() {
               <div className="pointer-events-auto w-screen max-w-md">
                 <div
                   className={cx(
-                    'flex h-full flex-col overflow-y-auto py-6 shadow-xl border-2 border-yellow-900',
+                    'flex h-full flex-col overflow-y-auto py-6 shadow-xl border-r-2 border-yellow-900',
                     !potatoMode && 'backdrop-blur-md',
                     styles['smooth-shadow'],
                     styles['container-background']

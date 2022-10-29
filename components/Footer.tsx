@@ -48,11 +48,18 @@ export default function Footer() {
         </div>
         <span className="flex shrink-0 flex-col items-center justify-center px-0 sm:ml-auto sm:mt-0 sm:justify-start md:px-6">
           <div className="mt-4 inline-flex flex-row space-x-4">
-            <a href="https://www.twitch.tv/ochrefox" className="text-gray-400" title="Twitch">
+            <a href="https://www.twitch.tv/ochrefox" className="text-gray-400 hover:text-white" title="Twitch">
               <Icon icon="bi:twitch" width="24" />
             </a>
-            <a href="mailto:contact@ochrefox.net" className="text-gray-400" title="Contact">
+            <a href="mailto:contact@ochrefox.net" className="text-gray-400 hover:text-white" title="Contact">
               <Icon icon="bi:envelope" width="24" />
+            </a>
+            <a
+              href="https://github.com/OchreFox/league-builds-gui"
+              className="text-gray-400 hover:text-white"
+              title="GitHub"
+            >
+              <Icon icon="bi:github" width="24" />
             </a>
           </div>
           <div className="mt-2 flex flex-row">

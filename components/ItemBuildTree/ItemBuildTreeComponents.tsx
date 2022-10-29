@@ -1,7 +1,6 @@
 import { css, cx } from '@emotion/css'
 import styled from '@emotion/styled'
-
-import { ItemsSchema } from '../types/Items'
+import { ItemsSchema } from 'types/Items'
 
 export type UnorderedListProps = {
   depth: number

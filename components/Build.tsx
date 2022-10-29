@@ -14,6 +14,7 @@ import { Block, BlockState, Item } from '../types/Build'
 import { ItemsSchema } from '../types/Items'
 import { easeInOutExpo } from '../utils/Transition'
 import { Tooltip, setPopperBg } from './ItemGrid/ItemComponents'
+import Button from './basic/Button'
 import { selectPotatoMode } from './store/potatoModeSlice'
 
 const buildVariant = {
@@ -174,9 +175,7 @@ const BuildSection = ({ id, block }: { id: number | undefined; block: Block }) =
 }
 
 const Build = () => {
-  const [addBuildBlockClick, setAddBuildBlockClick] = useState(false)
   const itemGridRef = createRef<HTMLDivElement>()
-  const sectionButtonRef = useRef<HTMLButtonElement>(null)
 
   const addIdToBlocks = (blocksArray: Array<BlockState>): BlockState[] => {
     let tempLastBlockId = 0
@@ -192,34 +191,6 @@ const Build = () => {
     return newBlocks
   }
 
-  const handleSetBlocks = (blocksArray: BlockState[]) => {
-    // actions.setBuildBlocks(blocksArray)
-  }
-
-  const handleAddBlock = (block: BlockState) => {
-    // let newBlock = { ...block, id: uuidv4() }
-    // let newBlocks = [...blocks, newBlock]
-    // handleSetBlocks(newBlocks)
-  }
-
-  // useEffect(() => {
-  //   // Initialize the blocks state
-  //   if (blocks.length > 0) {
-  //     console.log('Initializing blocks')
-  //     let modifiedBlocks = addIdToBlocks(blocks)
-  //     handleSetBlocks(modifiedBlocks)
-  //   }
-  // }, [])
-
-  useEffect(() => {
-    if (addBuildBlockClick) {
-      setTimeout(() => {
-        setAddBuildBlockClick(false)
-        sectionButtonRef.current?.blur()
-      }, 1000)
-    }
-  }, [addBuildBlockClick])
-
   return (
     <div className="absolute h-full w-full">
       <SimpleBar className="h-full overflow-y-auto justify-center" scrollableNodeProps={{ ref: itemGridRef }}>
@@ -228,19 +199,23 @@ const Build = () => {
             {/* {blocks.map((block, index) => (
               <BuildSection key={index} id={block.id} block={block} />
             ))} */}
-            <motion.button
-              layout="position"
+
+            <Button
+              label="Add Section"
               layoutId="add-block"
-              ref={sectionButtonRef}
-              className="inline-flex items-center bg-brand-default transition-colors duration-200 ease-out hover:bg-cyan-900 text-white font-bold py-2 px-4 rounded-full justify-center my-4 shadow-xl hover:shadow focus:bg-green-400"
-              onClick={() => {
-                handleAddBlock({ type: 'New Section', items: [] })
-                setAddBuildBlockClick(true)
+              icon="tabler:apps"
+              background="bg-brand-default"
+              color="text-white"
+              reactive={true}
+              labelReactive="Added"
+              iconReactive="tabler:check"
+              bgClick="bg-green-400"
+              colorReactive="text-black"
+              rounded="rounded-full"
+              handleClick={() => {
+                // handleAddBlock({ type: 'New Section', items: [] })
               }}
-            >
-              <Icon icon="tabler:apps" inline={true} className="mr-1" width="20" height="20" />
-              Add Section
-            </motion.button>
+            />
           </AnimatePresence>
         </div>
       </SimpleBar>

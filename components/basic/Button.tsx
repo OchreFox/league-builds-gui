@@ -39,15 +39,12 @@ const Button = ({
 
   const buttonVariants: Variants = {
     initial: {
-      scale: 1,
       boxShadow: '0 0 #0000, 0 0 #0000, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
     },
     hover: {
-      scale: reactive ? 1.05 : 1,
       boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
     },
     focus: {
-      scale: reactive ? 1.05 : 1,
       boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
     },
   }
@@ -77,7 +74,7 @@ const Button = ({
       whileFocus="focus"
       variants={buttonVariants}
       className={cx(
-        'inline-flex items-center transition-colors duration-200 ease-out hover:bg-cyan-900 py-2 justify-center my-4 font-normal relative grow overflow-hidden',
+        'inline-flex items-center transition-colors duration-200 ease-out hover:bg-cyan-900 py-2 justify-center my-4 font-normal relative grow overflow-hidden focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
         background,
         bgClick && `focus:${bgClick}`,
         rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md'
@@ -96,7 +93,7 @@ const Button = ({
         animate={{ y: reactive && buttonClick ? '-200%' : 0 }}
       >
         <Icon icon={icon} className={cx('h-5 w-5', label && 'mr-1')} inline={true} />
-        {label && <span>{label}</span>}
+        {label && <span className="font-bold">{label}</span>}
       </motion.span>
       {reactive && (
         <motion.span
@@ -106,7 +103,7 @@ const Button = ({
           whileTap={{ scale: 0.9 }}
         >
           {iconReactive && <Icon icon={iconReactive} className="mr-1 h-5 w-5" inline={true} />}
-          <span>{labelReactive}</span>
+          <span className="font-bold">{labelReactive}</span>
         </motion.span>
       )}
     </motion.button>

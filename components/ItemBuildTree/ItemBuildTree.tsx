@@ -1,18 +1,19 @@
 import Image from 'next/image'
 
+import { useItems } from '@/hooks/useItems'
+import { selectItemPicker, setItemPickerSelectedItem } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { ItemBuildTreeProps } from 'types/FilterProps'
+import { ItemsSchema } from 'types/Items'
 
-import { ItemBuildTreeProps } from '../types/FilterProps'
-import { ItemsSchema } from '../types/Items'
-import { CustomLoader } from '../utils/CustomLoader'
+import { CustomLoader } from 'utils/CustomLoader'
+
+import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from '../ItemGrid/ItemGridComponents'
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from './ItemBuildTreeComponents'
-import { getActiveChampionClass, getPluralFromItems, isFromChampionClass } from './ItemGrid/ItemGridComponents'
-import { useItems } from './hooks/useItems'
-import { selectItemPicker, setItemPickerSelectedItem } from './store/appSlice'
-import { useAppDispatch } from './store/store'
 
 export const ItemBuildTree = ({ itemRefArray, itemGridRef, classFilters, setClassFilters }: ItemBuildTreeProps) => {
   const dispatch = useAppDispatch()
@@ -200,7 +201,7 @@ export const ItemBuildTree = ({ itemRefArray, itemGridRef, classFilters, setClas
           margin-top: 1rem;
         `}
       >
-        <h3 className="mb-4">{baseItem.name}</h3>
+        <h3 className="mb-4 font-bold">{baseItem.name}</h3>
         <ItemBuildTreeItems buildTree={itemBuildTree} depth={0} baseItem={baseItem} />
       </div>
     )

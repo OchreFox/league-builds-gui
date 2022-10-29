@@ -4,6 +4,7 @@ import { motion, useAnimation } from 'framer-motion'
 import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
+import packageJson from '../../package.json'
 import { setMenuShow } from '../store/appSlice'
 import { selectPotatoMode } from '../store/potatoModeSlice'
 import { useAppDispatch } from '../store/store'
@@ -164,8 +165,9 @@ const Header = () => {
       >
         <button
           className={cx(
+            isHovering && 'bg-gray-500/50',
             'absolute z-10 -ml-4 px-2 py-1 inline-flex items-center group/menu text-gray-500 group-hover/header:font-bold group-hover/header:text-white hover:bg-brand-dark rounded',
-            !potatoMode && 'transition duration-200'
+            !potatoMode && 'backdrop-blur transition duration-200'
           )}
           onClick={() => dispatch(setMenuShow(true))}
         >
@@ -196,6 +198,9 @@ const Header = () => {
           className={cx('text-md font-sans tracking-widest text-gray-400', !potatoMode && ' backdrop-blur-sm')}
         >
           ITEM BUILDS
+          {packageJson.version.includes('beta') && (
+            <span className="ml-2 text-xs font-bold text-white bg-yellow-900 rounded-full px-2 py-0.5">BETA</span>
+          )}
         </motion.h2>
       </motion.div>
     </div>
