@@ -1,6 +1,6 @@
 import fuzzy from 'fuzzy'
 import _ from 'lodash'
-import { FilterByClassProps, FilterByTypeProps, SortDirection } from 'types/FilterProps'
+import { ClassFilter, FilterByTypeProps, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
 /**
@@ -96,7 +96,7 @@ export const getActiveCategories = (typeFilters: Array<FilterByTypeProps>): Arra
  * @returns ChampionClass - Active champion class
  * @returns ChampionClass.None - If no champion class is active
  */
-export const getActiveChampionClass = (classFilters: FilterByClassProps[]): ChampionClass => {
+export const getActiveChampionClass = (classFilters: ClassFilter[]): ChampionClass => {
   let activeClass = classFilters.filter((filter) => filter.isActive)[0]
   if (activeClass) {
     return activeClass.class

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "league-builds-gui",
-  "version": "0.4.0-beta",
+  "version": "0.4.1-beta",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -16,6 +16,11 @@
     "@emotion/css": "^11.10.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@fontsource/epilogue": "^4.5.10",
+    "@fontsource/ibm-plex-mono": "^4.5.12",
+    "@fontsource/ibm-plex-serif": "^4.5.12",
+    "@fontsource/inter": "^4.5.14",
+    "@fontsource/work-sans": "^4.5.12",
     "@giscus/react": "^2.2.0",
     "@headlessui/react": "^1.7.3",
     "@hookform/resolvers": "^2.9.10",

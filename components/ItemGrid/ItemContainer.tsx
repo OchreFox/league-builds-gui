@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import React, { useState } from 'react'
-import { ReactSortable } from 'react-sortablejs'
 import { ItemContainerState } from 'types/FilterProps'
 
 import { gridContainerVariants, transitionVariant } from './ItemGridComponents'
@@ -22,14 +21,6 @@ export const ItemContainer = ({ gridKey, itemsCombined, transition, mythic, item
         transition={transitionVariant}
         className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
       >
-        {/* <ReactSortable
-          group={{ name: 'shared', pull: 'clone', put: false }}
-          animation={150}
-          sort={false}
-          list={itemsCombined}
-          setList={() => {}}
-          className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
-        > */}
         {itemsCombined.map((item, index) => (
           <StandardItem
             key={'item-' + item.id + '-' + index}
@@ -39,7 +30,6 @@ export const ItemContainer = ({ gridKey, itemsCombined, transition, mythic, item
             itemRefArray={itemRefArray}
           />
         ))}
-        {/* </ReactSortable> */}
       </motion.ul>
     </>
   )

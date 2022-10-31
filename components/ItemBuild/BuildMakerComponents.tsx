@@ -2,9 +2,9 @@ import styled from '@emotion/styled'
 import { average, prominent } from 'color.js'
 import { Variants, motion } from 'framer-motion'
 import tinycolor from 'tinycolor2'
+import { AdditionalChampionProps } from 'types/Champions'
 
-import { AdditionalChampionProps } from '../types/Champions'
-import { easeInOutExpo } from '../utils/Transition'
+import { easeInOutExpo } from 'utils/Transition'
 
 export const getChampionSplash = async (championId: number): Promise<AdditionalChampionProps> => {
   if (championId <= 0) {

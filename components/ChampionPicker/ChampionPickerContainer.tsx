@@ -2,7 +2,7 @@ import React from 'react'
 import 'simplebar/dist/simplebar.min.css'
 
 import { Tag } from '../../types/Champions'
-import Build from '../Build'
+import Build from '../ItemBuild/Build'
 import ChampionPickerOverlay from './ChampionPickerOverlay'
 
 export const ChampionPickerContainer = ({

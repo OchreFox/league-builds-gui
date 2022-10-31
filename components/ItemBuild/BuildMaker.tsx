@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-
-import { ChampionsSchema } from '../types/Champions'
-import { getChampionSplash } from './BuildMakerComponents'
-import ChampionPickerCard from './ChampionPicker/ChampionPickerCard'
-import { ChampionPickerContainer } from './ChampionPicker/ChampionPickerContainer'
-import LinearProgress from './LinearProgress'
-import { useChampions } from './hooks/useChampions'
+import { useChampions } from '@/hooks/useChampions'
 import {
   selectChampionPicker,
   selectSelectedChampions,
   setChampionPickerHover,
   setChampionPickerIsLoading,
   updateSelectedChampion,
-} from './store/appSlice'
-import { useAppDispatch } from './store/store'
+} from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { ChampionsSchema } from 'types/Champions'
+
+import ChampionPickerCard from 'components/ChampionPicker/ChampionPickerCard'
+import { ChampionPickerContainer } from 'components/ChampionPicker/ChampionPickerContainer'
+import LinearProgress from 'components/LinearProgress'
+
+import { getChampionSplash } from './BuildMakerComponents'
 
 export const BuildMaker = () => {
   const dispatch = useAppDispatch()

@@ -7,193 +7,23 @@ import styles from 'styles/index.module.scss'
 import { Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
-import { BuildMaker } from 'components/BuildMaker'
+import { defaultClassFilters, defaultTypeFilters } from 'components/FilterComponents'
 import FilterItemsByClass from 'components/FilterItemsByClass'
 import FilterItemsByRarity from 'components/FilterItemsByRarity'
 import FilterItemsByType from 'components/FilterItemsByType'
 import Footer from 'components/Footer'
 import Header from 'components/Header/Header'
+import { BuildMaker } from 'components/ItemBuild/BuildMaker'
 import { ItemBuildTree } from 'components/ItemBuildTree/ItemBuildTree'
 import ItemGrid from 'components/ItemGrid/ItemGrid'
 import SearchBar from 'components/SearchBar'
 import Settings from 'components/Settings'
-import SlideoverOverlay from 'components/layout/SlideoverOverlay'
+import SliderOverlay from 'components/layout/SliderOverlay'
 import { resetItemBuild } from 'components/store/itemBuildSlice'
 
 function Home() {
-  const [classFilters, setClassFilters] = useState([
-    {
-      name: 'All Classes',
-      isActive: true,
-      icon: 'all-classes.svg',
-      class: ChampionClass.None,
-    },
-    {
-      name: 'Fighter',
-      isActive: false,
-      icon: 'fighter.svg',
-      class: ChampionClass.Fighter,
-    },
-    {
-      name: 'Marksman',
-      isActive: false,
-      icon: 'marksman.svg',
-      class: ChampionClass.Marksman,
-    },
-    {
-      name: 'Mage',
-      isActive: false,
-      icon: 'mage.svg',
-      class: ChampionClass.Mage,
-    },
-    {
-      name: 'Assassin',
-      isActive: false,
-      icon: 'assassin.svg',
-      class: ChampionClass.Assassin,
-    },
-    {
-      name: 'Tank',
-      isActive: false,
-      icon: 'tank.svg',
-      class: ChampionClass.Tank,
-    },
-    {
-      name: 'Support',
-      isActive: false,
-      icon: 'support.svg',
-      class: ChampionClass.Support,
-    },
-  ])
-
-  const [typeFilters, setTypeFilters] = useState([
-    {
-      name: 'All Items',
-      isActive: true,
-      icon: 'clear-filters.svg',
-      categories: [Category.All],
-    },
-    {
-      name: 'Attack Damage',
-      isActive: false,
-      icon: 'attack-damage.svg',
-      categories: [Category.AttackDamage],
-    },
-    {
-      name: 'Critical Strike',
-      isActive: false,
-      icon: 'critical-strike.svg',
-      categories: [Category.CriticalStrike],
-    },
-    {
-      name: 'Attack Speed',
-      isActive: false,
-      icon: 'attack-speed.svg',
-      categories: [Category.AttackSpeed],
-    },
-    {
-      name: 'On-Hit Effects',
-      isActive: false,
-      icon: 'on-hit-effects.svg',
-      categories: [Category.OnHit],
-    },
-    {
-      name: 'Armor Penetration',
-      isActive: false,
-      icon: 'armor-penetration.svg',
-      categories: [Category.ArmorPenetration],
-    },
-    {
-      name: 'Ability Power',
-      isActive: false,
-      icon: 'ability-power.svg',
-      categories: [Category.AbilityPower],
-    },
-    {
-      name: 'Mana & Regeneration',
-      isActive: false,
-      icon: 'mana.svg',
-      categories: [Category.Mana, Category.ManaRegen],
-    },
-    {
-      name: 'Magic Penetration',
-      isActive: false,
-      icon: 'magic-penetration.svg',
-      categories: [Category.MagicPenetration],
-    },
-    {
-      name: 'Health & Regeneration',
-      isActive: false,
-      icon: 'health.svg',
-      categories: [Category.Health, Category.HealthRegen],
-    },
-    {
-      name: 'Armor',
-      isActive: false,
-      icon: 'armor.svg',
-      categories: [Category.Armor],
-    },
-    {
-      name: 'Magic Resistance',
-      isActive: false,
-      icon: 'magic-resist.svg',
-      categories: [Category.MagicResistance],
-    },
-    {
-      name: 'Ability Haste',
-      isActive: false,
-      icon: 'ability-haste.svg',
-      categories: [Category.AbilityHaste, Category.CooldownReduction],
-    },
-    {
-      name: 'Movement',
-      isActive: false,
-      icon: 'movement-speed.svg',
-      categories: [Category.Boots, Category.NonbootsMovement],
-    },
-    {
-      name: 'Life Steal & Vamp',
-      isActive: false,
-      icon: 'omni-vamp.svg',
-      categories: [Category.SpellVamp, Category.LifeSteal],
-    },
-    {
-      name: 'Trinket',
-      isActive: false,
-      icon: 'trinket.svg',
-      categories: [Category.Trinket, Category.Vision],
-    },
-    {
-      name: 'Lane',
-      isActive: false,
-      icon: 'mid.svg',
-      categories: [Category.Lane],
-    },
-    {
-      name: 'Jungle',
-      isActive: false,
-      icon: 'jungle.svg',
-      categories: [Category.Jungle],
-    },
-    {
-      name: 'Tenacity',
-      isActive: false,
-      icon: 'tenacity.svg',
-      categories: [Category.Tenacity],
-    },
-    {
-      name: 'Consumable',
-      isActive: false,
-      icon: 'consumable.svg',
-      categories: [Category.Consumable],
-    },
-    {
-      name: 'Crowd Control',
-      isActive: false,
-      icon: 'cc.svg',
-      categories: [Category.Slow],
-    },
-  ])
+  const [classFilters, setClassFilters] = useState(defaultClassFilters)
+  const [typeFilters, setTypeFilters] = useState(defaultTypeFilters)
   const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
   const [rarityFilter, setRarityFilter] = useState(Rarity.Empty)
   const [searchTerm, setSearchTerm] = useState('')
@@ -214,7 +44,7 @@ function Home() {
       <Head>
         <title>League Tools | Item Builds</title>
       </Head>
-      <SlideoverOverlay />
+      <SliderOverlay />
       <div className={`absolute inset-0 brightness-100 contrast-150 filter ${styles.noise}`} />
       {/* Main container */}
       <div className="relative flex min-h-screen w-full flex-col items-stretch">

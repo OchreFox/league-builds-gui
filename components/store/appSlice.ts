@@ -24,6 +24,9 @@ const initialState: AppState = {
   menu: {
     show: false,
   },
+  build: {
+    deletePopup: null,
+  },
 }
 
 export const appSlice = createSlice({
@@ -76,6 +79,9 @@ export const appSlice = createSlice({
     setMenuShow: (state, action: PayloadAction<boolean>) => {
       state.menu.show = action.payload
     },
+    setBuildDeletePopup: (state, action: PayloadAction<string | null>) => {
+      state.build.deletePopup = action.payload
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -91,6 +97,7 @@ export const selectSelectedChampions = (state: RootState) => state.app.selectedC
 export const selectChampionPicker = (state: RootState) => state.app.championPicker
 export const selectItemPicker = (state: RootState) => state.app.itemPicker
 export const selectMenu = (state: RootState) => state.app.menu
+export const selectBuild = (state: RootState) => state.app.build
 
 export const {
   resetApp,
@@ -108,4 +115,5 @@ export const {
   setItemPickerSelectedItem,
   setItemPickerDraggedItem,
   setMenuShow,
+  setBuildDeletePopup,
 } = appSlice.actions

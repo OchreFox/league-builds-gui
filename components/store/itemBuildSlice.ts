@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
+import { v4 as uuidv4 } from 'uuid'
 
 import { Block, BlockState, ItemBuild } from '../../types/Build'
 import { ChampionsSchema, DefaultChampionSchema } from '../../types/Champions'
@@ -43,11 +44,26 @@ export const itemBuildSlice = createSlice({
     addBlock: (state, action: PayloadAction<BlockState>) => {
       state.blocks.push(action.payload)
     },
-    removeBlock: (state, action: PayloadAction<number>) => {
-      state.blocks.splice(action.payload, 1)
+    addEmptyBlock: (state) => {
+      state.blocks.push({
+        id: uuidv4(),
+        position: state.blocks.length,
+        type: `Empty Block ${state.blocks.length + 1}`,
+        items: [],
+      })
     },
-    updateBlock: (state, action: PayloadAction<{ index: number; block: Block }>) => {
-      state.blocks[action.payload.index] = action.payload.block
+    removeBlock: (state, action: PayloadAction<string>) => {
+      state.blocks = state.blocks.filter((block) => block.id !== action.payload)
+    },
+    updateBlock: (state, action: PayloadAction<{ id: string; block: BlockState }>) => {
+      const { id, block } = action.payload
+      const index = state.blocks.findIndex((block) => block.id === id)
+      state.blocks[index] = block
+    },
+    updateBlockType: (state, action: PayloadAction<{ id: string; type: string }>) => {
+      const { id, type } = action.payload
+      const index = state.blocks.findIndex((block) => block.id === id)
+      state.blocks[index].type = type
     },
   },
   extraReducers: {
@@ -72,7 +88,9 @@ export const {
   removeAssociatedChampion,
   setBlocks,
   addBlock,
+  addEmptyBlock,
   removeBlock,
   updateBlock,
+  updateBlockType,
 } = itemBuildSlice.actions
 export default itemBuildSlice.reducer

@@ -1,12 +1,13 @@
+import { selectChampionPicker } from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { css } from '@emotion/css'
 import { AnimatePresence, Variants, motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Champion } from 'types/Champions'
 
-import { Champion } from '../../types/Champions'
-import { easeOutExpo } from '../BuildMakerComponents'
-import { selectChampionPicker } from '../store/appSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
+import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
+
 import styles from './ChampionPickerCardBackground.module.scss'
 
 const ChampionImage = ({

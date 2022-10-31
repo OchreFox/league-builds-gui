@@ -16,6 +16,10 @@ export interface ItemPickerState {
   draggedItem: number | null
 }
 
+export interface BuildState {
+  deletePopup: string | null
+}
+
 export interface MenuState {
   show: boolean
 }
@@ -25,6 +29,7 @@ export interface AppState {
   championPicker: ChampionPickerState
   itemPicker: ItemPickerState
   menu: MenuState
+  build: BuildState
 }
 
 export type LoaderOptions = {

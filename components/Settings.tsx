@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import * as yup from 'yup'
 
 import styles from '../styles/index.module.scss'
-import { ItemBuild, ItemBuildSettings } from '../types/Build'
+import { Block, ItemBuild, ItemBuildSettings } from '../types/Build'
 import { easeInOutExpo } from '../utils/Transition'
 import PotatoModeSwitch from './PotatoModeSwitch'
 import ResetAlert from './ResetAlert'
@@ -61,10 +61,9 @@ const Settings = () => {
   const deleteIdFromBlocks = (state: ItemBuild) => {
     // Delete the id property from the state.itemBuild.blocks
     // This is to prevent the id from being saved in the json file
-    let newBlocks = []
+    let newBlocks: Block[] = []
     for (const block of state.blocks) {
-      let newBlock = { ...block }
-      delete newBlock.id
+      let newBlock: Block = { ...block } as Block
       newBlocks.push(newBlock)
     }
     return {

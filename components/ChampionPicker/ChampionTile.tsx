@@ -1,18 +1,18 @@
 import Image from 'next/image'
 
+import { addSelectedChampion, removeSelectedChampion } from '@/store/appSlice'
+import { addAssociatedChampion, removeAssociatedChampion, selectAssociatedChampions } from '@/store/itemBuildSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { ChampionsSchema } from 'types/Champions'
 
-import { ChampionsSchema } from '../../types/Champions'
-import { CustomLoader } from '../../utils/CustomLoader'
-import { easeInOutExpo } from '../../utils/Transition'
-import { easeOutExpo } from '../BuildMakerComponents'
-import { addSelectedChampion, removeSelectedChampion } from '../store/appSlice'
-import { addAssociatedChampion, removeAssociatedChampion, selectAssociatedChampions } from '../store/itemBuildSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import { useAppDispatch } from '../store/store'
+import { CustomLoader } from 'utils/CustomLoader'
+import { easeInOutExpo } from 'utils/Transition'
+
 import styles from './ChampionPickerOverlay.module.scss'
 
 const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {

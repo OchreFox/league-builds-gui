@@ -1,11 +1,10 @@
-import { cx } from '@emotion/css'
+import { css, cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import React from 'react'
-
-import { FilterByClassProps, FilterByClassState } from '../types/FilterProps'
+import { ClassFilter, FilterByClassState } from 'types/FilterProps'
 
 export default function FilterItemsByClass({ filterItems, setFilterItems }: FilterByClassState) {
-  const handleClick = (itemClicked: FilterByClassProps) => {
+  const handleClick = (itemClicked: ClassFilter) => {
     // Create a temporary array that is a clone of the filterItems array
     const tempArray = [...filterItems]
     // Set isActive to true for the clicked item, and false for all others
@@ -50,35 +49,60 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
       <div className="hidden flex-col xl:flex">
         <div className=" border-b border-slate-800">
           <nav className="flex flex-row justify-around space-x-1" aria-label="Tabs">
-            {filterItems.map((item) => (
-              <motion.button
-                key={item.name}
-                // Framer Motion onClick animation
-                whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.1, type: 'tween' }}
-                type="button"
-                title={item.name}
-                className={cx(
-                  item.isActive
-                    ? 'border-brand-default'
-                    : 'border-transparent text-gray-500 transition-colors duration-100 ease-out hover:border-gray-500 motion-reduce:transition-none',
-                  'group inline-flex flex-col items-center justify-center border-b-2 py-2 px-1 text-sm font-medium'
-                )}
-                onClick={() => handleClick(item)}
-              >
-                <img
-                  alt={item.name}
+            {filterItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <motion.button
+                  key={item.name}
+                  // Framer Motion onClick animation
+                  transition={{ duration: 0.1, type: 'tween' }}
+                  type="button"
+                  title={item.name}
                   className={cx(
-                    item.isActive
-                      ? 'text-gray-500'
-                      : 'text-gray-400 brightness-50 group-hover:text-gray-500 group-hover:brightness-75',
-                    ' flex-shrink-0 transition-all duration-100 ease-out motion-reduce:transition-none',
-                    item.name === 'All Classes' ? 'h-4 w-auto' : 'h-4 w-4'
+                    'group inline-flex flex-col items-center justify-center py-2 px-1 text-sm font-medium relative',
+                    item.isActive &&
+                      css`
+                        &::before {
+                          content: '';
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          width: 100%;
+                          height: 100%;
+                          background: radial-gradient(circle, rgba(199, 169, 110, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
+                          background-size: 100% 200%;
+                          animation: scroll 0.6s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+                          @keyframes scroll {
+                            0% {
+                              background-position: 0 100%;
+                              opacity: 0;
+                            }
+                            100% {
+                              background-position: 0 0%;
+                              opacity: 1;
+                            }
+                          }
+                        }
+                      `
                   )}
-                  src={'icons/' + item.icon}
-                />
-              </motion.button>
-            ))}
+                  onClick={() => handleClick(item)}
+                >
+                  {item.isActive ? (
+                    <motion.div
+                      layoutId="filter-class-underline"
+                      className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
+                    />
+                  ) : null}
+                  <Icon
+                    className={cx(
+                      item.isActive ? 'fill-league-gold' : 'fill-gray-600',
+                      'flex-shrink-0 transition duration-100 ease-out motion-reduce:transition-none group-hover:fill-gray-400',
+                      item.name === 'All Classes' ? 'h-4 w-auto' : 'h-4 w-4'
+                    )}
+                  />
+                </motion.button>
+              )
+            })}
           </nav>
         </div>
       </div>

@@ -1,14 +1,23 @@
 import Image from 'next/image'
 
+import {
+  selectChampionPicker,
+  selectSelectedChampions,
+  setChampionPickerCategory,
+  setChampionPickerHint,
+  setChampionPickerHover,
+  setChampionPickerQuery,
+  setChampionPickerShow,
+} from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import { VariantLabels, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Tag } from 'types/Champions'
 
-import { Tag } from '../../types/Champions'
-import { CustomLoader } from '../../utils/CustomLoader'
-import { easeInOutExpo } from '../../utils/Transition'
 import {
   ChampionPickerHover,
   championCardVariants,
@@ -18,18 +27,11 @@ import {
   descriptionHoverVariants,
   easeOutExpo,
   titleHoverVariants,
-} from '../BuildMakerComponents'
-import {
-  selectChampionPicker,
-  selectSelectedChampions,
-  setChampionPickerCategory,
-  setChampionPickerHint,
-  setChampionPickerHover,
-  setChampionPickerQuery,
-  setChampionPickerShow,
-} from '../store/appSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import { useAppDispatch } from '../store/store'
+} from 'components/ItemBuild/BuildMakerComponents'
+
+import { CustomLoader } from 'utils/CustomLoader'
+import { easeInOutExpo } from 'utils/Transition'
+
 import styles from './ChampionPickerCard.module.scss'
 import ChampionPickerCardBackground from './ChampionPickerCardBackground'
 import RiotMagicParticles from './RiotMagicParticles'

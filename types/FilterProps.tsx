@@ -9,6 +9,13 @@ export type ItemRefArrayType = MutableRefObject<
   }[]
 >
 
+export interface ClassFilter {
+  name: string
+  isActive: boolean
+  icon: any
+  class: ChampionClass
+}
+
 export type FilterByTypeProps = {
   name: string
   isActive: boolean
@@ -20,16 +27,9 @@ export type FilterByTypeState = {
   setFilterItems: Dispatch<SetStateAction<FilterByTypeProps[]>>
 }
 
-export type FilterByClassProps = {
-  name: string
-  isActive: boolean
-  icon: string
-  class: ChampionClass
-}
-
 export type FilterByClassState = {
-  filterItems: FilterByClassProps[]
-  setFilterItems: Dispatch<SetStateAction<FilterByClassProps[]>>
+  filterItems: ClassFilter[]
+  setFilterItems: Dispatch<SetStateAction<ClassFilter[]>>
 }
 
 export type ItemGridProps = {
@@ -37,7 +37,7 @@ export type ItemGridProps = {
   rarityFilter: Rarity
   setRarityFilter: Dispatch<SetStateAction<Rarity>>
   typeFilters: FilterByTypeProps[]
-  classFilters: FilterByClassProps[]
+  classFilters: ClassFilter[]
   searchFilter: string
   setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
   itemRefArray: ItemRefArrayType
@@ -90,6 +90,6 @@ export type StandardItemState = {
 export type ItemBuildTreeProps = {
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
-  classFilters: FilterByClassProps[]
-  setClassFilters: Dispatch<SetStateAction<FilterByClassProps[]>>
+  classFilters: ClassFilter[]
+  setClassFilters: Dispatch<SetStateAction<ClassFilter[]>>
 }

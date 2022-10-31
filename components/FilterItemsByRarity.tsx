@@ -1,8 +1,7 @@
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import React from 'react'
-
-import { FilterByRarityState, Rarity } from '../types/FilterProps'
+import { FilterByRarityState, Rarity } from 'types/FilterProps'
 
 export default function FilterItemsByRarity({ rarityFilter, setRarityFilter }: FilterByRarityState) {
   return (

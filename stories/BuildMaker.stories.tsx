@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 
-import { BuildMaker } from '../components/BuildMaker'
+import { BuildMaker } from 'components/ItemBuild/BuildMaker'
 
 export default {
   title: 'BuildMaker',

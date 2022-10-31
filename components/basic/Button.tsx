@@ -3,10 +3,8 @@ import { Icon, IconifyIcon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { easeInOutExpo } from '../../utils/Transition'
-
 export interface ButtonProps {
-  label?: string | undefined
+  label?: string
   icon: string | IconifyIcon
   background: string
   color: string

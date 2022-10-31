@@ -37,7 +37,6 @@ const Header = () => {
       marginLeft: ['2rem', '0rem'],
       transition: {
         staggerChildren: 1,
-        delay: 0.7,
         ...easeInOutExpo,
       },
     },
@@ -66,11 +65,9 @@ const Header = () => {
       transition: {
         ...easeInOutExpo,
         backgroundColor: {
-          delay: 1,
           ...easeInOutExpo,
         },
         paddingLeft: {
-          delay: 1,
           ...easeInOutExpo,
         },
       },
@@ -106,15 +103,12 @@ const Header = () => {
       transition: {
         ...easeInOutExpo,
         paddingLeft: {
-          delay: 1,
           ...easeInOutExpo,
         },
         backgroundColor: {
-          delay: 1,
           ...easeInOutExpo,
         },
         x: {
-          delay: 1,
           ...easeInOutExpo,
         },
       },

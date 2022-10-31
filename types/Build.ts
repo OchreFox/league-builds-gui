@@ -17,7 +17,8 @@ export interface Block {
 
 /** @internal Used for UI */
 export interface BlockState extends Block {
-  id?: string
+  id: string
+  position: number
 }
 
 export interface Item {
@@ -26,6 +27,22 @@ export interface Item {
 }
 
 export interface CategoryDropdownProps {
+  styles: {
+    [key: string]: React.CSSProperties
+  }
+  attributes: {
+    [key: string]:
+      | {
+          [key: string]: string
+        }
+      | undefined
+  }
+}
+
+export interface DeleteSectionPopperProps {
+  popperRef: React.RefObject<HTMLDivElement>
+  id: string
+  setArrowRef: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
   styles: {
     [key: string]: React.CSSProperties
   }

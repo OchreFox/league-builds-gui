@@ -22,6 +22,9 @@ module.exports = {
           default: '#dd7a39',
           dark: '#cc2936',
         },
+        league: {
+          gold: '#c7a96e',
+        },
       },
       transitionTimingFunction: {
         'ease-in-out-expo': 'cubic-bezier(0.87, 0, 0.13, 1)',

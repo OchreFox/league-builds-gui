@@ -12,7 +12,7 @@ import { useAppDispatch } from '../store/store'
 import StyledContainer from './StyledContainer'
 import styles from './StyledContainer.module.scss'
 
-export default function SlideoverOverlay() {
+export default function SliderOverlay() {
   const dispatch = useAppDispatch()
   const menu = useSelector(selectMenu)
   const potatoMode = useSelector(selectPotatoMode)
