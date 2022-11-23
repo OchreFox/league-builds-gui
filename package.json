@@ -31,7 +31,7 @@
     "@types/lodash": "^4.14.186",
     "@types/three": "^0.144.0",
     "color.js": "^1.2.0",
-    "framer-motion": "^7.6.2",
+    "framer-motion": "^7.6.4",
     "fuzzy": "^0.1.3",
     "fuzzysort": "^2.0.1",
     "immer": "^9.0.16",
