@@ -24,7 +24,7 @@
     "@giscus/react": "^2.2.0",
     "@headlessui/react": "^1.7.3",
     "@hookform/resolvers": "^2.9.10",
-    "@next/bundle-analyzer": "^13.0.0",
+    "@next/bundle-analyzer": "^13.0.1",
     "@pixi/particle-emitter": "^5.0.7",
     "@popperjs/core": "^2.11.6",
     "@reduxjs/toolkit": "^1.8.6",
