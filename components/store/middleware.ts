@@ -13,20 +13,6 @@ export const startAppListening = listenerMiddleware.startListening as AppStartLi
 
 export const addAppListener = addListener as TypedAddListener<RootState, AppDispatch>
 
-// Add ID when adding a new block
-startAppListening({
-  actionCreator: addBlock,
-  effect: (action, { getState, dispatch }) => {
-    const { blocks } = getState().itemBuild
-    const newBlock: BlockState = {
-      ...action.payload,
-      id: uuidv4(),
-      position: blocks.length,
-    }
-    dispatch(addBlock(newBlock))
-  },
-})
-
 // Move position when updating a block
 // Example: Block 1 is moved to position 3
 // Block 1 will have position 3
@@ -61,7 +47,6 @@ startAppListening({
       return {
         ...block,
         position: index,
-        type: block.type.includes('Empty Block') ? `Empty Block ${index + 1}` : block.type,
       }
     })
     dispatch(setBlocks(newBlocks))

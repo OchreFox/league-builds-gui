@@ -1,8 +1,10 @@
 import { css, cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
-import { motion, useAnimation } from 'framer-motion'
+import { AnimatePresence, motion, useAnimation } from 'framer-motion'
 import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 
 import packageJson from '../../package.json'
 import { setMenuShow } from '../store/appSlice'
@@ -161,14 +163,25 @@ const Header = () => {
           className={cx(
             isHovering && 'bg-gray-500/50',
             'absolute z-10 -ml-4 px-2 py-1 inline-flex items-center group/menu text-gray-500 group-hover/header:font-bold group-hover/header:text-white hover:bg-brand-dark rounded',
-            !potatoMode && 'backdrop-blur transition duration-200'
+            !potatoMode &&
+              'backdrop-blur backdrop-opacity-0 transition duration-200 group-hover/header:backdrop-opacity-100'
           )}
           onClick={() => dispatch(setMenuShow(true))}
         >
           <Icon icon="tabler:menu-2" className={cx('', !potatoMode && 'transition duration-200')} width={30} />
-          {isHovering && (
-            <span className={cx('ml-2 bg-transparent', !potatoMode && 'transition duration-200')}>Open Menu</span>
-          )}
+          <AnimatePresence>
+            {isHovering && (
+              <motion.span
+                className="ml-2 bg-transparent"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={easeOutExpo}
+              >
+                Open Menu
+              </motion.span>
+            )}
+          </AnimatePresence>
         </button>
         <motion.h1
           variants={titleVariants}

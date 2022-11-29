@@ -1,0 +1,390 @@
+as|30% **bonus** movement speed
+tip|stasis (buff)|stasis
+fd|2.5
+tip|untargetable
+tip|invulnerable
+tip|tether
+tip|sight
+tip|heal|healed
+pp|180 to 340|type=target's level
+as|10% of target's **maximum** health
+as|true damage
+tip|crowd control
+tip|Airborne
+as|50% **bonus total** movement speed
+tip|ghosted|ghosting
+fd|1.5
+as|20% **bonus** movement speed
+tip|slow|slows
+tip|Dash
+as|125 as|(+ 15% AP)
+tip|cr|icononly=true
+tip|shield
+pp|180 to 330|type=target's level
+as|(+ 90% **bonus** health)
+tip|Blind
+tip|Disarm
+tip|Ground
+tip|Nearsight
+tip|Suppression
+tip|heal
+pp|100 to 180|type=target's level
+tip|Effigy
+pp|130 to 300
+ci|Fiddlesticks
+tip|Totem Ward
+pp|90 to 120|type=average of all champion levels
+tip|Farsight Ward
+tip|standard sight|revealed
+tip|Sweeper Drone
+tip|sight|visible
+fd|3.5
+tip|channel
+tip|Stealth Ward
+as|100% **base** AD
+as|physical damage
+tip|cr|icononly = true
+tip|tenacity
+tip|slow resist
+tip|ghosting
+as|175% **base** AD
+tip|Heal
+as|20% AD
+as|(+ 8% of your **missing** health)
+tip|slow
+as|100 as|(+ 30% AP)
+tip|slow|slowing
+tip|root|rooted
+as|40% **bonus** movement speed
+tip|turret
+tt|225 units|center to edge
+tt|most wounded|Lowest health percent
+as|pp|180/3 to 315/3|1;10 to 18 by 1
+as|(+ 15% **bonus** AD)
+as|pp|180 to 315|1;10 to 18 by 1
+as|(+ 45% **bonus** AD)
+pp|type= target's **missing** health|color=health|key=%|0 to 50|key1=%|0;7;14;21;28;35;42;49;56;63;70|formula=5% per 7% of enemies' **missing** health
+as|75 as|(+ 30% **bonus** AD)
+as|15 **bonus** physical damage
+as|5 **bonus** physical damage
+pp|0 to 40 for 11|type=**current missing** health|color=health|key1=%|0 to 75|formula=0.53 health regen for every 1% missing health
+ft|66% effectiveness|pp|0 to 26.4 for 11|type=**current missing** health|color=health|key1=%|0 to 75|formula=0.35 health regen for every 1% missing health
+tip|ranged
+as|1 mana
+as|fd|1.5
+ft|45% of this value|ap|1.5*0.45
+ii|Mejai's Soulstealer
+as|4 ability power
+g|1
+g|100
+fd|0.5
+as|**bonus** true damage
+as|4% of the target's **maximum** health
+tip|brush
+as|45% **bonus** movement speed
+as|60%|ms
+pp|75 to 330
+tip|minions
+ui|Rift Herald|Summoned Rift Herald
+fd|66.67%
+tip|camouflage|camouflaged
+tip|invisible
+as|33%|health
+as|66%|health
+as|100% health
+as|armor
+as|magic resist
+as|sti|health|**maximum** health
+tip|Turret
+as|pp|key=%|14;11;8|Outer;Inner;Inhibitor/Nexus|type=turret type
+tt|pre-mitigation damage|Damage calculated before modifiers
+as|45% of this minion's **maximum** health
+as|70% of this minion's **maximum** health
+as|7% of this minion's **maximum** health
+as|35 armor
+as|35 magic resistance
+tip|Energized
+as|80 **bonus** magic damage
+fd|3.75
+tip|Heal|Healing
+tip|shield|shielding
+as|25% **bonus** movement speed
+ii|Perfectly Timed Stopwatch
+tip|takedown
+g|250
+as|10 **bonus** movement speed
+tip|immobilize|immobilizing
+tip|ground|grounding
+as|ability haste
+as|fd|0.5
+as|3 **bonus** mana
+as|6|mana
+as|360 **bonus** mana
+ii|Seraph's Embrace
+as|**bonus** attack damage
+as|fd|2.5
+ii|Muramana
+as|magic damage
+tip|Grievous Wounds
+tip|resurrection
+as|50% of **base** health
+as|30% of **maximum** mana
+as|35% **bonus** critical strike damage
+as|60% critical strike chance
+pp|type=**maximum** health difference|color=health|key=%|0 to 15 for 11|0 to 2000|formula=0.75% per 100 greater **maximum** health
+as|**bonus** physical damage|physical damage
+as|**maximum** health
+as|fd|1.3
+as|25% of mana spent
+pp|25 to 50
+as|(+ 10% AP)
+ii|Dark Seal
+as|5 ability power
+as|125|ap
+as|10% **bonus** movement speed
+as|as|fd|1.5
+tip|ability damage
+as|as|rd|fd|3.5
+fd|2.7
+as|(+ 6% AD)
+fd|6.5
+as|rd|fd|1.6
+fd|0.8
+as|7% **bonus** movement speed
+as|30% **bonus** attack speed
+tip|Immobilize|Immobilizing
+as|pp|30 to 70
+as|(+ fd|7.5
+as|(+ fd|1.5
+as|rd|20|10
+as|50% **base** AD
+as|30% of your **maximum** health
+as|80% of **bonus** health
+fd|4.5
+as|**bonus** physical damage
+tip|heal|healing
+stil|health regeneration
+as|5% **bonus** movement speed
+as|15 as|(+ fd|1.75
+as|5% armor reduction
+as|30%|armor
+as|3 **bonus** movement speed
+as|18|ms
+tip|healing
+sti|life steal
+pp|50 to 320
+rd|as|60% AD
+as|30% AD
+fd|0.1
+as|20 **bonus** attack damage
+as|10 as|(+ 20% **bonus** armor)
+as|4 magic damage
+rd|as|50% AD
+as|25% AD
+as|20 **bonus** movement speed
+as|**base** attack damage by 4%
+as|20% increase|attack damage
+as|200% **base** AD
+tt|post-mitigation|Damage calculated after modifiers
+tip|basic damage
+tip|cast instance
+as|(+ fd|3.5
+as|1100 **bonus** health
+ft|as|fd|2.5
+as|25% **maximum** health
+as|125|physical damage
+as|(+ 6% **maximum** health)
+as|**bonus** health
+as|ap|125*0.1
+fd|0.6
+tt|in front of you|180degree
+as|40% AD
+tip|on-hit
+tip|critical strike
+as|ability power
+as|pp|15;25;35;45;55;65;75;76.25;77.5;78.75;80|1;9 to 18 for 10|formula=15, then +10 per level starting at level 9, then +1.25 per level starting at level 15
+as|120 **bonus** magic damage
+as|75% **base** AD
+as|(+ 50% AP)
+as|**bonus** magic damage
+tip|spell shield
+tt|tethered to you|1250 units, center to edge
+as|physical|physical damage
+as|magic|magic damage
+as|30% **maximum** health
+tip|Cripple|Cripples
+tt|700 units|center to edge
+as|10 mana
+as|15 health
+as|15 as|(+ 20% AP)
+as|movement speed
+as|90
+as|8% **maximum** mana
+ii|Fimbulwinter
+tip|immobilize|Immobilizing
+tip|melee
+as|3% **current** mana
+pp|100 to 180
+as|(+ fd|4.5
+ft|by 80%|to pp|100*1.8 to 200*1.8
+as|(+ ap|5*1.8
+as|20% **maximum** mana
+as|1% critical strike chance
+as|2 **bonus** physical damage
+as|100% critical strike chance
+as|200 **bonus** physical damage
+fd|0.15
+Lethality|10
+as|40 **bonus** movement speed
+tip|critical strike|critical strike
+as|pp|50 to 125
+as|rd|12%|8%
+as|pp|40 to 150
+as|rd|110 to 280|82.5 to 210|pp=true
+rd|200|150
+as|(+ rd|225%|fd|168.75
+rd|8 as|(+ 8% **bonus** AD)
+as|(+ 6% **bonus** AD)
+ft|by 50%|to rd|4 as|(+ 4% **bonus** AD)
+as|(+ 3% **bonus** AD)
+rd|as|15%|ms
+as|10%|ms
+as|**bonus** movement speed
+as|**missing** health
+as|33% **missing** health
+as|50% of their **maximum** health
+tip|ward
+tip|stealthed trap|trap
+as|2 **bonus** true damage
+rd|10;20;35;43;51;59;67;75|5;10;17.5;21.5;25.5;29.5;33.5;37.5|levels=1;12 to 18 by 1|pp=true
+as|**bonus** armor
+as|**bonus** magic resistance
+ui|Blue Siege Minion|link=Siege minion|siege minions
+ui|Blue Super Minion|link=Super minion|super minions
+tip|er|icononly=true
+tt|1050 units|Estimated
+rd|10*3;20*3;35*3;43*3;51*3;59*3;67*3;75*3|5*3;10*3;17.5*3;21.5*3;25.5*3;29.5*3;33.5*3;37.5*3|levels=1;12 to 18 by 1|pp=true
+tt|850 units|center to edge
+as|3 **bonus** armor
+as|3 **bonus** magic resistance
+as|15|armor
+as|150% **base** health regeneration
+fd|33.recurring|3
+as|pp|type=target's level|key=%|10 to 30
+as|pp|type=target's level|5 to 20
+as|100% **base** AD (+ 40% **bonus** AD)
+as|mana
+as|40% **base** AD (+ 16% **bonus** AD)
+si|Empowered Recall
+fd|0.25
+tip|immobilize|immobilized
+as|pp|0 to 40 for 11|0 to 100|type=Momentum|label1=stacks of Momentum|formula=1 for every 1 stack of Momentum, capped at 40
+as|(+ pp|0 to 100 for 11|0 to 100|key=%|type=Momentum|label1=stacks of Momentum|formula=1% for every 1 stack of Momentum, capped at 100
+tip|slow|slowed
+as|2% of **bonus** health
+as|rd|4|3
+as|(+ rd|fd|1.5
+fd|1.125
+as|rd|40|30
+as|(+ rd|3%|fd|2.25
+as|20% of **maximum** mana
+as|20% of mana spent
+tt|nearby|2000 range
+g|20
+g|500
+ii|Frostfang
+ii|Shard of True Ice
+tip|execute
+as|**below** rd|50%|30%
+g|gold
+tt|nearby|1050 range
+ii|Runesteel Spaulders
+as|**below** 50% of their **maximum** health
+ii|Pauldrons of Whiterock
+ii|Targon's Buckler
+ii|Bulwark of the Mountain
+ii|Harrowing Crescent
+ii|Black Mist Scythe
+ai|Cannon Barrage|Gangplank
+fd|1.33
+ais|Cannon Barrage|Gangplank
+sti|true damage|as|ap|120 to 300 3
+as|(+ 30% AP)
+ci|Gangplank
+tip|immobilize
+as|pp|45 to 75
+as|pp|90 to 150|type=ally's level
+tip|polymorph|polymorphing
+tip|standard sight|reveals
+as|15% **bonus** movement speed
+as|5%|ms
+as|40 ability power
+as|fd|0.3
+as|9|magic resistance
+as|2% **bonus** health
+ft|as|rd|fd|7.2
+fd|3.2
+as|**total** magic damage
+as|rd|fd|1.8
+ii|Vigilant Wardstone
+g|1000
+ii|Control Ward|Control Wards
+tip|Control Ward
+as|pp|10 to 40|1;9 to 18 by 1|formula=10, then +3 per level starting at level 9
+pp|type=target's **current** health|10 to 20 for 11|2500 to 1000
+as|magic resistance
+rd|30%|10%
+tip|shield|shields
+tip|heals
+as|120% **bonus** AD
+as|pp|25 to 45|type=target's level
+as|20 ability haste
+as|125% **base** AD
+as|(+ rd|6%|3%
+as|150% **base** AD
+as|250% **base** AD
+as|fd|68.75
+as|(+ rd|fd|3.3
+fd|1.65
+ft|as|50 as|(+ 6% AP)
+as|(+ 4% target's **maximum** health)
+as|ap|50*0.125
+as|(+ ap|6*0.125
+as|(+ ap|4*0.125
+pp|type=target's **bonus** health|color=health|key=%|0 to 12 for 11|0 to 1250|formula=1.2% per 125 **bonus** health
+as|100 as|(+ 10% AP)
+rutngt|0.5
+as|20 **bonus** health
+as|20 **bonus** mana
+as|200 **bonus** health
+as|200 **bonus** mana
+as|12 as|(+ 1% **bonus** health)
+rd|15%|fd|7.5
+as|(+ rd|fd|0.4
+fd|0.2
+as|3% **maximum** health
+as|ap|3*0.3
+as|**maximum** health by 10%
+as|2% of your **maximum** health
+as|pp|key=%|key1=%|type=target's **missing** health|0 to 100 for 11|0 to 100|formula=1% per 1% of target's **missing** health
+as|20 **bonus** physical damage
+rd|on-hit|on-attack
+as|50 as|(+ 40% **bonus** AD)
+pp|250 to 630|1;10 to 18 by 1
+as|pp|15 to 35|1;10 to 18 by 1
+pp|type=critical strike chance|0 to 20 for 6|key=%|0 to 100|key1=%|color=critical strike chance
+as|5% of their **maximum** health
+g|25
+as|fd|1.75
+as|175 **bonus** physical damage
+as|rd|75|55
+as|(+ rd|30%|25%
+as|rd|6%|3%
+rd|160|80
+as|(+ rd|35%|fd|17.5
+rd|50%|35%
+tt|550 units|center to edge
+as|magic resistance by 5
+as|(+ fd|1.2
+as|25|magic resistance
+as|9 **bonus** magic resistance

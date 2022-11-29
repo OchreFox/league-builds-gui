@@ -4,12 +4,13 @@ import { addSelectedChampion, removeSelectedChampion } from '@/store/appSlice'
 import { addAssociatedChampion, removeAssociatedChampion, selectAssociatedChampions } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
-import { cx } from '@emotion/css'
+import { css, cx } from '@emotion/css'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
+import { blurhashDecode } from 'utils/BlurhashDecode'
 import { CustomLoader } from 'utils/CustomLoader'
 import { easeInOutExpo } from 'utils/Transition'
 
@@ -19,6 +20,7 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const associatedChampions = useSelector(selectAssociatedChampions)
+  const [loaded, setLoaded] = useState(false)
 
   const toggleChampion = (champion: ChampionsSchema) => {
     if (associatedChampions.includes(champion.id)) {
@@ -72,7 +74,7 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
       >
         <div
           className={cx(
-            'border border-yellow-900 ring-brand-default group-hover:ring-2 group-hover:brightness-125 flex',
+            'border border-yellow-900 ring-brand-default group-hover:ring-2 group-hover:brightness-125 flex overflow-hidden',
             !potatoMode && 'transition duration-100',
             associatedChampions.includes(champion.id) && 'border-2 border-yellow-500'
           )}
@@ -85,17 +87,27 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
               src={champion.icon}
               alt={champion.name}
               placeholder="blur"
-              blurDataURL={champion.placeholder}
+              blurDataURL={blurhashDecode(champion.placeholder)}
+              onLoad={() => setLoaded(true)}
+              className={cx(
+                !potatoMode && 'blur-xl',
+                !potatoMode &&
+                  loaded &&
+                  css`
+                    animation: unblur 0.5s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+                    @keyframes unblur {
+                      0% {
+                        filter: blur(24px);
+                      }
+                      100% {
+                        filter: blur(0px);
+                      }
+                    }
+                  `
+              )}
             />
           ) : (
-            <img
-              width={60}
-              height={60}
-              src="/icons/champion-square.svg"
-              alt={champion.name}
-              // placeholder="blur"
-              // blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO0rgcAAPsAvCZ+DFUAAAAASUVORK5CYII="
-            />
+            <img width={60} height={60} src="/icons/champion-square.svg" alt={champion.name} />
           )}
         </div>
         <p

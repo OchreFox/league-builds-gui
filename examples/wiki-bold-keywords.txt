@@ -1,0 +1,14 @@
+bonus
+maximum
+Can be used while [[death|dead]].
+bonus total
+base
+missing
+current missing
+Stopwatch
+current
+minimum
+Bonus
+below
+total
+additional

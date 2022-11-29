@@ -71,6 +71,7 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
                           height: 100%;
                           background: radial-gradient(circle, rgba(199, 169, 110, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
                           background-size: 100% 200%;
+                          background-position: 0 100%;
                           animation: scroll 0.6s cubic-bezier(0.87, 0, 0.13, 1) forwards;
                           @keyframes scroll {
                             0% {

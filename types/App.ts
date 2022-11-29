@@ -18,6 +18,10 @@ export interface ItemPickerState {
 
 export interface BuildState {
   deletePopup: string | null
+  itemContextMenu: {
+    show: boolean
+    item: number | null
+  }
 }
 
 export interface MenuState {

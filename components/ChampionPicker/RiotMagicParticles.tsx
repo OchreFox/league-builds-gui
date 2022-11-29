@@ -24,7 +24,7 @@ const riotMagicEmitterConfig = {
   },
   acceleration: {
     x: 0,
-    y: -50,
+    y: -20,
   },
   maxSpeed: 0,
   startRotation: {

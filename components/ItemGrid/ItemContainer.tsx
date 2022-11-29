@@ -1,11 +1,18 @@
 import { motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ItemContainerState } from 'types/FilterProps'
 
 import { gridContainerVariants, transitionVariant } from './ItemGridComponents'
 import { StandardItem } from './StandardItem'
 
-export const ItemContainer = ({ gridKey, itemsCombined, transition, mythic, itemRefArray }: ItemContainerState) => {
+export const ItemContainer = ({
+  gridKey,
+  itemsCombined,
+  setItemsCombined,
+  transition,
+  mythic,
+  itemRefArray,
+}: ItemContainerState) => {
   if (!itemsCombined || itemsCombined.length === 0) {
     return null
   }

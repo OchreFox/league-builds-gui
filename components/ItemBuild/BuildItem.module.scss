@@ -3,11 +3,9 @@
   initial-value: 132deg;
   inherits: false;
 }
-
 .animatedTileBg {
   position: relative;
   box-sizing: content-box;
-
   &::before {
     // Create a gradient border
     content: '';
@@ -28,28 +26,11 @@
     background-size: 600% 600%;
     box-shadow: 0px 0px 40px 5px rgba(130, 215, 255, 0.1);
     z-index: -3;
-    animation: move-gradient 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  &::after {
-    position: absolute;
-    content: '';
-    left: 0;
-    right: 0;
-    z-index: -5;
-    height: 100%;
-    width: 100%;
-    margin: 0 auto;
-    transform: scale(1.05);
-    filter: blur(10px);
-    background-image: linear-gradient(
-      var(--rotate),
-      rgba(202, 247, 250, 0.5),
-      rgba(12, 197, 248, 0.5) 30%,
-      rgba(0, 87, 164, 0.5) 60%
-    );
-    opacity: 1;
-    transition: opacity 0.5s;
-    animation: spin 8s linear infinite, reveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-name: move-gradient, fade-out;
+    animation-duration: 1s, 0.4s;
+    animation-delay: 0s, 0.4s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), linear;
+    animation-fill-mode: forwards, forwards;
   }
 }
 
@@ -68,12 +49,7 @@
     bottom: 0;
     z-index: -2;
     box-shadow: inset 0 0 10px 10px rgba(5, 3, 32, 0.3), inset 0 0 10px 5px rgba(255, 255, 255, 0.1);
-    // background-image: url('/effects/border_magic_glow_2.png');
-    // background-size: 100% 100%;
-    // background-repeat: repeat;
-    // background-position: 0 0;
-    // animation: rotate 2s linear infinite;
-    // mix-blend-mode: multiply;
+    animation: fade-out 0.4s linear 0.5s forwards;
   }
 
   &:after {
@@ -92,29 +68,11 @@
     mix-blend-mode: screen;
     // Rotate background 90 degrees
 
-    animation-name: slide-in-top, smoke-animation;
-    animation-duration: 0.5s, 5s;
-    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94), linear;
-    animation-iteration-count: 1, infinite;
-    animation-fill-mode: forwards, forwards;
-  }
-}
-
-@keyframes scroll {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0% 200%;
-  }
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
+    animation-name: slide-in-top, smoke-animation, fade-out;
+    animation-duration: 0.5s, 5s, 0.5s;
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94), linear, linear;
+    animation-iteration-count: 1, infinite, 1;
+    animation-fill-mode: forwards, forwards, forwards;
   }
 }
 
@@ -158,5 +116,19 @@
   }
   100% {
     opacity: 1;
+  }
+}
+@keyframes hide-background {
+  to {
+    background: transparent;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

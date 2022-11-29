@@ -26,6 +26,10 @@ const initialState: AppState = {
   },
   build: {
     deletePopup: null,
+    itemContextMenu: {
+      show: false,
+      item: null,
+    },
   },
 }
 
@@ -82,6 +86,12 @@ export const appSlice = createSlice({
     setBuildDeletePopup: (state, action: PayloadAction<string | null>) => {
       state.build.deletePopup = action.payload
     },
+    setBuildItemContextMenuShow: (state, action: PayloadAction<boolean>) => {
+      state.build.itemContextMenu.show = action.payload
+    },
+    setBuildItemContextMenuItem: (state, action: PayloadAction<number | null>) => {
+      state.build.itemContextMenu.item = action.payload
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -116,4 +126,6 @@ export const {
   setItemPickerDraggedItem,
   setMenuShow,
   setBuildDeletePopup,
+  setBuildItemContextMenuShow,
+  setBuildItemContextMenuItem,
 } = appSlice.actions

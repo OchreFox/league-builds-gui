@@ -13,7 +13,7 @@ import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
-import { VariantLabels, motion } from 'framer-motion'
+import { VariantLabels, Variants, motion, useAnimation } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Tag } from 'types/Champions'
@@ -41,6 +41,9 @@ const ChampionPickerCard = () => {
   const championPicker = useSelector(selectChampionPicker)
   const potatoMode = useSelector(selectPotatoMode)
   const selectedChampions = useSelector(selectSelectedChampions)
+  const previousValues = useRef({
+    selectedChampions: selectedChampions,
+  })
 
   const cardRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -145,16 +148,24 @@ const ChampionPickerCard = () => {
     >
       <motion.div className="relative flex flex-col overflow-hidden p-4" transition={easeInOutExpo} ref={cardRef}>
         <ChampionPickerCardBackground champions={selectedChampions} />
-        <motion.div
-          className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-cyan-700/30 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: hover ? 1 : 0 }}
-          transition={easeOutExpo}
-        >
-          {!potatoMode && size.width > 0 && size.height > 0 && (
-            <RiotMagicParticles width={size.width} height={size.height} />
-          )}
-        </motion.div>
+        {!potatoMode && (
+          <motion.div
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-cyan-700/30 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: hover ? 1 : 0 }}
+            transition={easeOutExpo}
+          >
+            <video
+              className="absolute top-0 left-0 w-full h-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+              src="/effects/loop-magic-vertical.webm"
+            />
+            {size.width > 0 && size.height > 0 && <RiotMagicParticles width={size.width} height={size.height} />}
+          </motion.div>
+        )}
         <motion.div
           variants={titleHoverVariants}
           animate={getChampionPickerAnimation()}

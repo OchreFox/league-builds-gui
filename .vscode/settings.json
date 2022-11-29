@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "blurhash",
     "Cooldown",
     "flexbugs",
     "Fuzzysort",
@@ -16,12 +17,15 @@
     "popperjs",
     "quicktype",
     "Regen",
+    "scanline",
+    "scanlines",
     "simplebar",
     "svgr",
     "tabler",
     "tanstack",
     "tinycolor",
     "trivago",
+    "unblur",
     "uncrush",
     "uuidv",
     "webp"

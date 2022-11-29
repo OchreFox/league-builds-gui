@@ -1,4 +1,9 @@
-import { selectItemPicker, setItemPickerHoveredItem, setItemPickerSelectedItem } from '@/store/appSlice'
+import {
+  selectItemPicker,
+  setItemPickerDraggedItem,
+  setItemPickerHoveredItem,
+  setItemPickerSelectedItem,
+} from '@/store/appSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
@@ -17,12 +22,11 @@ import { ItemTooltip } from './ItemTooltip'
 export const StandardItem = ({ item, transition, isMythic, itemRefArray }: StandardItemState) => {
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
-  const { selectedItem, hoveredItem } = useSelector(selectItemPicker)
-
+  const { selectedItem, hoveredItem, draggedItem } = useSelector(selectItemPicker)
   const [showPopper, setShowPopper] = useState(false)
   const [mouseEnter, setMouseEnter] = useState(false)
   const [buttonClick, setButtonClick] = useState(false)
-  const buttonRef = useRef<HTMLDivElement | null>(null)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
   const popperRef = useRef(null)
   const [arrowRef, setArrowRef] = useState<HTMLDivElement | null>(null)
   const { styles, attributes } = usePopper(buttonRef.current, popperRef.current, {
@@ -91,9 +95,32 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
     return null
   }
   return (
-    <li className="relative list-none" ref={addToRefs}>
+    <li
+      data-item-id={item.id}
+      className="relative list-none"
+      ref={addToRefs}
+      onDragStart={(e) => {
+        dispatch(setItemPickerDraggedItem(item.id))
+        e.dataTransfer.setData(
+          'text/plain',
+          JSON.stringify({
+            item: item,
+            isMythic: isMythic,
+          })
+        )
+        e.currentTarget.style.opacity = '0.4'
+        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
+        setButtonClick(true)
+      }}
+      onDragEnd={(e) => {
+        dispatch(setItemPickerDraggedItem(null))
+        e.currentTarget.style.opacity = '1'
+        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0)'
+        setButtonClick(false)
+      }}
+    >
       <>
-        <motion.div
+        <motion.button
           layout
           transition={transition}
           initial={{ opacity: 0 }}
@@ -101,7 +128,7 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
           exit={{ opacity: 0 }}
           key={item.id}
           className={cx(
-            'group -m-1 flex flex-col items-center px-2 py-2 text-center',
+            'group -m-1 flex flex-col items-center px-2 py-2 text-center relative',
             css`
               border: 2px solid rgba(0, 0, 0, 0);
             `,
@@ -188,6 +215,10 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
           onMouseUp={() => {
             setButtonClick(false)
           }}
+          draggable={true}
+          onDragOver={(e) => {
+            e.preventDefault()
+          }}
         >
           {/* Mythic item overlay */}
           <div
@@ -251,7 +282,7 @@ export const StandardItem = ({ item, transition, isMythic, itemRefArray }: Stand
           >
             {item.gold?.total}
           </p>
-        </motion.div>
+        </motion.button>
         {showPopper
           ? createPortal(
               <ItemTooltip

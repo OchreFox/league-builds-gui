@@ -1,7 +1,7 @@
 import { css, cx } from '@emotion/css'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -22,7 +22,7 @@ const ChampionPickerOverlay = ({
 }) => {
   const { championsData } = useChampions()
   const potatoMode = useSelector(selectPotatoMode)
-  const [filteredChampions, setFilteredChampions] = React.useState<ChampionsSchema[]>([])
+  const [filteredChampions, setFilteredChampions] = useState<ChampionsSchema[]>([])
 
   const includesCategory = (champion: ChampionsSchema, category: Tag) => {
     if (category === Tag.All) {
@@ -66,8 +66,8 @@ const ChampionPickerOverlay = ({
         <motion.div
           key="champion-picker"
           className={cx(
-            'absolute h-full w-full bg-black/50 select-none',
-            !potatoMode && '[@supports(backdrop-filter:blur(0))]:backdrop-blur'
+            'absolute h-full w-full select-none',
+            potatoMode ? 'bg-slate-900' : 'bg-black/50 backdrop-blur'
           )}
           initial={{ y: '-100%' }}
           animate={show ? { y: 0 } : { y: '-100%' }}

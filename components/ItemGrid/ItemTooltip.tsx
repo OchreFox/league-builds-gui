@@ -82,7 +82,7 @@ export function ItemTooltip({
       {/* Item information */}
       <div className="flex flex-col w-full" key={'popper-content-' + item.id}>
         <div className="flex w-full">
-          <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} size={35} />
+          <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} size={35} addPlaceholder={false} />
           <div className="flex justify-between border-b border-yellow-900 pb-1 ml-4 w-full">
             <h3 className="font-body font-semibold text-gray-200">{item.name}</h3>
             <p className="inline-flex items-center font-sans font-bold text-yellow-600">

@@ -128,3 +128,12 @@ export enum CSSProperty {
   OPACITY = 'opacity',
   ANIMATION = 'animation',
 }
+
+export interface DraggableItem extends ItemsSchema {
+  /** When true, the item is selected using MultiDrag */
+  selected?: boolean
+  /** When true, the item is deemed "chosen", which basically just a mousedown event. */
+  chosen?: boolean
+  /** When true, it will not be possible to pick this item up in the list. */
+  filtered?: boolean
+}

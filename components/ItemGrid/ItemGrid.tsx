@@ -7,7 +7,7 @@ import React, { Fragment, createRef, useEffect, useRef, useState } from 'react'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { ItemGridProps, Rarity } from 'types/FilterProps'
-import { Category, ChampionClass, ItemsSchema } from 'types/Items'
+import { Category, ChampionClass, DraggableItem, ItemsSchema } from 'types/Items'
 
 import { isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
 
@@ -40,16 +40,16 @@ export default function ItemGrid({
   // Fetch items from custom JSON
   const { items, itemsError } = useItems()
   // Basic items state
-  const [basicItems, setBasicItems] = useState<Array<ItemsSchema>>([])
+  const [basicItems, setBasicItems] = useState<Array<DraggableItem>>([])
   const [basicItemsCount, setBasicItemsCount] = useState(0)
   // Epic items state
-  const [epicItems, setEpicItems] = useState<Array<ItemsSchema>>([])
+  const [epicItems, setEpicItems] = useState<Array<DraggableItem>>([])
   const [epicItemsCount, setEpicItemsCount] = useState(0)
   // Legendary items state
-  const [legendaryItems, setLegendaryItems] = useState<Array<ItemsSchema>>([])
+  const [legendaryItems, setLegendaryItems] = useState<Array<DraggableItem>>([])
   const [legendaryItemsCount, setLegendaryItemsCount] = useState(0)
   // Mythic items state
-  const [mythicItems, setMythicItems] = useState<Array<ItemsSchema>>([])
+  const [mythicItems, setMythicItems] = useState<Array<DraggableItem>>([])
   const [mythicItemsCount, setMythicItemsCount] = useState(0)
   // Data initialization flag
   const [dataInitialized, setDataInitialized] = useState(false)
@@ -278,6 +278,7 @@ export default function ItemGrid({
             <ItemContainer
               gridKey="basicGrid"
               itemsCombined={basicItems}
+              setItemsCombined={setBasicItems}
               transition={transitionVariant}
               itemRefArray={itemRefArray}
             />
@@ -312,6 +313,7 @@ export default function ItemGrid({
             <ItemContainer
               gridKey="epicGrid"
               itemsCombined={epicItems}
+              setItemsCombined={setEpicItems}
               transition={transitionVariant}
               itemRefArray={itemRefArray}
             />
@@ -346,6 +348,7 @@ export default function ItemGrid({
             <ItemContainer
               gridKey="legendaryGrid"
               itemsCombined={legendaryItems}
+              setItemsCombined={setLegendaryItems}
               transition={transitionVariant}
               itemRefArray={itemRefArray}
             />
@@ -397,6 +400,7 @@ export default function ItemGrid({
             <ItemContainer
               gridKey="mythicGrid"
               itemsCombined={mythicItems}
+              setItemsCombined={setMythicItems}
               transition={transitionVariant}
               mythic={true}
               itemRefArray={itemRefArray}

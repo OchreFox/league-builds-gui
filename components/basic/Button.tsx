@@ -3,19 +3,24 @@ import { Icon, IconifyIcon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 
-export interface ButtonProps {
+export interface BaseButtonProps {
   label?: string
   icon: string | IconifyIcon
+  labelReactive?: string
+  iconReactive?: string | IconifyIcon
+  dropReactive?: boolean
+  handleClick?: () => void
+  handleDrop?: (e: React.DragEvent<HTMLButtonElement>) => void
+}
+
+export interface ButtonProps extends BaseButtonProps {
   background: string
   color: string
   reactive: boolean
-  labelReactive?: string
-  iconReactive?: string | IconifyIcon
   bgClick: string
   colorReactive?: string
   layoutId?: string
   rounded: 'rounded-full' | 'rounded-md' | 'rounded-none'
-  handleClick?: () => void
 }
 
 const Button = ({
@@ -30,10 +35,13 @@ const Button = ({
   colorReactive,
   layoutId,
   rounded,
+  dropReactive,
   handleClick,
+  handleDrop,
 }: ButtonProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [buttonClick, setButtonClick] = useState(false)
+  const [dragOver, setDragOver] = useState(false)
 
   const buttonVariants: Variants = {
     initial: {
@@ -75,7 +83,8 @@ const Button = ({
         'inline-flex items-center transition-colors duration-200 ease-out hover:bg-cyan-900 py-2 justify-center my-4 font-normal relative grow overflow-hidden focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
         background,
         bgClick && `focus:${bgClick}`,
-        rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md'
+        rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md',
+        dropReactive && dragOver && `drop-shadow-lg ${bgClick} ${colorReactive}`
       )}
       onClick={() => {
         reactive && setButtonClick(true)
@@ -83,6 +92,23 @@ const Button = ({
       }}
       onBlur={() => {
         setButtonClick(false)
+      }}
+      onDragOver={(e) => {
+        if (dropReactive) {
+          e.preventDefault()
+          setDragOver(true)
+        }
+      }}
+      onDragLeave={() => {
+        if (dropReactive) {
+          setDragOver(false)
+        }
+      }}
+      onDrop={(e) => {
+        setDragOver(false)
+        handleDrop && handleDrop(e)
+        buttonRef.current?.focus()
+        setButtonClick(true)
       }}
     >
       <motion.span

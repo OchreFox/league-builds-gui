@@ -1,6 +1,6 @@
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from 'react'
 
-import { Category, ChampionClass, ItemsSchema } from './Items'
+import { Category, ChampionClass, DraggableItem, ItemsSchema } from './Items'
 
 export type ItemRefArrayType = MutableRefObject<
   {
@@ -74,16 +74,20 @@ export type FilterBySearchState = {
 
 export type ItemContainerState = {
   gridKey: string
-  itemsCombined: ItemsSchema[]
+  itemsCombined: DraggableItem[]
+  setItemsCombined: Dispatch<SetStateAction<DraggableItem[]>>
   transition: any
   mythic: boolean
   itemRefArray: ItemRefArrayType
 }
 
-export type StandardItemState = {
+export interface ItemState {
   item: ItemsSchema
-  transition: any
   isMythic: boolean
+}
+
+export interface StandardItemState extends ItemState {
+  transition: any
   itemRefArray: ItemRefArrayType
 }
 

@@ -52,6 +52,17 @@ export const itemBuildSlice = createSlice({
         items: [],
       })
     },
+    addItemToBlock: (state, action: PayloadAction<{ blockId: string; itemId: number }>) => {
+      const { blockId, itemId } = action.payload
+      const block = state.blocks.find((block) => block.id === blockId)
+      if (block) {
+        block.items.push({
+          id: itemId.toString(),
+          uid: uuidv4(),
+          count: 1,
+        })
+      }
+    },
     removeBlock: (state, action: PayloadAction<string>) => {
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
@@ -89,6 +100,7 @@ export const {
   setBlocks,
   addBlock,
   addEmptyBlock,
+  addItemToBlock,
   removeBlock,
   updateBlock,
   updateBlockType,

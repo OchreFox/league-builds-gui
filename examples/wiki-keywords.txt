@@ -1,0 +1,39 @@
+basic attack
+champion ability|abilities
+summoner spell
+active ability items|activate items
+death|dead
+size
+Channel#Casting Times|cast time
+on-hit
+minions
+champion
+monster
+health regeneration
+area of effect
+damage over time
+damage|proc
+omnivamp
+minion
+kill
+assist
+death
+shop
+buff
+champion ability|ability
+death|lethal damage
+on-attack
+damage
+turret
+Champion ability|ability
+Damage modifier|reduced
+Health regeneration|Regenerate
+attack speed
+unit
+combat status|in-combat
+Stealth#Stealthed_traps_and_wards|stealthed
+structures
+unit-targeted
+auto-targeted
+combat status|in combat
+Experience (champion)|level 13
