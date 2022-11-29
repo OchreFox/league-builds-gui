@@ -30,7 +30,7 @@
     "@pixi/particle-emitter": "^5.0.7",
     "@popperjs/core": "^2.11.6",
     "@reduxjs/toolkit": "^1.8.6",
-    "@types/lodash": "^4.14.186",
+    "@types/lodash": "^4.14.187",
     "@types/three": "^0.144.0",
     "blurhash": "^2.0.4",
     "color.js": "^1.2.0",
