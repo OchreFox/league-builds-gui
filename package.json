@@ -25,7 +25,7 @@
     "@headlessui/react": "^1.7.4",
     "@hookform/resolvers": "^2.9.10",
     "@iconify/icons-clarity": "^1.2.6",
-    "@iconify/icons-tabler": "^1.2.49",
+    "@iconify/icons-tabler": "^1.2.50",
     "@next/bundle-analyzer": "^13.0.5",
     "@pixi/particle-emitter": "^5.0.8",
     "@popperjs/core": "^2.11.6",
