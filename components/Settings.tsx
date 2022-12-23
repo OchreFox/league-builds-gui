@@ -112,12 +112,6 @@ const Settings = () => {
     }
   }, [mouseHover, showCopyMessage, itemBuild])
 
-  useEffect(() => {
-    if (errors) {
-      console.log(errors)
-    }
-  }, [errors])
-
   return (
     <>
       <form

@@ -7,7 +7,7 @@ import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
 import { blurhashDecode } from 'utils/BlurhashDecode'
@@ -24,11 +24,15 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
 
   const toggleChampion = (champion: ChampionsSchema) => {
     if (associatedChampions.includes(champion.id)) {
-      dispatch(removeAssociatedChampion(champion.id))
-      dispatch(removeSelectedChampion(champion))
+      batch(() => {
+        dispatch(removeAssociatedChampion(champion.id))
+        dispatch(removeSelectedChampion(champion))
+      })
     } else {
-      dispatch(addAssociatedChampion(champion.id))
-      dispatch(addSelectedChampion(champion))
+      batch(() => {
+        dispatch(addAssociatedChampion(champion.id))
+        dispatch(addSelectedChampion(champion))
+      })
     }
   }
 

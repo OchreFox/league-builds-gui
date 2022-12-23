@@ -1,12 +1,22 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
+import { Rarity } from 'types/FilterProps'
 
-import { AppState } from '../../types/App'
+import { ItemType } from 'components/ItemFilters/FilterComponents'
+
+import { AppState, emptyContainer } from '../../types/App'
 import { Champion, Tag } from '../../types/Champions'
-import { ItemsSchema } from '../../types/Items'
+import { ChampionClass, ItemsSchema } from '../../types/Items'
 import { RootState } from './store'
 
+const hydrate = createAction<AppState>(HYDRATE)
+
 const initialState: AppState = {
+  itemFilters: {
+    class: ChampionClass.None,
+    rarity: Rarity.Empty,
+    types: [ItemType.All],
+  },
   selectedChampions: [],
   championPicker: {
     show: false,
@@ -20,6 +30,13 @@ const initialState: AppState = {
     hoveredItem: null,
     selectedItem: null,
     draggedItem: null,
+    containers: {
+      [Rarity.Empty]: emptyContainer,
+      [Rarity.Basic]: emptyContainer,
+      [Rarity.Epic]: emptyContainer,
+      [Rarity.Legendary]: emptyContainer,
+      [Rarity.Mythic]: emptyContainer,
+    },
   },
   menu: {
     show: false,
@@ -39,6 +56,33 @@ export const appSlice = createSlice({
   reducers: {
     resetApp: (_state) => {
       return initialState
+    },
+    setItemFiltersClass: (state, action: PayloadAction<ChampionClass>) => {
+      state.itemFilters.class = action.payload
+    },
+    setItemFiltersRarity: (state, action: PayloadAction<Rarity>) => {
+      state.itemFilters.rarity = action.payload
+    },
+    setItemFilterType: (state, action: PayloadAction<{ type: ItemType; value: boolean }>) => {
+      const { type, value } = action.payload
+      const index = state.itemFilters.types.indexOf(type)
+      if (value && index === -1) {
+        state.itemFilters.types.push(type)
+      } else if (!value && index !== -1) {
+        state.itemFilters.types.splice(index, 1)
+      }
+    },
+    toggleItemFiltersType: (state, action: PayloadAction<string>) => {
+      const itemType = action.payload as ItemType
+      const index = state.itemFilters.types.indexOf(itemType)
+      if (index === -1) {
+        state.itemFilters.types.push(itemType)
+      } else {
+        state.itemFilters.types.splice(index, 1)
+      }
+    },
+    resetItemFiltersTypes: (state) => {
+      state.itemFilters.types = [ItemType.All]
     },
     setSelectedChampions: (state, action: PayloadAction<Champion[]>) => {
       state.selectedChampions = action.payload
@@ -80,6 +124,27 @@ export const appSlice = createSlice({
     setItemPickerDraggedItem: (state, action: PayloadAction<number | null>) => {
       state.itemPicker.draggedItem = action.payload
     },
+    resetItemPickerContainer: (state, action: PayloadAction<Rarity>) => {
+      state.itemPicker.containers[action.payload] = emptyContainer
+    },
+    setItemPickerContainerHeight: (state, action: PayloadAction<{ rarity: Rarity; height: number }>) => {
+      state.itemPicker.containers[action.payload.rarity].height = action.payload.height
+    },
+    setItemPickerContainerGridHeight: (state, action: PayloadAction<{ rarity: Rarity; height: number }>) => {
+      state.itemPicker.containers[action.payload.rarity].gridHeight = action.payload.height
+    },
+    setItemPickerContainerTitleHeight: (state, action: PayloadAction<{ rarity: Rarity; height: number }>) => {
+      state.itemPicker.containers[action.payload.rarity].titleHeight = action.payload.height
+    },
+    setItemPickerContainerRows: (state, action: PayloadAction<{ rarity: Rarity; rows: number }>) => {
+      state.itemPicker.containers[action.payload.rarity].rows = action.payload.rows
+    },
+    setItemPickerContainerColumns: (state, action: PayloadAction<{ rarity: Rarity; columns: number }>) => {
+      state.itemPicker.containers[action.payload.rarity].columns = action.payload.columns
+    },
+    setItemPickerContainerCount: (state, action: PayloadAction<{ rarity: Rarity; count: number }>) => {
+      state.itemPicker.containers[action.payload.rarity].count = action.payload.count
+    },
     setMenuShow: (state, action: PayloadAction<boolean>) => {
       state.menu.show = action.payload
     },
@@ -93,16 +158,17 @@ export const appSlice = createSlice({
       state.build.itemContextMenu.item = action.payload
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(hydrate, (state, action) => {
       return {
         ...state,
-        ...action.payload.app,
+        ...action.payload,
       }
-    },
+    })
   },
 })
 
+export const selectItemFilters = (state: RootState) => state.app.itemFilters
 export const selectSelectedChampions = (state: RootState) => state.app.selectedChampions
 export const selectChampionPicker = (state: RootState) => state.app.championPicker
 export const selectItemPicker = (state: RootState) => state.app.itemPicker
@@ -111,6 +177,11 @@ export const selectBuild = (state: RootState) => state.app.build
 
 export const {
   resetApp,
+  setItemFiltersClass,
+  setItemFiltersRarity,
+  setItemFilterType,
+  toggleItemFiltersType,
+  resetItemFiltersTypes,
   setSelectedChampions,
   addSelectedChampion,
   removeSelectedChampion,
@@ -124,6 +195,13 @@ export const {
   setItemPickerHoveredItem,
   setItemPickerSelectedItem,
   setItemPickerDraggedItem,
+  resetItemPickerContainer,
+  setItemPickerContainerHeight,
+  setItemPickerContainerGridHeight,
+  setItemPickerContainerTitleHeight,
+  setItemPickerContainerRows,
+  setItemPickerContainerColumns,
+  setItemPickerContainerCount,
   setMenuShow,
   setBuildDeletePopup,
   setBuildItemContextMenuShow,

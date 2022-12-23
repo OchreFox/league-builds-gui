@@ -15,7 +15,7 @@ import { css, cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import { VariantLabels, Variants, motion, useAnimation } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { batch, useSelector } from 'react-redux'
 import { Tag } from 'types/Champions'
 
 import {
@@ -142,8 +142,10 @@ const ChampionPickerCard = () => {
       }}
       onMouseLeave={() => {
         setHover(false)
-        dispatch(setChampionPickerHover(false))
-        dispatch(setChampionPickerHint(false))
+        batch(() => {
+          dispatch(setChampionPickerHover(false))
+          dispatch(setChampionPickerHint(false))
+        })
       }}
     >
       <motion.div className="relative flex flex-col overflow-hidden p-4" transition={easeInOutExpo} ref={cardRef}>

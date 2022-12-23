@@ -2,7 +2,7 @@ import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { cx } from '@emotion/css'
 // SVG imports
 import goldIcon from 'public/icons/gold.svg?url'
-import React from 'react'
+import React, { useCallback } from 'react'
 import JsxParser from 'react-jsx-parser'
 import { useSelector } from 'react-redux'
 import { ItemsSchema } from 'types/Items'
@@ -32,12 +32,11 @@ import {
 } from './ItemComponents'
 import { ItemIcon } from './ItemIcon'
 
-export function ItemTooltip({
+export function ItemPopper({
   popperRef,
   styles,
   attributes,
   setArrowRef,
-  isMythic,
   hoveredItem,
   item,
 }: {
@@ -53,11 +52,15 @@ export function ItemTooltip({
       | undefined
   }
   setArrowRef: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
-  isMythic: boolean
   hoveredItem: number | null
   item: ItemsSchema
 }): JSX.Element {
   const potatoMode = useSelector(selectPotatoMode)
+
+  const renderError = useCallback(
+    (props: { error: string }) => <div className="text-red-500">{`${props.error}`}</div>,
+    []
+  )
   return (
     <Tooltip
       ref={popperRef}
@@ -82,7 +85,7 @@ export function ItemTooltip({
       {/* Item information */}
       <div className="flex flex-col w-full" key={'popper-content-' + item.id}>
         <div className="flex w-full">
-          <ItemIcon isMythic={isMythic} hoveredItem={hoveredItem} item={item} size={35} addPlaceholder={false} />
+          <ItemIcon item={item} size={35} addPlaceholder={false} />
           <div className="flex justify-between border-b border-yellow-900 pb-1 ml-4 w-full">
             <h3 className="font-body font-semibold text-gray-200">{item.name}</h3>
             <p className="inline-flex items-center font-sans font-bold text-yellow-600">
@@ -120,7 +123,7 @@ export function ItemTooltip({
               }}
               jsx={item.description}
               showWarnings={true}
-              renderError={(error) => <div className="text-red-500">{`${error}`}</div>}
+              renderError={renderError}
             />
           )}
         </div>

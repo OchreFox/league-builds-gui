@@ -6,7 +6,7 @@ import { cx } from '@emotion/css'
 import { Portal } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { batch, useSelector } from 'react-redux'
 import { DeleteSectionPopperProps } from 'types/Build'
 
 import { Tooltip, setPopperBg } from 'components/ItemGrid/ItemComponents'
@@ -51,8 +51,10 @@ export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attrib
             <button
               className="mr-2 px-2 py-1 bg-brand-dark hover:bg-red-800 transition-colors duration-200 ease-out rounded-md flex grow items-center justify-center"
               onClick={() => {
-                dispatch(removeBlock(id))
-                dispatch(setBuildDeletePopup(null))
+                batch(() => {
+                  dispatch(removeBlock(id))
+                  dispatch(setBuildDeletePopup(null))
+                })
               }}
             >
               <Icon icon="tabler:trash" className="h-5 w-5 text-gray-300 mr-1" inline={true} />

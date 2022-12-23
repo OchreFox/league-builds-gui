@@ -59,8 +59,6 @@ const riotMagicEmitterConfig = {
 }
 
 const RiotMagicParticles = ({ width = 150, height = 150 }: { width: number; height: number }) => {
-  // Monitor if the container gets new children
-
   return (
     <Stage
       className="absolute top-0 left-0 pointer-events-none"

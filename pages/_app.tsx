@@ -8,6 +8,7 @@ import { Provider, useSelector } from 'react-redux'
 import 'styles/globals.css'
 import { ReducedMotionType } from 'types/PotatoMode'
 
+import 'components/ItemGrid/ItemGrid.css'
 import { selectPotatoMode } from 'components/store/potatoModeSlice'
 
 // Font imports

@@ -1,8 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
+import { AppState } from 'types/App'
 
 import { PotatoModeState } from '../../types/PotatoMode'
 import { RootState } from './store'
+
+const hydrate = createAction<AppState>(HYDRATE)
 
 const initialState: PotatoModeState = {
   enabled: false,
@@ -22,13 +25,13 @@ export const potatoModeSlice = createSlice({
       state.enabled = action.payload
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(hydrate, (state, action) => {
       return {
         ...state,
-        ...action.payload.potatoMode,
+        ...action.payload,
       }
-    },
+    })
   },
 })
 

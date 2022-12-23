@@ -1,0 +1,42 @@
+.filterButtonActive {
+  color: #fff;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(199, 169, 110, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+    background-size: 100% 230%;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    animation: scroll 0.6s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  }
+
+  &.all::before {
+    background: radial-gradient(circle, rgba(18, 219, 255, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+    background-size: 100% 230%;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    animation: scroll 0.6s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    background-position: 0 -100%;
+    opacity: 0;
+  }
+  100% {
+    background-position: 0 0%;
+    opacity: 1;
+  }
+}
+
+.rarityButtonContainer {
+  svg > * {
+    fill: inherit;
+    stroke: inherit;
+  }
+}

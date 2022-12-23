@@ -80,7 +80,7 @@ const BuildItem = ({
           styles.animatedTileBgOverlay
         )}
       >
-        <ItemIcon item={item} isMythic={isMythic(item)} hoveredItem={null} />
+        <ItemIcon item={item} />
         <p className="font-sans text-gray-200 group-hover:text-yellow-200 select-none">{item.gold?.total}</p>
       </button>
       <AnimatePresence>

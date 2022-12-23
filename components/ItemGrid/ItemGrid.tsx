@@ -1,65 +1,81 @@
 import { useItems } from '@/hooks/useItems'
+import { selectItemFilters, selectItemPicker, setItemPickerContainerCount } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
 import _ from 'lodash'
-import React, { Fragment, createRef, useEffect, useRef, useState } from 'react'
+import React, { Fragment, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { batch, useSelector } from 'react-redux'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
-import { ItemGridProps, Rarity } from 'types/FilterProps'
-import { Category, ChampionClass, DraggableItem, ItemsSchema } from 'types/Items'
+import { ItemGridProps, Rarity, SortDirection } from 'types/FilterProps'
+import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
 import { isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
+import { easeInOutExpo } from 'utils/Transition'
 
-import { RarityTitle } from '../RarityTitle'
-import { ItemContainer } from './ItemContainer'
 import {
   getActiveCategories,
-  getActiveChampionClass,
-  getPluralFromItems,
   includesCategory,
+  includesCategoryAll,
   isFromChampionClass,
   isInStore,
   markItemsAsVisible,
   matchesSearchQuery,
+  overlayVariants,
   titleVariants,
   transitionVariant,
 } from './ItemGridComponents'
+import ItemSection from './ItemSection'
 
 export default function ItemGrid({
   goldOrderDirection,
-  rarityFilter,
-  setRarityFilter,
-  typeFilters,
-  classFilters,
   searchFilter,
   setAutocompleteResults,
   itemRefArray,
   itemGridRef,
 }: ItemGridProps) {
+  const dispatch = useAppDispatch()
+  const itemFilters = useSelector(selectItemFilters)
+  const itemPicker = useSelector(selectItemPicker)
+  const { hoveredItem } = useSelector(selectItemPicker)
+  const basicItemsCount = useMemo(() => itemPicker.containers[Rarity.Basic].count, [itemPicker.containers])
+  const epicItemsCount = useMemo(() => itemPicker.containers[Rarity.Epic].count, [itemPicker.containers])
+  const legendaryItemsCount = useMemo(() => itemPicker.containers[Rarity.Legendary].count, [itemPicker.containers])
+  const mythicItemsCount = useMemo(() => itemPicker.containers[Rarity.Mythic].count, [itemPicker.containers])
+
   // Fetch items from custom JSON
   const { items, itemsError } = useItems()
-  // Basic items state
-  const [basicItems, setBasicItems] = useState<Array<DraggableItem>>([])
-  const [basicItemsCount, setBasicItemsCount] = useState(0)
-  // Epic items state
-  const [epicItems, setEpicItems] = useState<Array<DraggableItem>>([])
-  const [epicItemsCount, setEpicItemsCount] = useState(0)
-  // Legendary items state
-  const [legendaryItems, setLegendaryItems] = useState<Array<DraggableItem>>([])
-  const [legendaryItemsCount, setLegendaryItemsCount] = useState(0)
-  // Mythic items state
-  const [mythicItems, setMythicItems] = useState<Array<DraggableItem>>([])
-  const [mythicItemsCount, setMythicItemsCount] = useState(0)
+  // Items state
+  const [basicItems, setBasicItems] = useState<Array<ItemsSchema>>([])
+  const [epicItems, setEpicItems] = useState<Array<ItemsSchema>>([])
+  const [legendaryItems, setLegendaryItems] = useState<Array<ItemsSchema>>([])
+  const [mythicItems, setMythicItems] = useState<Array<ItemsSchema>>([])
+  // Initial items state
+  const [initialBasicItems, setInitialBasicItems] = useState<Array<ItemsSchema>>([])
+  const [initialEpicItems, setInitialEpicItems] = useState<Array<ItemsSchema>>([])
+  const [initialLegendaryItems, setInitialLegendaryItems] = useState<Array<ItemsSchema>>([])
+  const [initialMythicItems, setInitialMythicItems] = useState<Array<ItemsSchema>>([])
   // Data initialization flag
   const [dataInitialized, setDataInitialized] = useState(false)
+  // Scroll to bottom
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false)
+  const [scrollToBottom, setScrollToBottom] = useState(false)
+  const topRef = useRef(0)
+  const bottomRef = useRef(0)
+
+  // Memoize total height of the item grid
+  const totalHeight = useMemo(() => {
+    return Object.values(itemPicker.containers).reduce((acc, container) => {
+      return acc + (container.height || 0)
+    }, 0)
+  }, [itemPicker.containers])
 
   // Previous refs
   const previousValues = useRef({
     goldOrderDirection,
-    rarityFilter,
-    typeFilters,
-    classFilters,
+    itemFilters,
     searchFilter,
   })
 
@@ -101,16 +117,25 @@ export default function ItemGrid({
     tempEpicItems = _.orderBy(tempEpicItems, ['gold.total'], ['asc'])
     tempLegendaryItems = _.orderBy(tempLegendaryItems, ['gold.total'], ['asc'])
     tempMythicItems = _.orderBy(tempMythicItems, ['gold.total'], ['asc'])
+
+    // Set initial items
+    setInitialBasicItems(tempBasicItems)
+    setInitialEpicItems(tempEpicItems)
+    setInitialLegendaryItems(tempLegendaryItems)
+    setInitialMythicItems(tempMythicItems)
+
     setBasicItems(tempBasicItems)
     setEpicItems(tempEpicItems)
     setLegendaryItems(tempLegendaryItems)
     setMythicItems(tempMythicItems)
 
     // Set the count of each rarity
-    setBasicItemsCount(tempBasicItems.length)
-    setEpicItemsCount(tempEpicItems.length)
-    setLegendaryItemsCount(tempLegendaryItems.length)
-    setMythicItemsCount(tempMythicItems.length)
+    batch(() => {
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: tempBasicItems.length }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: tempEpicItems.length }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: tempLegendaryItems.length }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: tempMythicItems.length }))
+    })
 
     // Initialize itemRefArray
     let totalItemsAmount =
@@ -143,49 +168,78 @@ export default function ItemGrid({
       console.error('No items array provided to reduceItems')
       return
     }
-    // Create an array of filter methods to filter the items
-    let filterMethods: Array<Function> = [
-      (item: ItemsSchema) => includesCategory(item, categories),
-      (item: ItemsSchema) => isFromChampionClass(item, championClass),
-      (item: ItemsSchema) => matchesSearchQuery(item, searchFilter),
-      (item: ItemsSchema) => isInStore(item),
-    ]
 
-    let filteredItems = Object.values(items).filter((item) => {
-      // If any filter method returns false, the item is filtered out
-      return filterMethods.every((method) => method(item))
-    })
+    let filteredItems: ItemsSchema[]
 
-    let { visibleItems: basicVisibleItems, count: basicCount } = markItemsAsVisible(
-      basicItems,
-      filteredItems,
-      goldOrderDirection
-    )
-    let { visibleItems: epicVisibleItems, count: epicCount } = markItemsAsVisible(
-      epicItems,
-      filteredItems,
-      goldOrderDirection
-    )
-    let { visibleItems: legendaryVisibleItems, count: legendaryCount } = markItemsAsVisible(
-      legendaryItems,
-      filteredItems,
-      goldOrderDirection
-    )
-    let { visibleItems: mythicVisibleItems, count: mythicCount } = markItemsAsVisible(
-      mythicItems,
-      filteredItems,
-      goldOrderDirection
-    )
+    let basicVisibleItems: Array<ItemsSchema> = []
+    let epicVisibleItems: Array<ItemsSchema> = []
+    let legendaryVisibleItems: Array<ItemsSchema> = []
+    let mythicVisibleItems: Array<ItemsSchema> = []
+
+    let basicVisibleItemsCount = 0
+    let epicVisibleItemsCount = 0
+    let legendaryVisibleItemsCount = 0
+    let mythicVisibleItemsCount = 0
+
+    // If no filters are selected, return all items
+    const hasCategoryAll = includesCategoryAll(categories)
+    if (
+      hasCategoryAll &&
+      championClass === ChampionClass.None &&
+      searchFilter === '' &&
+      goldOrderDirection === SortDirection.Asc
+    ) {
+      filteredItems = items
+      console.log('No filters selected')
+      basicVisibleItems = initialBasicItems
+      epicVisibleItems = initialEpicItems
+      legendaryVisibleItems = initialLegendaryItems
+      mythicVisibleItems = initialMythicItems
+
+      basicVisibleItemsCount = initialBasicItems.length
+      epicVisibleItemsCount = initialEpicItems.length
+      legendaryVisibleItemsCount = initialLegendaryItems.length
+      mythicVisibleItemsCount = initialMythicItems.length
+    } else {
+      // Create an array of filter methods to filter the items
+      let filterMethods: Array<Function> = [
+        (item: ItemsSchema) => includesCategory(item, categories),
+        (item: ItemsSchema) => isFromChampionClass(item, championClass),
+        (item: ItemsSchema) => matchesSearchQuery(item, searchFilter),
+        (item: ItemsSchema) => isInStore(item),
+      ]
+
+      filteredItems = Object.values(items).filter((item) => {
+        // If any filter method returns false, the item is filtered out
+        return filterMethods.every((method) => method(item))
+      })
+      let basicResults = markItemsAsVisible(basicItems, filteredItems, goldOrderDirection)
+      let epicResults = markItemsAsVisible(epicItems, filteredItems, goldOrderDirection)
+      let legendaryResults = markItemsAsVisible(legendaryItems, filteredItems, goldOrderDirection)
+      let mythicResults = markItemsAsVisible(mythicItems, filteredItems, goldOrderDirection)
+
+      basicVisibleItems = basicResults.visibleItems
+      epicVisibleItems = epicResults.visibleItems
+      legendaryVisibleItems = legendaryResults.visibleItems
+      mythicVisibleItems = mythicResults.visibleItems
+
+      basicVisibleItemsCount = basicResults.count
+      epicVisibleItemsCount = epicResults.count
+      legendaryVisibleItemsCount = legendaryResults.count
+      mythicVisibleItemsCount = mythicResults.count
+    }
 
     setBasicItems(basicVisibleItems)
     setEpicItems(epicVisibleItems)
     setLegendaryItems(legendaryVisibleItems)
     setMythicItems(mythicVisibleItems)
 
-    setBasicItemsCount(basicCount)
-    setEpicItemsCount(epicCount)
-    setLegendaryItemsCount(legendaryCount)
-    setMythicItemsCount(mythicCount)
+    batch(() => {
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: basicVisibleItemsCount }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: epicVisibleItemsCount }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: legendaryVisibleItemsCount }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: mythicVisibleItemsCount }))
+    })
 
     // Check if the searchFilter has changed
     if (previousValues.current.searchFilter !== searchFilter) {
@@ -202,7 +256,6 @@ export default function ItemGrid({
     // Data initialization
     if (items && !dataInitialized) {
       setDataInitialized(true)
-      console.log('Initializing data...')
       initializeItems()
     }
     // Data filters
@@ -210,217 +263,167 @@ export default function ItemGrid({
       // Return if no changes were made to the filters
       if (
         previousValues.current.goldOrderDirection === goldOrderDirection &&
-        previousValues.current.typeFilters === typeFilters &&
-        previousValues.current.classFilters === classFilters &&
-        previousValues.current.searchFilter === searchFilter
+        previousValues.current.searchFilter === searchFilter &&
+        previousValues.current.itemFilters === itemFilters
       )
         return
       else {
         // Reduce items
-        const activeCategories = getActiveCategories(typeFilters)
-        const activeChampionClass = getActiveChampionClass(classFilters)
-
-        reduceItems(activeCategories, activeChampionClass)
+        const activeCategories = getActiveCategories(itemFilters.types)
+        reduceItems(activeCategories, itemFilters.class)
 
         // Set previous values
         previousValues.current.goldOrderDirection = goldOrderDirection
-        previousValues.current.typeFilters = typeFilters
-        previousValues.current.classFilters = classFilters
         previousValues.current.searchFilter = searchFilter
+        previousValues.current.itemFilters = itemFilters
       }
     }
-  }, [items, goldOrderDirection, rarityFilter, typeFilters, classFilters, searchFilter])
+  }, [items, goldOrderDirection, itemFilters, searchFilter])
+
+  // Listen for changes in itemPicker
+  useEffect(() => {
+    if (itemPicker) {
+      handleScrollShow({ target: itemGridRef.current })
+    }
+  }, [itemPicker])
+
+  // Handle scroll to bottom
+  const handleScroll = (e: any) => {
+    const div = e.target as HTMLDivElement
+    topRef.current = div.scrollTop
+    bottomRef.current = div.scrollTop + div.clientHeight
+    console.log(topRef.current)
+    console.log(bottomRef.current)
+    const bottom = Math.abs(div.scrollHeight - div.clientHeight - div.scrollTop) < 1
+    if (bottom) {
+      setScrollToBottom(true)
+    } else {
+      setScrollToBottom(false)
+    }
+  }
+
+  // Handle scroll show if the item grid requires a scroll bar
+  const handleScrollShow = (e: any) => {
+    const div = e.target as HTMLDivElement
+    const hasVerticalScrollbar = totalHeight > div.clientHeight
+    if (hasVerticalScrollbar) {
+      setShowScrollToBottom(true)
+    } else {
+      setShowScrollToBottom(false)
+    }
+  }
+
+  useEffect(() => {
+    itemGridRef.current?.addEventListener('scroll', handleScroll)
+
+    return () => {
+      itemGridRef.current?.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   return (
-    <SimpleBar
-      className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
-      scrollableNodeProps={{ ref: itemGridRef }}
-    >
-      {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
-        <Fragment key="noItems">
-          <motion.h3
-            variants={titleVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionVariant}
+    <>
+      <AnimatePresence>
+        {showScrollToBottom && !scrollToBottom && (
+          <motion.div
             className={cx(
-              'mb-2 text-center font-body font-semibold text-gray-200',
-              rarityFilter !== Rarity.Epic && 'mt-6'
+              'absolute bottom-4 left-0 right-4 h-16 z-10 pointer-events-none',
+              css`
+                background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 1) 100%);
+              `
             )}
-          >
-            No items match your filters.
-          </motion.h3>
-          <motion.img
-            variants={titleVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionVariant}
-            src="icons/poro_question.png"
-            alt="Poro question mark"
-            className="mx-auto h-32 w-32 brightness-200"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           />
-        </Fragment>
-      )}
-      {basicItemsCount > 0 &&
-        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Basic ? (
-          <React.Fragment key="basicContainer">
-            <RarityTitle
+        )}
+      </AnimatePresence>
+      <SimpleBar
+        className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
+        scrollableNodeProps={{ ref: itemGridRef }}
+      >
+        <AnimatePresence>
+          {hoveredItem && (
+            <motion.div
+              className={cx('absolute inset-0 w-full h-full z-[5] pointer-events-none bg-black/25')}
+              variants={overlayVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              transition={easeInOutExpo}
+            ></motion.div>
+          )}
+        </AnimatePresence>
+        <div id="item-virtual-container">
+          {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
+            <Fragment key="noItems">
+              <motion.h3
+                variants={titleVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={transitionVariant}
+                className={cx(
+                  'mb-2 text-center font-body font-semibold text-gray-200',
+                  itemFilters.rarity !== Rarity.Epic && 'mt-6'
+                )}
+              >
+                No items match your filters.
+              </motion.h3>
+              <motion.img
+                variants={titleVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={transitionVariant}
+                src="icons/poro_question.png"
+                alt="Poro question mark"
+                className="mx-auto h-32 w-32 brightness-200"
+              />
+            </Fragment>
+          )}
+          {basicItemsCount > 0 && (
+            <ItemSection
+              items={basicItems}
               rarity={Rarity.Basic}
-              variants={titleVariants}
-              transition={transitionVariant}
               tier={1}
-              backgroundColor="bg-slate-900/25"
-              fallbackBackgroundColor="bg-slate-900"
-            />
-            {/* Loop through the items object */}
-            <ItemContainer
-              gridKey="basicGrid"
-              itemsCombined={basicItems}
-              setItemsCombined={setBasicItems}
-              transition={transitionVariant}
               itemRefArray={itemRefArray}
+              itemGridRef={itemGridRef}
             />
-          </React.Fragment>
-        ) : (
-          <motion.p
-            variants={titleVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionVariant}
-            key="basicItemsHidden"
-            className="mb-2 cursor-pointer italic text-gray-400 underline-offset-1 hover:underline"
-            onClick={() => setRarityFilter(Rarity.Basic)}
-          >
-            {basicItemsCount} basic {getPluralFromItems(basicItemsCount)} hidden.
-          </motion.p>
-        ))}
+          )}
 
-      {epicItemsCount > 0 &&
-        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Epic ? (
-          <React.Fragment key="epicContainer">
-            <RarityTitle
+          {epicItemsCount > 0 && (
+            <ItemSection
+              items={epicItems}
               rarity={Rarity.Epic}
-              variants={titleVariants}
-              transition={transitionVariant}
               tier={2}
-              backgroundColor="bg-purple-800/25"
-              fallbackBackgroundColor="bg-purple-800"
-            />
-            {/* Loop through the epic items */}
-            <ItemContainer
-              gridKey="epicGrid"
-              itemsCombined={epicItems}
-              setItemsCombined={setEpicItems}
-              transition={transitionVariant}
               itemRefArray={itemRefArray}
+              itemGridRef={itemGridRef}
             />
-          </React.Fragment>
-        ) : (
-          <motion.p
-            variants={titleVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionVariant}
-            key="epicItemsHidden"
-            className="mb-2 cursor-pointer italic text-gray-400 decoration-purple-700 underline-offset-1 hover:underline"
-            onClick={() => setRarityFilter(Rarity.Epic)}
-          >
-            {epicItemsCount} <span className="text-purple-500">epic</span> {getPluralFromItems(epicItemsCount)} hidden.
-          </motion.p>
-        ))}
+          )}
 
-      {legendaryItemsCount > 0 &&
-        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Legendary ? (
-          <React.Fragment key="legendaryContainer">
-            <RarityTitle
+          {legendaryItemsCount > 0 && (
+            <ItemSection
+              items={legendaryItems}
               rarity={Rarity.Legendary}
-              variants={titleVariants}
-              transition={transitionVariant}
               tier={3}
-              backgroundColor="bg-red-800/25"
-              fallbackBackgroundColor="bg-red-800"
-            />
-            {/* Loop through the items object */}
-            <ItemContainer
-              gridKey="legendaryGrid"
-              itemsCombined={legendaryItems}
-              setItemsCombined={setLegendaryItems}
-              transition={transitionVariant}
               itemRefArray={itemRefArray}
+              itemGridRef={itemGridRef}
             />
-          </React.Fragment>
-        ) : (
-          <motion.p
-            variants={titleVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionVariant}
-            key="legendaryItemsHidden"
-            className="mb-2 cursor-pointer italic text-gray-400 decoration-red-800 underline-offset-1 hover:underline"
-            onClick={() => setRarityFilter(Rarity.Legendary)}
-          >
-            {legendaryItemsCount} <span className="text-red-600">legendary</span>{' '}
-            {getPluralFromItems(legendaryItemsCount)} hidden.
-          </motion.p>
-        ))}
+          )}
 
-      {mythicItemsCount > 0 &&
-        (rarityFilter === Rarity.Empty || rarityFilter === Rarity.Mythic ? (
-          <React.Fragment key="mythicContainer">
-            <RarityTitle
+          {mythicItemsCount > 0 && (
+            <ItemSection
+              items={mythicItems}
               rarity={Rarity.Mythic}
-              variants={titleVariants}
-              transition={transitionVariant}
               tier={3}
-              backgroundColor={css`
-                background: radial-gradient(rgb(234 179 8 / 25%), rgb(161 98 7 / 25%));
-                background-size: 400% 400%;
-                animation: Glow 3s ease infinite;
-
-                @keyframes Glow {
-                  0% {
-                    background-position: 50% 0;
-                  }
-                  50% {
-                    background-position: 50% 100%;
-                  }
-                  100% {
-                    background-position: 50% 0;
-                  }
-                }
-              `}
-              fallbackBackgroundColor="bg-orange-600"
-            />
-            {/* Loop through the items object */}
-            <ItemContainer
-              gridKey="mythicGrid"
-              itemsCombined={mythicItems}
-              setItemsCombined={setMythicItems}
-              transition={transitionVariant}
-              mythic={true}
               itemRefArray={itemRefArray}
+              itemGridRef={itemGridRef}
             />
-          </React.Fragment>
-        ) : (
-          <motion.p
-            variants={titleVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionVariant}
-            key="mythicItemsHidden"
-            className="mb-2 cursor-pointer italic text-gray-400 decoration-orange-800 underline-offset-1 hover:underline"
-            onClick={() => setRarityFilter(Rarity.Mythic)}
-          >
-            {mythicItemsCount} <span className="text-orange-600">mythic</span> {getPluralFromItems(mythicItemsCount)}{' '}
-            hidden.
-          </motion.p>
-        ))}
-    </SimpleBar>
+          )}
+        </div>
+      </SimpleBar>
+    </>
   )
 }

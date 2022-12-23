@@ -1,27 +1,25 @@
+import { selectItemFilters, setItemFiltersClass } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { ClassFilter, FilterByClassState } from 'types/FilterProps'
+import { useSelector } from 'react-redux'
+import { ChampionClass } from 'types/Items'
 
-export default function FilterItemsByClass({ filterItems, setFilterItems }: FilterByClassState) {
-  const handleClick = (itemClicked: ClassFilter) => {
-    // Create a temporary array that is a clone of the filterItems array
-    const tempArray = [...filterItems]
-    // Set isActive to true for the clicked item, and false for all others
-    tempArray.forEach((item) => {
-      if (item.class === itemClicked.class) {
-        item.isActive = !item.isActive
-      } else {
-        item.isActive = false
-      }
-    })
-    // If no items are active, set the first item to active
-    if (!tempArray.some((item) => item.isActive)) {
-      tempArray[0].isActive = true
+import { ClassFilters } from './FilterComponents'
+
+export default function FilterItemsByClass() {
+  const dispatch = useAppDispatch()
+  const itemFilters = useSelector(selectItemFilters)
+
+  const handleClick = (itemClicked: ChampionClass) => {
+    if (itemFilters.class !== itemClicked) {
+      dispatch(setItemFiltersClass(itemClicked))
+    } else {
+      dispatch(setItemFiltersClass(ChampionClass.None))
     }
-
-    setFilterItems(tempArray)
   }
+
   return (
     <div className="flex select-none flex-col">
       <div className="xl:hidden">
@@ -30,18 +28,12 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
           id="filterItems"
           name="filterItems"
           className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-          defaultValue={filterItems.find((item) => item.isActive)?.name}
+          defaultValue={itemFilters.class}
           onChange={(e) => {
-            const newFilterItems = filterItems.map((item) => {
-              if (item.name === e.target.value) {
-                return { ...item, isActive: true }
-              }
-              return { ...item, isActive: false }
-            })
-            setFilterItems(newFilterItems)
+            dispatch(setItemFiltersClass(e.target.value as ChampionClass))
           }}
         >
-          {filterItems.map((item) => (
+          {Object.values(ClassFilters).map((item) => (
             <option key={item.name}>{item.name}</option>
           ))}
         </select>
@@ -49,7 +41,7 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
       <div className="hidden flex-col xl:flex">
         <div className=" border-b border-slate-800">
           <nav className="flex flex-row justify-around space-x-1" aria-label="Tabs">
-            {filterItems.map((item) => {
+            {Object.entries(ClassFilters).map(([championClass, item]) => {
               const Icon = item.icon
               return (
                 <motion.button
@@ -60,7 +52,7 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
                   title={item.name}
                   className={cx(
                     'group inline-flex flex-col items-center justify-center py-2 px-1 text-sm font-medium relative',
-                    item.isActive &&
+                    itemFilters.class === championClass &&
                       css`
                         &::before {
                           content: '';
@@ -72,23 +64,23 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
                           background: radial-gradient(circle, rgba(199, 169, 110, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
                           background-size: 100% 200%;
                           background-position: 0 100%;
-                          animation: scroll 0.6s cubic-bezier(0.87, 0, 0.13, 1) forwards;
-                          @keyframes scroll {
-                            0% {
-                              background-position: 0 100%;
-                              opacity: 0;
-                            }
-                            100% {
-                              background-position: 0 0%;
-                              opacity: 1;
-                            }
+                          animation: scroll-down 0.6s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+                        }
+                        @keyframes scroll-down {
+                          0% {
+                            background-position: 0 100%;
+                            opacity: 0;
+                          }
+                          100% {
+                            background-position: 0 0%;
+                            opacity: 1;
                           }
                         }
                       `
                   )}
-                  onClick={() => handleClick(item)}
+                  onClick={() => handleClick(championClass as ChampionClass)}
                 >
-                  {item.isActive ? (
+                  {itemFilters.class === championClass ? (
                     <motion.div
                       layoutId="filter-class-underline"
                       className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
@@ -96,9 +88,9 @@ export default function FilterItemsByClass({ filterItems, setFilterItems }: Filt
                   ) : null}
                   <Icon
                     className={cx(
-                      item.isActive ? 'fill-league-gold' : 'fill-gray-600',
+                      itemFilters.class === championClass ? 'fill-league-gold' : 'fill-gray-600',
                       'flex-shrink-0 transition duration-100 ease-out motion-reduce:transition-none group-hover:fill-gray-400',
-                      item.name === 'All Classes' ? 'h-4 w-auto' : 'h-4 w-4'
+                      championClass === 'All Classes' ? 'h-4 w-auto' : 'h-4 w-4'
                     )}
                   />
                 </motion.button>

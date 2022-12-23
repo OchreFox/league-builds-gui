@@ -1,0 +1,4 @@
+.simplebar-content {
+  /* Fix for the hover item overlay */
+  position: relative;
+}

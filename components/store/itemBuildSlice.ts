@@ -1,10 +1,13 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
+import { AppState } from 'types/App'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Block, BlockState, ItemBuild } from '../../types/Build'
 import { ChampionsSchema, DefaultChampionSchema } from '../../types/Champions'
 import { RootState } from './store'
+
+const hydrate = createAction<AppState>(HYDRATE)
 
 const initialState: ItemBuild = {
   title: '',
@@ -77,13 +80,13 @@ export const itemBuildSlice = createSlice({
       state.blocks[index].type = type
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(hydrate, (state, action) => {
       return {
         ...state,
-        ...action.payload.itemBuild,
+        ...action.payload,
       }
-    },
+    })
   },
 })
 

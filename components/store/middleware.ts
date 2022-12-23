@@ -1,9 +1,7 @@
 import { addListener, createListenerMiddleware } from '@reduxjs/toolkit'
 import type { TypedAddListener, TypedStartListening } from '@reduxjs/toolkit'
-import { BlockState } from 'types/Build'
-import { v4 as uuidv4 } from 'uuid'
 
-import { addBlock, removeBlock, setBlocks, updateBlock } from './itemBuildSlice'
+import { removeBlock, setBlocks, updateBlock } from './itemBuildSlice'
 import { AppDispatch, RootState } from './store'
 
 export const listenerMiddleware = createListenerMiddleware()

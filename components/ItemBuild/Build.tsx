@@ -17,10 +17,14 @@ const Build = () => {
   const { blocks } = useSelector(selectItemBuild)
   const itemGridRef = createRef<HTMLDivElement>()
 
+  const handleClick = useCallback(() => {
+    dispatch(addEmptyBlock())
+  }, [])
+
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLButtonElement>) => {
       e.preventDefault()
-      const item: ItemsSchema = JSON.parse(e.dataTransfer.getData('text'))?.item
+      const item: ItemsSchema = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
       let block: BlockState = {
         id: uuidv4(),
         type: 'New Section',
@@ -44,7 +48,7 @@ const Build = () => {
         <div className="flex flex-col m-4">
           <AnimatePresence>
             {blocks.map((block) => (
-              <BuildSection key={block.id} id={block.id} />
+              <BuildSection key={block.id + '-build-item'} id={block.id} />
             ))}
             <PrimaryButton
               label="Add Section"
@@ -52,10 +56,8 @@ const Build = () => {
               labelReactive="Added"
               iconReactive="tabler:check"
               dropReactive={true}
-              handleClick={() => {
-                dispatch(addEmptyBlock())
-              }}
-              handleDrop={(e) => handleDrop(e)}
+              handleClick={handleClick}
+              handleDrop={handleDrop}
             />
           </AnimatePresence>
         </div>

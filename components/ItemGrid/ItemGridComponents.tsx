@@ -1,7 +1,11 @@
+import { css } from '@emotion/css'
+import { Variants } from 'framer-motion'
 import fuzzy from 'fuzzy'
 import _ from 'lodash'
-import { ClassFilter, FilterByTypeProps, SortDirection } from 'types/FilterProps'
+import { Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
+
+import { ItemType, TypeFilters } from 'components/ItemFilters/FilterComponents'
 
 /**
  * Function to determine if an item includes a category from an array of categories
@@ -20,6 +24,10 @@ export const includesCategory = (item: ItemsSchema, activeCategories: Array<Cate
       (categoryString) => categoryArray.includes(categoryString) || categoryArray.includes(Category.All)
     )
   )
+}
+
+export const includesCategoryAll = (activeCategories: Array<Category[]>) => {
+  return activeCategories.flat().includes(Category.All)
 }
 
 /**
@@ -81,27 +89,8 @@ export const isInStore = (item: ItemsSchema) => {
  * Function to get the active categories
  * @returns Array<Category[]> - Active categories (or types) as an array of arrays
  */
-export const getActiveCategories = (typeFilters: Array<FilterByTypeProps>): Array<Category[]> => {
-  let activeCategories: Array<Category[]> = []
-  typeFilters.forEach((filter) => {
-    if (filter.isActive) {
-      activeCategories.push([...filter.categories])
-    }
-  })
-  return activeCategories
-}
-
-/**
- * Function to get the active champion class
- * @returns ChampionClass - Active champion class
- * @returns ChampionClass.None - If no champion class is active
- */
-export const getActiveChampionClass = (classFilters: ClassFilter[]): ChampionClass => {
-  let activeClass = classFilters.filter((filter) => filter.isActive)[0]
-  if (activeClass) {
-    return activeClass.class
-  }
-  return ChampionClass.None
+export const getActiveCategories = (typeFilters: Array<ItemType>): Array<Category[]> => {
+  return typeFilters.map((typeFilter) => TypeFilters[typeFilter].categories)
 }
 
 export function getPluralFromItems(count: number): string
@@ -117,6 +106,62 @@ export function getPluralFromItems(x: any): string {
     return x.length === 1 ? 'item' : 'items'
   }
   return x === 1 ? 'item' : 'items'
+}
+
+export const itemSectionConstants: {
+  [key in Rarity]: {
+    backgroundColor: string
+    fallbackBackgroundColor: string
+    textColor: string
+    decorationColor: string
+  }
+} = {
+  [Rarity.Empty]: {
+    backgroundColor: 'bg-transparent',
+    fallbackBackgroundColor: 'bg-transparent',
+    textColor: 'text-white',
+    decorationColor: 'decoration-white',
+  },
+  [Rarity.Basic]: {
+    backgroundColor: 'bg-slate-900/25',
+    fallbackBackgroundColor: 'bg-slate-900',
+    textColor: '',
+    decorationColor: '',
+  },
+  [Rarity.Epic]: {
+    backgroundColor: 'bg-cyan-300/25',
+    fallbackBackgroundColor: 'bg-cyan-700',
+    textColor: 'text-cyan-500',
+    decorationColor: 'decoration-cyan-700',
+  },
+  [Rarity.Legendary]: {
+    backgroundColor: 'bg-red-800/50',
+    fallbackBackgroundColor: 'bg-red-800',
+    decorationColor: 'decoration-red-800',
+    textColor: 'text-red-600',
+  },
+  [Rarity.Mythic]: {
+    backgroundColor: css`
+      background: radial-gradient(rgba(168, 85, 247, 0.25), rgba(126, 34, 206, 0.25));
+      background-size: 400% 400%;
+      animation: Glow 3s ease infinite;
+
+      @keyframes Glow {
+        0% {
+          background-position: 50% 0;
+        }
+        50% {
+          background-position: 50% 100%;
+        }
+        100% {
+          background-position: 50% 0;
+        }
+      }
+    `,
+    fallbackBackgroundColor: 'bg-purple-500',
+    decorationColor: 'decoration-purple-500',
+    textColor: 'text-purple-500',
+  },
 }
 
 export const gridContainerVariants = {
@@ -153,4 +198,13 @@ export const transitionVariant = {
   type: 'tween',
   ease: [0.87, 0, 0.13, 1],
   duration: 0.4,
+}
+
+export const overlayVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+  },
 }

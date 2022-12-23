@@ -1,26 +1,29 @@
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import React, { useContext } from 'react'
+import React, { forwardRef } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Rarity } from '../types/FilterProps'
-import { selectPotatoMode } from './store/potatoModeSlice'
+import { Rarity } from '../../types/FilterProps'
+import { selectPotatoMode } from '../store/potatoModeSlice'
 
-export const RarityTitle = ({
-  rarity,
-  transition,
-  variants,
-  tier,
-  backgroundColor,
-  fallbackBackgroundColor,
-}: {
-  rarity: Rarity
-  transition: any
-  variants: any
-  tier: number
-  backgroundColor?: string
-  fallbackBackgroundColor?: string
-}) => {
+export const RarityTitleWrapper = (
+  {
+    rarity,
+    transition,
+    variants,
+    tier,
+    backgroundColor,
+    fallbackBackgroundColor,
+  }: {
+    rarity: Rarity
+    transition: any
+    variants: any
+    tier: number
+    backgroundColor?: string
+    fallbackBackgroundColor?: string
+  },
+  ref: React.Ref<HTMLDivElement> | undefined
+) => {
   const potatoMode = useSelector(selectPotatoMode)
 
   const getBackgroundColor = () => {
@@ -38,6 +41,7 @@ export const RarityTitle = ({
   return (
     <motion.h3
       key={rarity + 'Label'}
+      ref={ref}
       variants={variants}
       initial="enter"
       animate="center"
@@ -54,3 +58,6 @@ export const RarityTitle = ({
     </motion.h3>
   )
 }
+
+export const RarityTitle = forwardRef(RarityTitleWrapper)
+export default RarityTitle

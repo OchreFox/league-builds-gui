@@ -2,6 +2,7 @@ import { Dispatch, MutableRefObject, RefObject, SetStateAction } from 'react'
 
 import { Category, ChampionClass, DraggableItem, ItemsSchema } from './Items'
 
+// Auxiliary types
 export type ItemRefArrayType = MutableRefObject<
   {
     itemId: number
@@ -9,52 +10,12 @@ export type ItemRefArrayType = MutableRefObject<
   }[]
 >
 
-export interface ClassFilter {
-  name: string
-  isActive: boolean
-  icon: any
-  class: ChampionClass
-}
-
-export type FilterByTypeProps = {
-  name: string
-  isActive: boolean
-  icon: string
-  categories: Array<Category>
-}
-export type FilterByTypeState = {
-  filterItems: FilterByTypeProps[]
-  setFilterItems: Dispatch<SetStateAction<FilterByTypeProps[]>>
-}
-
-export type FilterByClassState = {
-  filterItems: ClassFilter[]
-  setFilterItems: Dispatch<SetStateAction<ClassFilter[]>>
-}
-
-export type ItemGridProps = {
-  goldOrderDirection: SortDirection
-  rarityFilter: Rarity
-  setRarityFilter: Dispatch<SetStateAction<Rarity>>
-  typeFilters: FilterByTypeProps[]
-  classFilters: ClassFilter[]
-  searchFilter: string
-  setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
-  itemRefArray: ItemRefArrayType
-  itemGridRef: RefObject<HTMLDivElement>
-}
-
 export enum Rarity {
   Empty = 'All',
   Basic = 'Basic',
   Epic = 'Epic',
   Legendary = 'Legendary',
   Mythic = 'Mythic',
-}
-
-export type FilterByRarityState = {
-  rarityFilter: Rarity
-  setRarityFilter: Dispatch<SetStateAction<Rarity>>
 }
 
 export type SortByTier = {
@@ -66,34 +27,55 @@ export enum SortDirection {
   Desc = 'desc',
 }
 
+// Filters
+export interface ClassFilter {
+  name: string
+  icon: any
+}
+
+export interface TypeFilter {
+  name: string
+  categories: Category[]
+  icon: string
+}
+
+export type ItemGridProps = {
+  goldOrderDirection: SortDirection
+  searchFilter: string
+  setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
+  itemRefArray: ItemRefArrayType
+  itemGridRef: RefObject<HTMLDivElement>
+}
+
 export type FilterBySearchState = {
   searchTerm: string
   setSearchTerm: Dispatch<SetStateAction<string>>
   autocompleteResults: Fuzzysort.KeysResults<ItemsSchema> | undefined
 }
 
+export interface ItemSectionState {
+  items: ItemsSchema[]
+  rarity: Rarity
+  tier: number
+  itemRefArray: ItemRefArrayType
+  itemGridRef: RefObject<HTMLDivElement>
+}
+
 export type ItemContainerState = {
   gridKey: string
   itemsCombined: DraggableItem[]
-  setItemsCombined: Dispatch<SetStateAction<DraggableItem[]>>
-  transition: any
-  mythic: boolean
+  rarity: Rarity
   itemRefArray: ItemRefArrayType
+  itemGridRef: RefObject<HTMLDivElement>
 }
 
-export interface ItemState {
+export interface StandardItemState {
   item: ItemsSchema
-  isMythic: boolean
-}
-
-export interface StandardItemState extends ItemState {
-  transition: any
   itemRefArray: ItemRefArrayType
+  itemGridRef: RefObject<HTMLDivElement>
 }
 
 export type ItemBuildTreeProps = {
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
-  classFilters: ClassFilter[]
-  setClassFilters: Dispatch<SetStateAction<ClassFilter[]>>
 }

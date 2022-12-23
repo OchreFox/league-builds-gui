@@ -8,7 +8,7 @@ import {
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
 import ChampionPickerCard from 'components/ChampionPicker/ChampionPickerCard'
@@ -26,9 +26,11 @@ export const BuildMaker = () => {
   const fetchChampionSplash = async (champion: ChampionsSchema) => {
     dispatch(setChampionPickerIsLoading(true))
     const response = await getChampionSplash(champion.id)
-    dispatch(updateSelectedChampion({ ...champion, ...response }))
-    dispatch(setChampionPickerHover(false))
-    dispatch(setChampionPickerIsLoading(false))
+    batch(() => {
+      dispatch(updateSelectedChampion({ ...champion, ...response }))
+      dispatch(setChampionPickerHover(false))
+      dispatch(setChampionPickerIsLoading(false))
+    })
   }
 
   useEffect(() => {

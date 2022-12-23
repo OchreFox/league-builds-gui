@@ -1,5 +1,7 @@
 import { css, cx } from '@emotion/css'
-import styled from '@emotion/styled'
+import _ from 'lodash'
+import { RefObject } from 'react'
+import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
 export type UnorderedListProps = {
@@ -12,6 +14,53 @@ export type ListItemProps = {
   filteredBuildTree: ItemsSchema[]
   filteredChildren: ItemsSchema[]
   className?: string
+}
+
+export function scrollIntoItem(
+  item: ItemsSchema,
+  itemRefArray: ItemRefArrayType,
+  itemGridRef: RefObject<HTMLDivElement>
+) {
+  const itemIndex = _.findIndex(itemRefArray.current, (x) => x.itemId === item.id)
+  if (itemIndex > -1) {
+    // console.log('Scrolling to item ' + item.name + ' at index ', itemIndex)
+    const itemRef = itemRefArray.current[itemIndex].ref.current
+    if (itemRef && itemGridRef.current) {
+      // Scroll to item in itemGridRef
+      itemGridRef.current.scrollTo({
+        top: itemRef.offsetTop - 100,
+        behavior: 'smooth',
+      })
+    }
+  }
+}
+
+// Get recursive list of items from a base item
+// Search in item.from array
+export const getItemBuildTree = (
+  item: ItemsSchema,
+  items: ItemsSchema[],
+  depth: number = 1,
+  buildTree: ItemsSchema[] = [],
+  order: number = 1
+): ItemsSchema[] => {
+  if (depth > 5) {
+    return buildTree
+  }
+  if (!items) {
+    return []
+  }
+  if (item.from) {
+    item.from.forEach((fromItemId) => {
+      const fromItem = Object.values(items).find((x) => x.id === fromItemId)
+      if (!fromItem) {
+        return
+      }
+      buildTree.push({ ...fromItem, depth, instance: order++ })
+      getItemBuildTree(fromItem, items, depth + 1, buildTree, order)
+    })
+  }
+  return buildTree
 }
 
 // Function to return the max depth of a tree
@@ -92,7 +141,7 @@ export const dynamicListItemStyles = ({ depth, buildTree, filteredBuildTree, fil
         &:first-of-type {
           &:after {
             transform: translateY(50%);
-            height: 80%;
+            height: 100%;
           }
         }
         &:last-of-type {
@@ -137,7 +186,7 @@ export const dynamicListItemStyles = ({ depth, buildTree, filteredBuildTree, fil
         &:last-of-type {
           &:after {
             transform: translateY(-50%);
-            height: 80%;
+            height: 60%;
           }
         }
       `,

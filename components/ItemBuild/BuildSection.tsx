@@ -8,11 +8,11 @@ import { Dialog, Transition } from '@headlessui/react'
 import dragHandleLine from '@iconify/icons-clarity/drag-handle-line'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux'
 import { BlockState } from 'types/Build'
-import { ItemState } from 'types/FilterProps'
+import { ItemsSchema } from 'types/Items'
 
 import RiotMagicParticles from 'components/ChampionPicker/RiotMagicParticles'
 
@@ -40,7 +40,6 @@ const buildVariant = {
 }
 
 export const BuildSection = ({ id }: { id: string }) => {
-  const { items } = useItems()
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const { deletePopup } = useSelector(selectBuild)
@@ -73,6 +72,10 @@ export const BuildSection = ({ id }: { id: string }) => {
       },
     ],
   })
+
+  const closePopup = useCallback(() => {
+    dispatch(setBuildDeletePopup(null))
+  }, [])
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -123,10 +126,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           autoComplete="off"
           value={block?.type}
           onChange={(e) => dispatch(updateBlockType({ id: block.id, type: e.target.value }))}
-          onDragOver={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-          }}
+          onDrop={(e) => e.preventDefault()}
         />
         <button
           className="group right-0 flex items-center pl-2 pr-1 border-b-2 border-yellow-900 bg-gray-700 hover:bg-brand-dark transition-colors duration-200 ease-out"
@@ -140,7 +140,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           />
         </button>
         <Transition.Root show={deletePopup === block.id} as={Fragment}>
-          <Dialog onClose={() => dispatch(setBuildDeletePopup(null))}>
+          <Dialog onClose={closePopup}>
             <Transition.Child
               as={Fragment}
               enter="ease-out-expo duration-300"
@@ -185,10 +185,10 @@ export const BuildSection = ({ id }: { id: string }) => {
           e.preventDefault()
           e.stopPropagation()
           setHover(false)
-          const data = JSON.parse(e.dataTransfer.getData('text')) as ItemState
+          const data = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
           console.log(data)
           if (data) {
-            dispatch(addItemToBlock({ blockId: block.id, itemId: data.item.id }))
+            dispatch(addItemToBlock({ blockId: block.id, itemId: data.id }))
           }
         }}
       >
@@ -245,7 +245,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           ) : (
             block.items.map((item, index) => (
               <BuildItem
-                key={item.id + '-' + index}
+                key={item.id + '-build-section-item'}
                 itemId={parseInt(item.id, 10)}
                 itemUid={item.uid}
                 blockId={block.id}

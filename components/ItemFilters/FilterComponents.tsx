@@ -5,179 +5,172 @@ import Mage from 'public/icons/champion-class/mage.svg'
 import Marksman from 'public/icons/champion-class/marksman.svg'
 import Support from 'public/icons/champion-class/support.svg'
 import Tank from 'public/icons/champion-class/tank.svg'
-import { ClassFilter } from 'types/FilterProps'
+import { ClassFilter, TypeFilter } from 'types/FilterProps'
 import { Category, ChampionClass } from 'types/Items'
 
-export const defaultClassFilters: ClassFilter[] = [
-  {
+export const ClassFilters: {
+  [key in ChampionClass]: ClassFilter
+} = {
+  [ChampionClass.None]: {
     name: 'All Classes',
-    isActive: true,
     icon: AllClasses,
-    class: ChampionClass.None,
   },
-  {
+  [ChampionClass.Fighter]: {
     name: 'Fighter',
-    isActive: false,
     icon: Fighter,
-    class: ChampionClass.Fighter,
   },
-  {
+  [ChampionClass.Marksman]: {
     name: 'Marksman',
-    isActive: false,
     icon: Marksman,
-    class: ChampionClass.Marksman,
   },
-  {
+  [ChampionClass.Mage]: {
     name: 'Mage',
-    isActive: false,
     icon: Mage,
-    class: ChampionClass.Mage,
   },
-  {
+  [ChampionClass.Assassin]: {
     name: 'Assassin',
-    isActive: false,
     icon: Assassin,
-    class: ChampionClass.Assassin,
   },
-  {
+  [ChampionClass.Tank]: {
     name: 'Tank',
-    isActive: false,
     icon: Tank,
-    class: ChampionClass.Tank,
   },
-  {
+  [ChampionClass.Support]: {
     name: 'Support',
-    isActive: false,
     icon: Support,
-    class: ChampionClass.Support,
   },
-]
+}
 
-export const defaultTypeFilters = [
-  {
+export enum ItemType {
+  All = 'All',
+  AttackDamage = 'AttackDamage',
+  CritStrike = 'CritStrike',
+  AttackSpeed = 'AttackSpeed',
+  OnHit = 'OnHit',
+  ArmorPenetration = 'ArmorPenetration',
+  AbilityPower = 'AbilityPower',
+  Mana = 'Mana',
+  MagicPenetration = 'MagicPenetration',
+  Health = 'Health',
+  Armor = 'Armor',
+  MagicResist = 'MagicResist',
+  AbilityHaste = 'AbilityHaste',
+  Movement = 'Movement',
+  Lifesteal = 'Lifesteal',
+  Trinket = 'Trinket',
+  Lane = 'Lane',
+  Jungle = 'Jungle',
+  Tenacity = 'Tenacity',
+  Consumable = 'Consumable',
+  CC = 'CC',
+}
+
+export const TypeFilters: {
+  [key in ItemType]: TypeFilter
+} = {
+  [ItemType.All]: {
     name: 'All Items',
-    isActive: true,
     icon: 'clear-filters.svg',
     categories: [Category.All],
   },
-  {
+  [ItemType.AttackDamage]: {
     name: 'Attack Damage',
-    isActive: false,
     icon: 'attack-damage.svg',
     categories: [Category.AttackDamage],
   },
-  {
+  [ItemType.CritStrike]: {
     name: 'Critical Strike',
-    isActive: false,
     icon: 'critical-strike.svg',
     categories: [Category.CriticalStrike],
   },
-  {
+  [ItemType.AttackSpeed]: {
     name: 'Attack Speed',
-    isActive: false,
     icon: 'attack-speed.svg',
     categories: [Category.AttackSpeed],
   },
-  {
+  [ItemType.OnHit]: {
     name: 'On-Hit Effects',
-    isActive: false,
     icon: 'on-hit-effects.svg',
     categories: [Category.OnHit],
   },
-  {
+  [ItemType.ArmorPenetration]: {
     name: 'Armor Penetration',
-    isActive: false,
     icon: 'armor-penetration.svg',
     categories: [Category.ArmorPenetration],
   },
-  {
+  [ItemType.AbilityPower]: {
     name: 'Ability Power',
-    isActive: false,
     icon: 'ability-power.svg',
     categories: [Category.AbilityPower],
   },
-  {
+  [ItemType.Mana]: {
     name: 'Mana & Regeneration',
-    isActive: false,
     icon: 'mana.svg',
     categories: [Category.Mana, Category.ManaRegen],
   },
-  {
+  [ItemType.MagicPenetration]: {
     name: 'Magic Penetration',
-    isActive: false,
     icon: 'magic-penetration.svg',
     categories: [Category.MagicPenetration],
   },
-  {
+  [ItemType.Health]: {
     name: 'Health & Regeneration',
-    isActive: false,
     icon: 'health.svg',
     categories: [Category.Health, Category.HealthRegen],
   },
-  {
+  [ItemType.Armor]: {
     name: 'Armor',
-    isActive: false,
     icon: 'armor.svg',
     categories: [Category.Armor],
   },
-  {
+  [ItemType.MagicResist]: {
     name: 'Magic Resistance',
-    isActive: false,
     icon: 'magic-resist.svg',
     categories: [Category.MagicResistance],
   },
-  {
+  [ItemType.AbilityHaste]: {
     name: 'Ability Haste',
-    isActive: false,
     icon: 'ability-haste.svg',
     categories: [Category.AbilityHaste, Category.CooldownReduction],
   },
-  {
+  [ItemType.Movement]: {
     name: 'Movement',
-    isActive: false,
     icon: 'movement-speed.svg',
     categories: [Category.Boots, Category.NonbootsMovement],
   },
-  {
+  [ItemType.Lifesteal]: {
     name: 'Life Steal & Vamp',
-    isActive: false,
     icon: 'omni-vamp.svg',
     categories: [Category.SpellVamp, Category.LifeSteal],
   },
-  {
+  [ItemType.Trinket]: {
     name: 'Trinket',
-    isActive: false,
     icon: 'trinket.svg',
     categories: [Category.Trinket, Category.Vision],
   },
-  {
+  [ItemType.Lane]: {
     name: 'Lane',
-    isActive: false,
     icon: 'mid.svg',
     categories: [Category.Lane],
   },
-  {
+  [ItemType.Jungle]: {
     name: 'Jungle',
-    isActive: false,
     icon: 'jungle.svg',
     categories: [Category.Jungle],
   },
-  {
+  [ItemType.Tenacity]: {
     name: 'Tenacity',
-    isActive: false,
     icon: 'tenacity.svg',
     categories: [Category.Tenacity],
   },
-  {
+  [ItemType.Consumable]: {
     name: 'Consumable',
-    isActive: false,
     icon: 'consumable.svg',
     categories: [Category.Consumable],
   },
-  {
+  [ItemType.CC]: {
     name: 'Crowd Control',
-    isActive: false,
     icon: 'cc.svg',
     categories: [Category.Slow],
   },
-]
+}
