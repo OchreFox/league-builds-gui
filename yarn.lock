@@ -1577,10 +1577,10 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify/icons-tabler@^1.2.49":
-  version "1.2.49"
-  resolved "https://registry.yarnpkg.com/@iconify/icons-tabler/-/icons-tabler-1.2.49.tgz#a6a192394d06d07dbf250071f5d0b5ea9cfbf461"
-  integrity sha512-9V0qa2Jibfb3wI6G3pdNWzyySV41OkGPQGdYr5Czd64Nd8jco7Wg3K2xCRs+5EgZCTYMfbgX9sqz8W5mkpMZWw==
+"@iconify/icons-tabler@^1.2.50":
+  version "1.2.53"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-tabler/-/icons-tabler-1.2.53.tgz#397197887b8f058e8deccf74930925290504502a"
+  integrity sha512-+KPaG8o8K3ah1AsSpTceU7hI/AjLJMfpfX6ziSsXlrel5sA0ze9CzUF7rwvUZgPUhD9LIXUaTIKNMFRTwrlKKQ==
   dependencies:
     "@iconify/types" "*"
 
