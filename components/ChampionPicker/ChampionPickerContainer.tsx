@@ -1,9 +1,14 @@
+import dynamic from 'next/dynamic'
+
 import React from 'react'
 import 'simplebar/dist/simplebar.min.css'
 
 import { Tag } from '../../types/Champions'
 import Build from '../ItemBuild/Build'
-import ChampionPickerOverlay from './ChampionPickerOverlay'
+
+const DynamicChampionPickerOverlay = dynamic(() => import('./ChampionPickerOverlay'), {
+  ssr: false,
+})
 
 export const ChampionPickerContainer = ({
   show,
@@ -19,7 +24,7 @@ export const ChampionPickerContainer = ({
       {/* Build Editor */}
       <Build />
       {/* Overlay for Champion Picker */}
-      <ChampionPickerOverlay show={show} categoryFilter={categoryFilter} searchQuery={searchQuery} />
+      <DynamicChampionPickerOverlay show={show} categoryFilter={categoryFilter} searchQuery={searchQuery} />
     </div>
   )
 }

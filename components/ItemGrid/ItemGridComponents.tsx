@@ -1,7 +1,6 @@
 import { css } from '@emotion/css'
 import { Variants } from 'framer-motion'
 import fuzzy from 'fuzzy'
-import _ from 'lodash'
 import { Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
@@ -62,7 +61,13 @@ export const markItemsAsVisible = (
     }
     return { ...item, visible: false }
   })
-  visibleItems = _.orderBy(visibleItems, ['gold.total'], [goldOrderDirection as any])
+  // visibleItems = _.orderBy(visibleItems, ['gold.total'], [goldOrderDirection as any])
+  visibleItems = visibleItems.sort((a, b) => {
+    if (goldOrderDirection === SortDirection.Asc) {
+      return a.gold.total - b.gold.total
+    }
+    return b.gold.total - a.gold.total
+  })
   return { visibleItems: visibleItems, count: visibleItemCount }
 }
 

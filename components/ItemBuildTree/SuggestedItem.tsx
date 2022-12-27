@@ -40,13 +40,7 @@ const SuggestedItem = ({
       draggable={true}
       onDragStart={(e) => {
         dispatch(setItemPickerDraggedItem(item.id))
-        e.dataTransfer.setData(
-          'text/plain',
-          JSON.stringify({
-            item: item,
-            isMythic: item.mythic,
-          })
-        )
+        e.dataTransfer.setData('text/plain', JSON.stringify(item))
         e.currentTarget.style.opacity = '0.4'
         e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
       }}

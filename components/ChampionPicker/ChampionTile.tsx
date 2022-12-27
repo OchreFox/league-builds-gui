@@ -1,12 +1,17 @@
 import Image from 'next/image'
 
-import { addSelectedChampion, removeSelectedChampion } from '@/store/appSlice'
+import {
+  addChampionPickerLoadedChampionId,
+  addSelectedChampion,
+  removeSelectedChampion,
+  selectChampionPicker,
+} from '@/store/appSlice'
 import { addAssociatedChampion, removeAssociatedChampion, selectAssociatedChampions } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
@@ -16,14 +21,44 @@ import { easeInOutExpo } from 'utils/Transition'
 
 import styles from './ChampionPickerOverlay.module.scss'
 
+const championTileVariants: Variants = {
+  initial: {
+    opacity: 0,
+    y: 20,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+    transition: {
+      duration: 0.1,
+    },
+  },
+}
+
 const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const associatedChampions = useSelector(selectAssociatedChampions)
-  const [loaded, setLoaded] = useState(false)
+  const { loadedChampionIds } = useSelector(selectChampionPicker)
+  const [loadAnimation, setLoadAnimation] = useState(false)
+  const isLoaded = useMemo(() => loadedChampionIds.includes(champion.id), [loadedChampionIds, champion.id])
+
+  const loadChampion = useCallback(() => {
+    if (!isLoaded) {
+      dispatch(addChampionPickerLoadedChampionId(champion.id))
+    }
+  }, [champion.id])
+
+  const isActive = useMemo(() => {
+    return champion && associatedChampions.includes(champion.id)
+  }, [associatedChampions, champion.id])
 
   const toggleChampion = (champion: ChampionsSchema) => {
-    if (associatedChampions.includes(champion.id)) {
+    if (isActive) {
       batch(() => {
         dispatch(removeAssociatedChampion(champion.id))
         dispatch(removeSelectedChampion(champion))
@@ -36,32 +71,20 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
     }
   }
 
-  const championTileVariants: Variants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.1,
-      },
-    },
-  }
+  useEffect(() => {
+    if (!isLoaded) {
+      setLoadAnimation(true)
+    }
+  }, [])
 
   return (
     <motion.li
-      layout
+      layout="position"
       id={'champion-container-' + champion.id}
       className={cx(
         'group flex cursor-pointer flex-col items-center justify-center list-none',
         !potatoMode && 'transition-colors duration-200 ease-in-out',
-        associatedChampions.includes(champion.id) ? styles.animatedTileBg : 'hover:bg-white/20 bg-transparent'
+        isActive ? styles.animatedTileBg : 'hover:bg-white/20 bg-transparent'
       )}
       variants={championTileVariants}
       initial="initial"
@@ -73,14 +96,14 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
       <div
         className={cx(
           'flex flex-col items-center justify-center w-full h-full py-2',
-          associatedChampions.includes(champion.id) && styles.animatedTileBgOverlay
+          isActive && styles.animatedTileBgOverlay
         )}
       >
         <div
           className={cx(
             'border border-yellow-900 ring-brand-default group-hover:ring-2 group-hover:brightness-125 flex overflow-hidden',
-            !potatoMode && 'transition duration-100',
-            associatedChampions.includes(champion.id) && 'border-2 border-yellow-500'
+            !potatoMode && 'transition-colors duration-100',
+            isActive && 'border-2 border-yellow-500'
           )}
         >
           {champion.icon && champion.placeholder ? (
@@ -92,11 +115,11 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
               alt={champion.name}
               placeholder="blur"
               blurDataURL={blurhashDecode(champion.placeholder)}
-              onLoad={() => setLoaded(true)}
+              onLoadingComplete={loadChampion}
               className={cx(
-                !potatoMode && 'blur-xl',
+                !potatoMode && loadAnimation && 'blur-xl',
                 !potatoMode &&
-                  loaded &&
+                  loadAnimation &&
                   css`
                     animation: unblur 0.5s cubic-bezier(0.87, 0, 0.13, 1) forwards;
                     @keyframes unblur {
@@ -117,9 +140,10 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
         <p
           className={cx(
             'text-center text-gray-200 group-hover:text-white',
-            !potatoMode && 'transition duration-100',
+            !potatoMode && 'transition-colors duration-100',
             champion.name.length < 10 ? 'text-sm' : 'text-xs',
-            associatedChampions.includes(champion.id) && 'text-yellow-300'
+            !champion && 'text-sm',
+            isActive && 'text-yellow-300'
           )}
         >
           {champion.name}

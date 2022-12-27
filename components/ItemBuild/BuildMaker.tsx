@@ -1,9 +1,11 @@
 import { useChampions } from '@/hooks/useChampions'
 import {
   selectChampionPicker,
+  selectItemPicker,
   selectSelectedChampions,
   setChampionPickerHover,
   setChampionPickerIsLoading,
+  setChampionPickerShow,
   updateSelectedChampion,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
@@ -22,6 +24,7 @@ export const BuildMaker = () => {
   const { championsData } = useChampions()
   const selectedChampions = useSelector(selectSelectedChampions)
   const championPicker = useSelector(selectChampionPicker)
+  const { draggedItem } = useSelector(selectItemPicker)
 
   const fetchChampionSplash = async (champion: ChampionsSchema) => {
     dispatch(setChampionPickerIsLoading(true))
@@ -43,6 +46,12 @@ export const BuildMaker = () => {
       })
     }
   }, [selectedChampions])
+
+  useEffect(() => {
+    if (draggedItem) {
+      dispatch(setChampionPickerShow(false))
+    }
+  }, [draggedItem])
 
   return (
     <div className="flex h-full w-full flex-col" id="build-maker">

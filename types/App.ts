@@ -16,6 +16,7 @@ export interface ChampionPickerState {
   isLoading: boolean
   category: Tag
   query: string
+  loadedChampionIds: number[]
 }
 
 export interface ItemContainer {

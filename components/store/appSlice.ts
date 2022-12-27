@@ -25,6 +25,7 @@ const initialState: AppState = {
     isLoading: false,
     category: Tag.All,
     query: '',
+    loadedChampionIds: [],
   },
   itemPicker: {
     hoveredItem: null,
@@ -115,6 +116,9 @@ export const appSlice = createSlice({
     setChampionPickerQuery: (state, action: PayloadAction<string>) => {
       state.championPicker.query = action.payload
     },
+    addChampionPickerLoadedChampionId: (state, action: PayloadAction<number>) => {
+      state.championPicker.loadedChampionIds.push(action.payload)
+    },
     setItemPickerHoveredItem: (state, action: PayloadAction<number | null>) => {
       state.itemPicker.hoveredItem = action.payload
     },
@@ -192,6 +196,7 @@ export const {
   setChampionPickerIsLoading,
   setChampionPickerCategory,
   setChampionPickerQuery,
+  addChampionPickerLoadedChampionId,
   setItemPickerHoveredItem,
   setItemPickerSelectedItem,
   setItemPickerDraggedItem,

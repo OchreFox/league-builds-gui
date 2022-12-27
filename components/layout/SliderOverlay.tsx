@@ -1,15 +1,13 @@
 import { cx } from '@emotion/css'
 import Giscus from '@giscus/react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Icon } from '@iconify/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 import Button from '../basic/Button'
 import { selectMenu, setMenuShow } from '../store/appSlice'
 import { selectPotatoMode } from '../store/potatoModeSlice'
 import { useAppDispatch } from '../store/store'
-import StyledContainer from './StyledContainer'
 import styles from './StyledContainer.module.scss'
 
 export default function SliderOverlay() {
@@ -17,9 +15,13 @@ export default function SliderOverlay() {
   const menu = useSelector(selectMenu)
   const potatoMode = useSelector(selectPotatoMode)
 
+  const hideMenu = useCallback(() => {
+    dispatch(setMenuShow(false))
+  }, [dispatch])
+
   return (
     <Transition.Root show={menu.show} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-hidden z-10" onClose={() => dispatch(setMenuShow(false))}>
+      <Dialog as="div" className="fixed inset-0 overflow-hidden z-10" onClose={hideMenu}>
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
             as={Fragment}
@@ -62,7 +64,7 @@ export default function SliderOverlay() {
                           reactive={false}
                           bgClick="bg-brand-dark"
                           rounded="rounded-md"
-                          handleClick={() => dispatch(setMenuShow(false))}
+                          handleClick={hideMenu}
                         />
                       </div>
                     </div>

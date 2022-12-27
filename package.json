@@ -27,6 +27,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@iconify/icons-clarity": "^1.2.6",
     "@iconify/icons-tabler": "^1.2.49",
+    "@lottiefiles/react-lottie-player": "^3.5.0",
     "@next/bundle-analyzer": "^13.0.5",
     "@pixi/particle-emitter": "^5.0.8",
     "@popperjs/core": "^2.11.6",

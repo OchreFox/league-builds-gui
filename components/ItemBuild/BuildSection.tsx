@@ -186,7 +186,6 @@ export const BuildSection = ({ id }: { id: string }) => {
           e.stopPropagation()
           setHover(false)
           const data = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
-          console.log(data)
           if (data) {
             dispatch(addItemToBlock({ blockId: block.id, itemId: data.id }))
           }
@@ -204,7 +203,6 @@ export const BuildSection = ({ id }: { id: string }) => {
               },
             }}
             onAnimationComplete={() => {
-              console.log('animation complete')
               setInit(true)
             }}
           >

@@ -19,7 +19,7 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
   useEffect(() => {
     if (listRef.current) {
       const grid = listRef.current
-      console.log(grid.scrollTop, grid.scrollHeight, grid.clientHeight)
+      // console.log(grid.scrollTop, grid.scrollHeight, grid.clientHeight)
       const height = Math.ceil(grid.getBoundingClientRect().height)
 
       // Get count of rows and columns in the grid

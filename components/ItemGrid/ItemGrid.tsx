@@ -190,7 +190,6 @@ export default function ItemGrid({
       goldOrderDirection === SortDirection.Asc
     ) {
       filteredItems = items
-      console.log('No filters selected')
       basicVisibleItems = initialBasicItems
       epicVisibleItems = initialEpicItems
       legendaryVisibleItems = initialLegendaryItems
@@ -290,10 +289,10 @@ export default function ItemGrid({
   // Handle scroll to bottom
   const handleScroll = (e: any) => {
     const div = e.target as HTMLDivElement
-    topRef.current = div.scrollTop
-    bottomRef.current = div.scrollTop + div.clientHeight
-    console.log(topRef.current)
-    console.log(bottomRef.current)
+    // topRef.current = div.scrollTop
+    // bottomRef.current = div.scrollTop + div.clientHeight
+    // console.log(topRef.current)
+    // console.log(bottomRef.current)
     const bottom = Math.abs(div.scrollHeight - div.clientHeight - div.scrollTop) < 1
     if (bottom) {
       setScrollToBottom(true)

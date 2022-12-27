@@ -1,7 +1,7 @@
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
 import { cx } from '@emotion/css'
-import { Icon } from '@iconify/react'
 import { MutableRefObject, createRef, useEffect, useRef, useState } from 'react'
 import styles from 'styles/index.module.scss'
 import { SortDirection } from 'types/FilterProps'
@@ -11,7 +11,6 @@ import Footer from 'components/Footer'
 import Header from 'components/Header/Header'
 import { BuildMaker } from 'components/ItemBuild/BuildMaker'
 import { BuildTreeContainer } from 'components/ItemBuildTree/BuildTreeContainer'
-import { ClassFilters } from 'components/ItemFilters/FilterComponents'
 import FilterItemsByClass from 'components/ItemFilters/FilterItemsByClass'
 import FilterItemsByRarity from 'components/ItemFilters/FilterItemsByRarity'
 import FilterItemsByType from 'components/ItemFilters/FilterItemsByType'
@@ -19,7 +18,10 @@ import SortByGold from 'components/ItemFilters/SortByGold'
 import ItemGrid from 'components/ItemGrid/ItemGrid'
 import SearchBar from 'components/SearchBar'
 import Settings from 'components/Settings'
-import SliderOverlay from 'components/layout/SliderOverlay'
+
+const DynamicSliderOverlay = dynamic(() => import('components/layout/SliderOverlay'), {
+  ssr: false,
+})
 
 function Home() {
   const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
@@ -41,7 +43,7 @@ function Home() {
       <Head>
         <title>League Tools | Item Builds</title>
       </Head>
-      <SliderOverlay />
+      <DynamicSliderOverlay />
       <div className={`absolute inset-0 brightness-100 contrast-150 filter ${styles.noise}`} />
       {/* Main container */}
       <div className="relative flex min-h-screen w-full flex-col items-stretch">

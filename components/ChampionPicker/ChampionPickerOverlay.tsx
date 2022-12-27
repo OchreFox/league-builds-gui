@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
+import LoadingSpinner from 'components/basic/LoadingSpinner'
+
 import { ChampionsSchema, Tag } from '../../types/Champions'
 import { useChampions } from '../hooks/useChampions'
 import { selectPotatoMode } from '../store/potatoModeSlice'
@@ -23,6 +25,8 @@ const ChampionPickerOverlay = ({
   const { championsData } = useChampions()
   const potatoMode = useSelector(selectPotatoMode)
   const [filteredChampions, setFilteredChampions] = useState<ChampionsSchema[]>([])
+  const [renderOverlay, setRenderOverlay] = useState(false)
+  const [renderChampions, setRenderChampions] = useState(false)
 
   const includesCategory = (champion: ChampionsSchema, category: Tag) => {
     if (category === Tag.All) {
@@ -53,21 +57,33 @@ const ChampionPickerOverlay = ({
   // Filter data when categoryFilter or searchQuery changes
   useEffect(() => {
     if (championsData) {
-      const filtered = Object.values(championsData).filter((champion) => {
-        return filters.every((filter) => filter(champion))
-      })
-      setFilteredChampions(filtered)
+      if (categoryFilter === Tag.All && !searchQuery) {
+        setFilteredChampions(Object.values(championsData))
+      } else {
+        const filtered = Object.values(championsData).filter((champion) => {
+          return filters.every((filter) => filter(champion))
+        })
+        setFilteredChampions(filtered)
+      }
     }
   }, [championsData, filters])
 
+  // Detect when show changes to true for the first time
+  useEffect(() => {
+    if (show && !renderOverlay) {
+      setRenderOverlay(true)
+    }
+  }, [show])
+
   return (
     <AnimatePresence>
-      {show && (
+      {renderOverlay && (
         <motion.div
           key="champion-picker"
           className={cx(
             'absolute h-full w-full select-none',
-            potatoMode ? 'bg-slate-900' : 'bg-black/50 backdrop-blur'
+            potatoMode ? 'bg-slate-900' : 'bg-black/50 backdrop-blur',
+            !show && 'pointer-events-none'
           )}
           initial={{ y: '-100%' }}
           animate={show ? { y: 0 } : { y: '-100%' }}
@@ -77,19 +93,24 @@ const ChampionPickerOverlay = ({
             ease: [0.87, 0, 0.13, 1],
             duration: 0.4,
           }}
+          onAnimationComplete={() => {
+            setRenderChampions(true)
+          }}
         >
+          {!renderChampions && <LoadingSpinner />}
           <SimpleBar
             className={cx(
               'h-full overflow-y-auto',
               css`
                 box-shadow: inset 0px 0px 25px 0px #000000;
+                position: relative;
               `
             )}
           >
             <ul className="m-4 grid grid-cols-6 h-full gap-2">
               <LayoutGroup>
                 <AnimatePresence>
-                  {championsData &&
+                  {renderChampions &&
                     filteredChampions.map((champion) => (
                       <ChampionTile key={'champion-container-key-' + champion.id} champion={champion} />
                     ))}

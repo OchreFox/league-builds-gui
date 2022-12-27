@@ -41,9 +41,6 @@ const ChampionPickerCard = () => {
   const championPicker = useSelector(selectChampionPicker)
   const potatoMode = useSelector(selectPotatoMode)
   const selectedChampions = useSelector(selectSelectedChampions)
-  const previousValues = useRef({
-    selectedChampions: selectedChampions,
-  })
 
   const cardRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -64,6 +61,9 @@ const ChampionPickerCard = () => {
     },
     [championPicker.query]
   )
+
+  const handleMouseEnter = useCallback(() => dispatch(setChampionPickerHint(true)), [championPicker.hint])
+
   const getChampionPickerAnimation = (): VariantLabels => {
     if (championPicker.isLoading) {
       return 'loading'
@@ -201,7 +201,7 @@ const ChampionPickerCard = () => {
             icon="tabler:chevron-up"
             width="24"
             height="24"
-            onMouseEnter={() => dispatch(setChampionPickerHint(true))}
+            onMouseEnter={handleMouseEnter}
           />
         </motion.div>
         <ChampionPickerHover
@@ -257,7 +257,10 @@ const ChampionPickerCard = () => {
                     <option
                       key={'champion-class-' + championClass}
                       value={championClass}
-                      className="inline-flex w-full py-2 px-4 hover:bg-gray-600 hover:text-white"
+                      className={cx(
+                        'inline-flex w-full py-2 px-4 hover:bg-gray-600 hover:text-white',
+                        championClass === championPicker.category && 'bg-gray-500 text-white'
+                      )}
                     >
                       {championClass}
                     </option>

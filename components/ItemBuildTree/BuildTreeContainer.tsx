@@ -11,6 +11,7 @@ import { ItemBuildTreeProps, Rarity } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
 import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
+import styles from 'components/ItemFilters/FilterRarity.module.scss'
 
 import { isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
 
@@ -104,14 +105,24 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
         <>
           <div className="flex py-1 mb-2 border-b border-yellow-900 items-center space-x-4">
             <h3 className="font-body font-semibold text-gray-200 shrink-0 border-r border-yellow-900 pr-2">ITEM</h3>
-            <button className="group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-white">
+            <button
+              className={cx(
+                'group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-white hover:bg-cyan-900 hover:text-white',
+                styles.filterButtonActive,
+                styles.all
+              )}
+            >
               Build Path
               <motion.div
                 layoutId="item-details-border"
                 className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
               />
             </button>
-            <button className="group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-gray-600 hover:bg-cyan-900 hover:text-white">
+            <button
+              disabled
+              className="group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-gray-600 cursor-help"
+              title="Coming soon!"
+            >
               Description
               <motion.div
                 layoutId="item-details-border"
@@ -174,7 +185,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
   } else {
     return (
       <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
-        <img src="icons/poro_sleeping.png" alt="Poro sleeping" className="mx-auto h-32 w-32 opacity-75" />
+        <img src="icons/poro_sleeping.png" alt="Poro sleeping" className="mx-auto h-32 w-auto opacity-75" />
         <p className="italic text-gray-500">Select an item to see its build path tree</p>
       </div>
     )
