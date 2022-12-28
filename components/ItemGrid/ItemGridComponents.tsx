@@ -43,6 +43,21 @@ export const isFromChampionClass = (item: ItemsSchema, championClass: ChampionCl
 }
 
 /**
+ * Function to sort items by gold
+ * @param items - Array<ItemsSchema> - Items to sort
+ * @param goldOrderDirection - SortDirection - Direction to sort
+ * @returns Array<ItemsSchema> - Sorted items
+ */
+export const sortItems = (items: Array<ItemsSchema>, goldOrderDirection: SortDirection) => {
+  return items.sort((a, b) => {
+    if (goldOrderDirection === SortDirection.Asc) {
+      return a.gold.total - b.gold.total
+    }
+    return b.gold.total - a.gold.total
+  })
+}
+
+/**
  * Function to mark items as visible from an items array
  * @param itemsArray - Array<ItemsSchema> - Items to mark
  * @param filteredItems - Array<ItemsSchema> - Items to check against
@@ -61,13 +76,7 @@ export const markItemsAsVisible = (
     }
     return { ...item, visible: false }
   })
-  // visibleItems = _.orderBy(visibleItems, ['gold.total'], [goldOrderDirection as any])
-  visibleItems = visibleItems.sort((a, b) => {
-    if (goldOrderDirection === SortDirection.Asc) {
-      return a.gold.total - b.gold.total
-    }
-    return b.gold.total - a.gold.total
-  })
+  visibleItems = sortItems(visibleItems, goldOrderDirection)
   return { visibleItems: visibleItems, count: visibleItemCount }
 }
 

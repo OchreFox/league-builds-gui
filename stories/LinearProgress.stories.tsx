@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 
-import LinearProgress from '../components/LinearProgress'
+import LinearProgress from '../components/basic/LinearProgress'
 
 export default {
   title: 'Basic/LinearProgress',

@@ -24,7 +24,7 @@ export interface BlockState extends Block {
 export interface Item {
   id: string
   count: number
-  uid: string
+  uid?: string
 }
 
 export interface CategoryDropdownProps {

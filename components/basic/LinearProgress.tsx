@@ -10,7 +10,7 @@ const LinearProgress = ({ show }: { show: boolean }) => {
       transition={{ type: 'tween', ease: [0.87, 0, 0.13, 1], duration: 0.2 }}
       className="absolute z-20 w-full overflow-hidden bg-transparent"
     >
-      <span className="relative block h-1 overflow-hidden" role="progressbar">
+      <span className="relative block h-1 overflow-hidden" role="progressbar" aria-label="Loading...">
         <span
           className={cx(
             'absolute inset-0 w-full bg-brand-light transition duration-200',

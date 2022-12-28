@@ -1,14 +1,16 @@
 import { cx } from '@emotion/css'
-import { yupResolver } from '@hookform/resolvers/yup'
+import checkIcon from '@iconify/icons-tabler/check'
+import clipboardText from '@iconify/icons-tabler/clipboard-text'
+import fileExport from '@iconify/icons-tabler/file-export'
+import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import * as yup from 'yup'
+import { batch, useSelector } from 'react-redux'
 
 import styles from '../styles/index.module.scss'
-import { Block, ItemBuild, ItemBuildSettings } from '../types/Build'
+import { Block, Item, ItemBuild, ItemBuildSettings } from '../types/Build'
 import { easeInOutExpo } from '../utils/Transition'
 import PotatoModeSwitch from './PotatoModeSwitch'
 import ResetAlert from './ResetAlert'
@@ -17,6 +19,8 @@ import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from './
 import { selectPotatoMode } from './store/potatoModeSlice'
 import { useAppDispatch } from './store/store'
 
+// import { yupResolver } from '@hookform/resolvers/yup'
+// import * as yup from 'yup'
 // const schema: yup.ObjectSchema<ItemBuildSettings> = yup.object({
 //   title: yup.string().required(),
 //   associatedMaps: yup.ar
@@ -46,6 +50,9 @@ const Settings = () => {
 
   const onSubmit: SubmitHandler<ItemBuildSettings> = (data) => console.log(data)
 
+  const isSummonersRift = useMemo(() => itemBuild.associatedMaps.includes(11), [itemBuild.associatedMaps])
+  const isHowlingAbyss = useMemo(() => itemBuild.associatedMaps.includes(12), [itemBuild.associatedMaps])
+
   const toggleMap = (payload: number) => {
     if (itemBuild.associatedMaps.includes(payload)) {
       // Remove map from array
@@ -60,11 +67,15 @@ const Settings = () => {
 
   const deleteIdFromBlocks = (state: ItemBuild) => {
     // Delete the id property from the state.itemBuild.blocks
-    // This is to prevent the id from being saved in the json file
     let newBlocks: Block[] = []
-    for (const block of state.blocks) {
-      let newBlock: Block = { ...block } as Block
-      newBlocks.push(newBlock)
+    for (const blockState of state.blocks) {
+      let { items, type } = blockState
+      let newItems: Item[] = []
+      for (const item of items) {
+        const { uid, ...rest } = item
+        newItems.push(rest)
+      }
+      newBlocks.push({ type, items: newItems })
     }
     return {
       itemBuild: {
@@ -83,17 +94,18 @@ const Settings = () => {
     e.preventDefault()
     handleSubmit(onSubmit)
     setShowCopyMessage(true)
-    let modifiedState = deleteIdFromBlocks(itemBuild)
-    navigator.clipboard.writeText(JSON.stringify(modifiedState.itemBuild))
+    let cleanState = deleteIdFromBlocks(itemBuild)
+    navigator.clipboard.writeText(JSON.stringify(cleanState.itemBuild))
   }
 
-  const resetBuild = () => {
+  const resetBuild = useCallback(() => {
     console.log('Resetting build...')
-    // actions.deleteState()
-    dispatch(resetItemBuild())
-    dispatch(resetApp())
+    batch(() => {
+      dispatch(resetItemBuild())
+      dispatch(resetApp())
+    })
     reset()
-  }
+  }, [dispatch, reset])
 
   useEffect(() => {
     if (mouseHover && showCopyMessage) {
@@ -104,10 +116,10 @@ const Settings = () => {
       }, 3000)
     }
     if (itemBuild) {
-      let modifiedState = deleteIdFromBlocks(itemBuild)
+      let cleanState = deleteIdFromBlocks(itemBuild)
       setDownloadTitle(`${itemBuild.title.trim()}.json` || 'My Build.json')
       setDownloadContent(
-        `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(modifiedState.itemBuild, null, 2))}`
+        `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(cleanState.itemBuild, null, 2))}`
       )
     }
   }, [mouseHover, showCopyMessage, itemBuild])
@@ -150,7 +162,7 @@ const Settings = () => {
                 className="absolute h-8 w-8"
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: itemBuild?.associatedMaps?.includes(11) ? 1 : 0,
+                  opacity: isSummonersRift ? 1 : 0,
                 }}
                 transition={easeInOutExpo}
               />
@@ -161,7 +173,7 @@ const Settings = () => {
                 initial={{ opacity: 1 }}
                 whileHover={{ opacity: 0 }}
                 animate={{
-                  opacity: itemBuild?.associatedMaps?.includes(11) ? 0 : 1,
+                  opacity: isSummonersRift ? 0 : 1,
                 }}
                 transition={easeInOutExpo}
               />
@@ -174,7 +186,7 @@ const Settings = () => {
                 className="absolute h-8 w-8"
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: itemBuild?.associatedMaps?.includes(12) ? 1 : 0,
+                  opacity: isHowlingAbyss ? 1 : 0,
                 }}
                 transition={easeInOutExpo}
               />
@@ -185,7 +197,7 @@ const Settings = () => {
                 initial={{ opacity: 1 }}
                 whileHover={{ opacity: 0 }}
                 animate={{
-                  opacity: itemBuild?.associatedMaps?.includes(12) ? 0 : 1,
+                  opacity: isHowlingAbyss ? 0 : 1,
                 }}
                 transition={easeInOutExpo}
               />
@@ -194,6 +206,7 @@ const Settings = () => {
             <p className="ml-3 text-sm font-medium text-gray-200">Associated Maps</p>
           </div>
           <PotatoModeSwitch />
+          {/*  Build Import/Export */}
           <div className="flex w-full space-x-2">
             <button
               type="submit"
@@ -213,7 +226,7 @@ const Settings = () => {
                 initial={{ y: 0 }}
                 animate={{ y: showCopyMessage ? '-200%' : 0 }}
               >
-                <Icon icon="tabler:clipboard-text" className="mr-1 h-5 w-5" inline={true} />
+                <Icon icon={clipboardText} className="mr-1 h-5 w-5" inline={true} />
                 Copy Build
               </motion.span>
               <motion.span
@@ -222,7 +235,7 @@ const Settings = () => {
                 animate={{ y: showCopyMessage ? 0 : '200%' }}
                 whileTap={{ scale: 0.9 }}
               >
-                <Icon icon="tabler:check" className="mr-1 h-5 w-5" inline={true} />
+                <Icon icon={checkIcon} className="mr-1 h-5 w-5" inline={true} />
                 Copied!
               </motion.span>
             </button>
@@ -235,7 +248,7 @@ const Settings = () => {
                 !potatoMode && 'transition duration-100'
               )}
             >
-              <Icon icon="tabler:file-export" className="mr-1 h-5 w-5" inline={true} />
+              <Icon icon={fileExport} className="mr-1 h-5 w-5" inline={true} />
               Export Build
             </a>
           </div>
@@ -250,12 +263,12 @@ const Settings = () => {
               setShowResetAlert(true)
             }}
           >
-            <Icon icon="tabler:trash" className="mr-1 h-6 w-6" inline={true} />
+            <Icon icon={trashIcon} className="mr-1 h-6 w-6" inline={true} />
             Reset Build
           </button>
         </div>
       </form>
-      <ResetAlert resetBuild={() => resetBuild()} open={showResetAlert} setOpen={setShowResetAlert} />
+      <ResetAlert resetBuild={resetBuild} open={showResetAlert} setOpen={setShowResetAlert} />
     </>
   )
 }

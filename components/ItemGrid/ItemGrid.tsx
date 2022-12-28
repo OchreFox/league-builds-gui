@@ -24,6 +24,7 @@ import {
   markItemsAsVisible,
   matchesSearchQuery,
   overlayVariants,
+  sortItems,
   titleVariants,
   transitionVariant,
 } from './ItemGridComponents'
@@ -113,10 +114,10 @@ export default function ItemGrid({
     }
 
     // Order temp arrays with the type of goldOrderDirection
-    tempBasicItems = _.orderBy(tempBasicItems, ['gold.total'], ['asc'])
-    tempEpicItems = _.orderBy(tempEpicItems, ['gold.total'], ['asc'])
-    tempLegendaryItems = _.orderBy(tempLegendaryItems, ['gold.total'], ['asc'])
-    tempMythicItems = _.orderBy(tempMythicItems, ['gold.total'], ['asc'])
+    tempBasicItems = sortItems(tempBasicItems, goldOrderDirection)
+    tempEpicItems = sortItems(tempEpicItems, goldOrderDirection)
+    tempLegendaryItems = sortItems(tempLegendaryItems, goldOrderDirection)
+    tempMythicItems = sortItems(tempMythicItems, goldOrderDirection)
 
     // Set initial items
     setInitialBasicItems(tempBasicItems)
@@ -345,7 +346,7 @@ export default function ItemGrid({
         <AnimatePresence>
           {hoveredItem && (
             <motion.div
-              className={cx('absolute inset-0 w-full h-full z-[5] pointer-events-none bg-black/25')}
+              className="absolute inset-0 w-full h-full z-[5] pointer-events-none bg-black/25"
               variants={overlayVariants}
               initial="hidden"
               animate="visible"
@@ -376,7 +377,7 @@ export default function ItemGrid({
                 animate="center"
                 exit="exit"
                 transition={transitionVariant}
-                src="icons/poro_question.png"
+                src="icons/poro_question.webp"
                 alt="Poro question mark"
                 className="mx-auto h-32 w-32 brightness-200"
               />

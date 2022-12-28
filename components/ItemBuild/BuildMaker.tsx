@@ -15,7 +15,7 @@ import { ChampionsSchema } from 'types/Champions'
 
 import ChampionPickerCard from 'components/ChampionPicker/ChampionPickerCard'
 import { ChampionPickerContainer } from 'components/ChampionPicker/ChampionPickerContainer'
-import LinearProgress from 'components/LinearProgress'
+import LinearProgress from 'components/basic/LinearProgress'
 
 import { getChampionSplash } from './BuildMakerComponents'
 
