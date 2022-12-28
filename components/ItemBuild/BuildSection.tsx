@@ -245,7 +245,7 @@ export const BuildSection = ({ id }: { id: string }) => {
               <BuildItem
                 key={item.id + '-build-section-item'}
                 itemId={parseInt(item.id, 10)}
-                itemUid={item.uid}
+                itemUid={item?.uid || ''}
                 blockId={block.id}
                 index={index}
               />
