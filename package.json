@@ -50,7 +50,7 @@
     "pixi.js": "6.5.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.39.7",
+    "react-hook-form": "^7.40.0",
     "react-jsx-parser": "^1.29.0",
     "react-merge-refs": "^2.0.1",
     "react-particles": "^2.5.3",
