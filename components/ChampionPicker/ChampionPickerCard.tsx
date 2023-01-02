@@ -12,9 +12,13 @@ import {
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
+import appsIcon from '@iconify/icons-tabler/apps'
+import chevronUp from '@iconify/icons-tabler/chevron-up'
+import circleX from '@iconify/icons-tabler/circle-x'
+import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
 import { VariantLabels, Variants, motion, useAnimation } from 'framer-motion'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { Tag } from 'types/Champions'
 
@@ -46,6 +50,8 @@ const ChampionPickerCard = () => {
   const [size, setSize] = useState({ width: 0, height: 0 })
   const [hover, setHover] = useState(false)
 
+  const selectedChampionsLength = useMemo(() => selectedChampions.length, [selectedChampions])
+
   useEffect(() => {
     if (cardRef.current) {
       setSize({
@@ -64,7 +70,7 @@ const ChampionPickerCard = () => {
 
   const handleMouseEnter = useCallback(() => dispatch(setChampionPickerHint(true)), [championPicker.hint])
 
-  const getChampionPickerAnimation = (): VariantLabels => {
+  const getChampionPickerAnimation = useCallback((): VariantLabels => {
     if (championPicker.isLoading) {
       return 'loading'
     }
@@ -75,31 +81,31 @@ const ChampionPickerCard = () => {
       return 'hover'
     }
     return 'default'
-  }
+  }, [championPicker.show, championPicker.hint, championPicker.isLoading])
 
-  const title = (): string => {
+  const title = useCallback((): string => {
     // Only show the first two champions in the title and the rest in the description
-    if (selectedChampions.length > 0) {
+    if (selectedChampionsLength > 0) {
       return (
         selectedChampions
           .slice(0, 2)
           .map((champion) => champion.name)
-          .join(', ') + (selectedChampions.length > 2 ? ' , ...' : '')
+          .join(', ') + (selectedChampionsLength > 2 ? ' , ...' : '')
       )
     }
     return 'Select Champions'
-  }
+  }, [selectedChampions])
 
-  const description = (): JSX.Element => {
+  const description = useCallback((): JSX.Element => {
     // If only one champion is selected, show the champion's title
-    if (selectedChampions.length === 1) {
+    if (selectedChampionsLength === 1) {
       const champion = selectedChampions[0]
       return <>{champion.title}</>
-    } else if (selectedChampions.length > 1) {
+    } else if (selectedChampionsLength > 1) {
       // Otherwise show the number of champions selected
       return (
         <span className="flex flex-row items-center">
-          {selectedChampions.length} champions selected
+          {selectedChampionsLength} champions selected
           {selectedChampions.map((champion) => (
             <Image
               loader={CustomLoader}
@@ -115,7 +121,7 @@ const ChampionPickerCard = () => {
       )
     }
     return <>Click to select champions</>
-  }
+  }, [selectedChampions])
 
   const titleColor = (): string => {
     if (selectedChampions.length === 1) {
@@ -198,7 +204,7 @@ const ChampionPickerCard = () => {
           </motion.p>
           <Icon
             className="text-gray-700 bg-white/50 p-1 rounded-full absolute bottom-0 right-0 pointer-events-auto"
-            icon="tabler:chevron-up"
+            icon={chevronUp}
             width="24"
             height="24"
             onMouseEnter={handleMouseEnter}
@@ -221,7 +227,7 @@ const ChampionPickerCard = () => {
             )}
           >
             <Icon
-              icon={championPicker.show ? 'tabler:circle-x' : 'tabler:apps'}
+              icon={championPicker.show ? circleX : appsIcon}
               inline={true}
               className="mr-1"
               width="20"
@@ -292,7 +298,7 @@ const ChampionPickerCard = () => {
               </div>
             </div>
             <div className="flex items-center justify-center font-sans text-xs font-normal text-white/50 transition duration-100 group-hover:text-white">
-              <Icon className="" icon="tabler:x" width="16" height="16" /> CLOSE
+              <Icon className="" icon={xIcon} width="16" height="16" /> CLOSE
             </div>
           </div>
         </motion.div>

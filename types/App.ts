@@ -54,6 +54,8 @@ export interface BuildState {
     show: boolean
     item: number | null
   }
+  allowSave: boolean
+  savePopup: boolean
 }
 
 // Main state

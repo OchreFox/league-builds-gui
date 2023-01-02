@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 
 import { ItemsSchema } from '../../types/Items'
-import JSONFetcher from '../JSONFetcher'
+import JSONFetcher from '../../utils/JSONFetcher'
 
 export const useItems = () => {
   const { data, error } = useSWR<Array<ItemsSchema>>(

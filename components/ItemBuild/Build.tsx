@@ -19,6 +19,7 @@ const Build = () => {
 
   const handleClick = useCallback(() => {
     dispatch(addEmptyBlock())
+    return true
   }, [])
 
   const handleDrop = useCallback(

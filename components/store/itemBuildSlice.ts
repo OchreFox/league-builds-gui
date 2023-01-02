@@ -2,8 +2,9 @@ import { PayloadAction, createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
 import { AppState } from 'types/App'
 import { v4 as uuidv4 } from 'uuid'
+import { string } from 'yup'
 
-import { Block, BlockState, ItemBuild } from '../../types/Build'
+import { Block, BlockState, ItemBuild, RiotItemBuild } from '../../types/Build'
 import { ChampionsSchema, DefaultChampionSchema } from '../../types/Champions'
 import { RootState } from './store'
 
@@ -25,6 +26,26 @@ export const itemBuildSlice = createSlice({
     },
     setItemBuild: (_state, action: PayloadAction<ItemBuild>) => {
       return action.payload
+    },
+    setRiotItemBuild: (state, action: PayloadAction<RiotItemBuild>) => {
+      const { title, associatedMaps, associatedChampions, blocks } = action.payload
+      state.title = title
+      state.associatedMaps = associatedMaps
+      state.associatedChampions = associatedChampions
+      state.blocks = blocks.map((block, index) => {
+        return {
+          id: uuidv4(),
+          position: index,
+          type: block.type,
+          items: block.items.map((item) => {
+            return {
+              id: item.id,
+              uid: uuidv4(),
+              count: item.count,
+            }
+          }),
+        }
+      })
     },
     setTitle: (state, action: PayloadAction<string>) => {
       state.title = action.payload
@@ -66,6 +87,13 @@ export const itemBuildSlice = createSlice({
         })
       }
     },
+    removeItemFromBlock: (state, action: PayloadAction<{ blockId: string; itemId: number }>) => {
+      const { blockId, itemId } = action.payload
+      const block = state.blocks.find((block) => block.id === blockId)
+      if (block) {
+        block.items = block.items.filter((item) => item.id !== itemId.toString())
+      }
+    },
     removeBlock: (state, action: PayloadAction<string>) => {
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
@@ -95,6 +123,7 @@ export const selectAssociatedChampions = (state: RootState) => state.itemBuild.a
 export const {
   resetItemBuild,
   setItemBuild,
+  setRiotItemBuild,
   setTitle,
   setAssociatedMaps,
   setAssociatedChampions,
@@ -104,6 +133,7 @@ export const {
   addBlock,
   addEmptyBlock,
   addItemToBlock,
+  removeItemFromBlock,
   removeBlock,
   updateBlock,
   updateBlockType,

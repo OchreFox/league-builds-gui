@@ -16,6 +16,10 @@ module.exports = {
       screens: {
         '3xl': '1920px',
       },
+      transitionProperty: {
+        'extended-colors':
+          'color, background-color, border-color, text-decoration-color, fill, stroke, box-shadow, filter, backdrop-filter',
+      },
       colors: {
         brand: {
           light: '#f18e4d',

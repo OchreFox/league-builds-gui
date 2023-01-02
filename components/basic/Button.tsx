@@ -1,59 +1,85 @@
 import { cx } from '@emotion/css'
+import alertCircle from '@iconify/icons-tabler/alert-circle'
 import { Icon, IconifyIcon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 export interface BaseButtonProps {
   label?: string
-  icon: string | IconifyIcon
+  icon?: string | IconifyIcon
   labelReactive?: string
   iconReactive?: string | IconifyIcon
   dropReactive?: boolean
-  handleClick?: () => void
+  handleClick?: (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => boolean
   handleDrop?: (e: React.DragEvent<HTMLButtonElement>) => void
+
+  // Handle rest of React.HTMLAttributes<HTMLElement>
+  [rest: string]: any
 }
 
 export interface ButtonProps extends BaseButtonProps {
-  background: string
-  color: string
+  outlined?: boolean
   reactive: boolean
-  bgClick: string
+  bold?: boolean
+  color: string
   colorReactive?: string
+  colorError?: string
+  outlineColor?: string
+  bgColor: string
+  bgHover?: string
+  bgClick: string
+  bgClickError?: string
   layoutId?: string
   rounded: 'rounded-full' | 'rounded-md' | 'rounded-none'
+  className?: string
 }
 
 const Button = ({
   label,
   icon,
-  background,
+  bgColor,
   color,
+  outlined = false,
+  bold = false,
+  outlineColor,
   reactive,
   labelReactive,
   iconReactive,
   bgClick,
+  bgClickError = 'focus:bg-brand-dark',
+  bgHover = 'hover:bg-cyan-900',
   colorReactive,
+  colorError = 'text-white',
   layoutId,
   rounded,
   dropReactive,
   handleClick,
   handleDrop,
+  className,
+  ...rest
 }: ButtonProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [buttonClick, setButtonClick] = useState(false)
+  const [buttonError, setButtonError] = useState(false)
   const [dragOver, setDragOver] = useState(false)
 
-  const buttonVariants: Variants = {
-    initial: {
-      boxShadow: '0 0 #0000, 0 0 #0000, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  const onClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+      if (handleClick) {
+        setButtonError(false)
+        const res = handleClick(e)
+        console.log(res)
+        if (res) {
+          reactive && setButtonClick(true)
+        } else {
+          reactive && setButtonError(true)
+        }
+      } else {
+        reactive && setButtonClick(true)
+      }
     },
-    hover: {
-      boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-    },
-    focus: {
-      boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-    },
-  }
+    [handleClick, reactive]
+  )
 
   useEffect(() => {
     const setTimer = () => {
@@ -70,6 +96,21 @@ const Button = ({
     }
   }, [buttonClick])
 
+  useEffect(() => {
+    const setTimer = () => {
+      return setTimeout(() => {
+        if (buttonError) {
+          setButtonError(false)
+          buttonRef.current?.blur()
+        }
+      }, 1500)
+    }
+    if (buttonError) {
+      let timer = setTimer()
+      return () => clearTimeout(timer)
+    }
+  }, [buttonError])
+
   return (
     <motion.button
       layout="position"
@@ -78,18 +119,17 @@ const Button = ({
       initial="initial"
       whileHover="hover"
       whileFocus="focus"
-      variants={buttonVariants}
       className={cx(
-        'inline-flex items-center transition-colors duration-200 ease-out hover:bg-cyan-900 py-2 justify-center my-4 font-normal relative grow overflow-hidden focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
-        background,
-        bgClick && `focus:${bgClick}`,
-        rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md',
-        dropReactive && dragOver && `drop-shadow-lg ${bgClick} ${colorReactive}`
+        'relative overflow-hidden transition-extended-colors duration-150 ease-out py-2 w-full h-full justify-center font-medium focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 border-2 drop-shadow-xl hover:drop-shadow-sm',
+        bgColor,
+        bgHover,
+        buttonError ? bgClickError : bgClick,
+        rounded !== 'rounded-none' && (rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md'),
+        dropReactive && dragOver && `drop-shadow-lg ${buttonError ? bgClickError : bgClick} ${colorReactive}`,
+        outlined ? `border-2 ${outlineColor}` : 'border-transparent',
+        className
       )}
-      onClick={() => {
-        reactive && setButtonClick(true)
-        handleClick && handleClick()
-      }}
+      onClick={onClick}
       onBlur={() => {
         setButtonClick(false)
       }}
@@ -110,24 +150,40 @@ const Button = ({
         buttonRef.current?.focus()
         setButtonClick(true)
       }}
+      {...rest}
     >
       <motion.span
         className={cx(reactive && 'absolute', 'inset-0 flex items-center justify-center', color)}
         initial={{ y: 0 }}
-        animate={{ y: reactive && buttonClick ? '-200%' : 0 }}
+        animate={{ y: reactive && (buttonClick || buttonError) ? '-200%' : 0 }}
       >
-        <Icon icon={icon} className={cx('h-5 w-5', label && 'mr-1')} inline={true} />
-        {label && <span className="font-bold">{label}</span>}
+        {icon && <Icon icon={icon} className={cx('h-5 w-5', label && 'mr-1')} inline={true} />}
+        {label && <span className={cx(bold && 'font-bold')}>{label}</span>}
       </motion.span>
       {reactive && (
         <motion.span
-          className={cx('flex items-center justify-center', colorReactive)}
+          className={cx('absolute inset-0 flex items-center justify-center', colorReactive)}
           initial={{ y: '200%' }}
           animate={{ y: buttonClick ? 0 : '200%' }}
           whileTap={{ scale: 0.9 }}
         >
           {iconReactive && <Icon icon={iconReactive} className="mr-1 h-5 w-5" inline={true} />}
-          <span className="font-bold">{labelReactive}</span>
+          <span className={cx(bold && 'font-bold')}>{labelReactive}</span>
+        </motion.span>
+      )}
+      {reactive && buttonError && (
+        <motion.span
+          className={cx(
+            'absolute inset-0 flex items-center justify-center',
+            buttonError ? bgClickError : bgClick,
+            colorError
+          )}
+          initial={{ y: '200%' }}
+          animate={{ y: buttonError ? 0 : '200%' }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <Icon icon={alertCircle} className="mr-1 h-5 w-5" inline={true} />
+          <span className={cx(bold && 'font-bold')}>Error!</span>
         </motion.span>
       )}
     </motion.button>

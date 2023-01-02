@@ -1,16 +1,114 @@
-import { css, cx } from '@emotion/css'
+import { setMenuShow } from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
+import { cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion, useAnimation } from 'framer-motion'
-import React, { useContext, useEffect, useState } from 'react'
+import packageJson from 'package.json'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 
-import packageJson from '../../package.json'
-import { setMenuShow } from '../store/appSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import { useAppDispatch } from '../store/store'
+import { easeInOutExpo } from 'utils/Transition'
+
 import styles from './Header.module.scss'
+
+const bgTitleVariants = {
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    marginLeft: ['2rem', '0rem'],
+    transition: {
+      staggerChildren: 1,
+      ...easeInOutExpo,
+    },
+  },
+  hidden: {
+    opacity: 1,
+    x: 20,
+    transition: easeInOutExpo,
+  },
+  whileHover: {
+    x: '1rem',
+  },
+}
+
+const titleVariants = {
+  initial: {
+    x: 0,
+    backgroundColor: 'rgb(0 0 0 / 0)',
+    transition: easeInOutExpo,
+    paddingLeft: '6rem',
+  },
+  animate: {
+    x: '1rem',
+    y: '-1rem',
+    paddingLeft: '1rem',
+    backgroundColor: 'rgb(0 0 0 / 0.5)',
+    transition: {
+      ...easeInOutExpo,
+      backgroundColor: {
+        ...easeInOutExpo,
+      },
+      paddingLeft: {
+        ...easeInOutExpo,
+      },
+    },
+  },
+  default: {
+    x: '1rem',
+    y: '-1rem',
+    paddingLeft: '1rem',
+    backgroundColor: 'rgb(0 0 0 / 0.5)',
+    transition: easeInOutExpo,
+    opacity: 1,
+  },
+  whileHover: {
+    x: '0rem',
+    y: '0rem',
+    opacity: 0.5,
+  },
+}
+
+const subtitleVariants = {
+  initial: {
+    opacity: 0,
+    x: '-100%',
+    y: 0,
+    backgroundColor: 'rgb(0 0 0 / 0)',
+  },
+  animate: {
+    opacity: 1,
+    x: ['13.5rem', '1rem'],
+    y: '-1rem',
+    paddingLeft: '1rem',
+    backgroundColor: 'rgb(0 0 0 / 0.75)',
+    transition: {
+      ...easeInOutExpo,
+      paddingLeft: {
+        ...easeInOutExpo,
+      },
+      backgroundColor: {
+        ...easeInOutExpo,
+      },
+      x: {
+        ...easeInOutExpo,
+      },
+    },
+  },
+  default: {
+    x: '1rem',
+    y: '-1rem',
+    opacity: 1,
+  },
+  whileHover: {
+    x: '0rem',
+    y: '0rem',
+    opacity: 0.5,
+  },
+}
 
 const Header = () => {
   const dispatch = useAppDispatch()
@@ -23,108 +121,6 @@ const Header = () => {
 
   const setAnimationPlaying = (isPlaying: boolean) => {
     setIsAnimationPlaying(isPlaying)
-  }
-
-  const easeInOutExpo = {
-    type: 'tween',
-    ease: [0.87, 0, 0.13, 1],
-    duration: 0.4,
-  }
-
-  const bgTitleVariants = {
-    visible: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      marginLeft: ['2rem', '0rem'],
-      transition: {
-        staggerChildren: 1,
-        ...easeInOutExpo,
-      },
-    },
-    hidden: {
-      opacity: 1,
-      x: 20,
-      transition: easeInOutExpo,
-    },
-    whileHover: {
-      x: '1rem',
-    },
-  }
-
-  const titleVariants = {
-    initial: {
-      x: 0,
-      backgroundColor: 'rgb(0 0 0 / 0)',
-      transition: easeInOutExpo,
-      paddingLeft: '6rem',
-    },
-    animate: {
-      x: '1rem',
-      y: '-1rem',
-      paddingLeft: '1rem',
-      backgroundColor: 'rgb(0 0 0 / 0.5)',
-      transition: {
-        ...easeInOutExpo,
-        backgroundColor: {
-          ...easeInOutExpo,
-        },
-        paddingLeft: {
-          ...easeInOutExpo,
-        },
-      },
-    },
-    default: {
-      x: '1rem',
-      y: '-1rem',
-      paddingLeft: '1rem',
-      backgroundColor: 'rgb(0 0 0 / 0.5)',
-      transition: easeInOutExpo,
-      opacity: 1,
-    },
-    whileHover: {
-      x: '0rem',
-      y: '0rem',
-      opacity: 0.5,
-    },
-  }
-
-  const subtitleVariants = {
-    initial: {
-      opacity: 0,
-      x: '-100%',
-      y: 0,
-      backgroundColor: 'rgb(0 0 0 / 0)',
-    },
-    animate: {
-      opacity: 1,
-      x: ['13.5rem', '1rem'],
-      y: '-1rem',
-      paddingLeft: '1rem',
-      backgroundColor: 'rgb(0 0 0 / 0.75)',
-      transition: {
-        ...easeInOutExpo,
-        paddingLeft: {
-          ...easeInOutExpo,
-        },
-        backgroundColor: {
-          ...easeInOutExpo,
-        },
-        x: {
-          ...easeInOutExpo,
-        },
-      },
-    },
-    default: {
-      x: '1rem',
-      y: '-1rem',
-      opacity: 1,
-    },
-    whileHover: {
-      x: '0rem',
-      y: '0rem',
-      opacity: 0.5,
-    },
   }
 
   useEffect(() => {
@@ -194,7 +190,14 @@ const Header = () => {
           )}
         >
           {!potatoMode && (
-            <video src="/effects/vfx-vertical-magic-loop.webm" loop autoPlay muted className={styles.video} />
+            <video
+              src="/effects/vfx-vertical-magic-loop.webm"
+              loop
+              autoPlay
+              muted
+              playsInline
+              className={styles.video}
+            />
           )}
           League Tools
         </motion.h1>

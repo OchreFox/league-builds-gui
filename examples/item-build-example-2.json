@@ -1,0 +1,199 @@
+{
+    "title": "Laceration Zed builds V12.23",
+    "associatedMaps": [
+        11
+    ],
+    "associatedChampions": [
+        238
+    ],
+    "blocks": [
+        {
+            "items": [
+                {
+                    "id": "6693",
+                    "count": 1
+                },
+                {
+                    "id": "6692",
+                    "count": 1
+                },
+                {
+                    "id": "6691",
+                    "count": 1
+                }
+            ],
+            "type": "Mythics"
+        },
+        {
+            "items": [
+                {
+                    "id": "6691",
+                    "count": 1
+                },
+                {
+                    "id": "3158",
+                    "count": 1
+                },
+                {
+                    "id": "3074",
+                    "count": 1
+                },
+                {
+                    "id": "6694",
+                    "count": 1
+                },
+                {
+                    "id": "3161",
+                    "count": 1
+                },
+                {
+                    "id": "3071",
+                    "count": 1
+                },
+                {
+                    "id": "3142",
+                    "count": 1
+                }
+            ],
+            "type": "caster: duskblade or claw > as shown"
+        },
+        {
+            "items": [
+                {
+                    "id": "6693",
+                    "count": 1
+                },
+                {
+                    "id": "3158",
+                    "count": 1
+                },
+                {
+                    "id": "3153",
+                    "count": 1
+                },
+                {
+                    "id": "3036",
+                    "count": 1
+                },
+                {
+                    "id": "6675",
+                    "count": 1
+                },
+                {
+                    "id": "3074",
+                    "count": 1
+                },
+                {
+                    "id": "3508",
+                    "count": 1
+                }
+            ],
+            "type": "Crit Zed:"
+        },
+        {
+            "items": [
+                {
+                    "id": "3179",
+                    "count": 1
+                },
+                {
+                    "id": "3033",
+                    "count": 1
+                },
+                {
+                    "id": "6695",
+                    "count": 1
+                },
+                {
+                    "id": "3046",
+                    "count": 1
+                },
+                {
+                    "id": "6609",
+                    "count": 1
+                },
+                {
+                    "id": "3143",
+                    "count": 1
+                },
+                {
+                    "id": "3026",
+                    "count": 1
+                },
+                {
+                    "id": "3508",
+                    "count": 1
+                },
+                {
+                    "id": "3156",
+                    "count": 1
+                },
+                {
+                    "id": "3181",
+                    "count": 1
+                },
+                {
+                    "id": "3814",
+                    "count": 1
+                },
+                {
+                    "id": "6676",
+                    "count": 1
+                },
+                {
+                    "id": "6696",
+                    "count": 1
+                },
+                {
+                    "id": "3139",
+                    "count": 1
+                },
+                {
+                    "id": "6035",
+                    "count": 1
+                },
+                {
+                    "id": "3142",
+                    "count": 1
+                },
+                {
+                    "id": "3053",
+                    "count": 1
+                },
+                {
+                    "id": "3071",
+                    "count": 1
+                },
+                {
+                    "id": "6333",
+                    "count": 1
+                },
+                {
+                    "id": "6694",
+                    "count": 1
+                },
+                {
+                    "id": "3153",
+                    "count": 1
+                },
+                {
+                    "id": "3074",
+                    "count": 1
+                },
+                {
+                    "id": "3031",
+                    "count": 1
+                },
+                {
+                    "id": "3161",
+                    "count": 1
+                },
+                {
+                    "id": "6675",
+                    "count": 1
+                }
+            ],
+            "type": "Situational:"
+        }
+    ]
+}

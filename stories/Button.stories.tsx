@@ -15,7 +15,7 @@ export default {
     icon: {
       type: 'string',
     },
-    background: {
+    bgColor: {
       control: {
         type: 'text',
       },
@@ -59,7 +59,7 @@ export const Primary = Template.bind({})
 Primary.args = {
   label: 'Button',
   icon: 'tabler:apps',
-  background: 'bg-brand-default',
+  bgColor: 'bg-brand-default',
   color: 'text-white',
   reactive: false,
   labelReactive: 'Success',
@@ -72,7 +72,7 @@ export const PrimaryRounded = Template.bind({})
 PrimaryRounded.args = {
   label: 'Button',
   icon: 'tabler:apps',
-  background: 'bg-brand-default',
+  bgColor: 'bg-brand-default',
   color: 'text-white',
   reactive: false,
   labelReactive: 'Success',
@@ -86,7 +86,7 @@ export const PrimaryReactive = Template.bind({})
 PrimaryReactive.args = {
   label: 'Button',
   icon: 'tabler:apps',
-  background: 'bg-brand-default',
+  bgColor: 'bg-brand-default',
   color: 'text-white',
   reactive: true,
   labelReactive: 'Success',
@@ -100,7 +100,7 @@ export const PrimaryReactiveRounded = Template.bind({})
 PrimaryReactiveRounded.args = {
   label: 'Button',
   icon: 'tabler:apps',
-  background: 'bg-brand-default',
+  bgColor: 'bg-brand-default',
   color: 'text-white',
   reactive: true,
   labelReactive: 'Success',

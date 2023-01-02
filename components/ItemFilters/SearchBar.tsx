@@ -3,8 +3,8 @@ import Image from 'next/image'
 import { Combobox, Transition } from '@headlessui/react'
 import React, { Fragment, useCallback } from 'react'
 
-import { FilterBySearchState } from '../types/FilterProps'
-import { CustomLoader } from '../utils/CustomLoader'
+import { FilterBySearchState } from '../../types/FilterProps'
+import { CustomLoader } from '../../utils/CustomLoader'
 
 export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResults }: FilterBySearchState) {
   const handleChange = useCallback(
@@ -40,7 +40,7 @@ export default function SearchBar({ searchTerm, setSearchTerm, autocompleteResul
           <Combobox.Input
             id="search"
             name="search"
-            className="block w-full rounded-md border border-transparent bg-gray-700 py-2 pl-10 pr-3 leading-5 text-gray-300 placeholder-gray-400 focus:border-gray-400 focus:outline-none focus:ring-white sm:text-sm"
+            className="block w-full rounded-md border border-transparent transition-extended-colors duration-150 bg-gray-700 py-2 pl-10 pr-3 leading-5 text-gray-300 placeholder-gray-400 focus:border-gray-400 focus:outline-none focus:ring-brand-light focus:ring-2 focus:ring-offset-2 sm:text-sm"
             placeholder="Search items"
             type="search"
             value={searchTerm}

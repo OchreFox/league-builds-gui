@@ -1,3 +1,5 @@
+import { useLongPress } from '@/hooks/useLongPress'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { css, cx } from '@emotion/css'
 import { Dialog, Transition } from '@headlessui/react'
 import alertTriangle from '@iconify/icons-tabler/alert-triangle'
@@ -9,9 +11,7 @@ import { animate, motion, useMotionTemplate, useMotionValue } from 'framer-motio
 import React, { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import styles from '../styles/index.module.scss'
-import { useLongPress } from './hooks/useLongPress'
-import { selectPotatoMode } from './store/potatoModeSlice'
+import styles from '/styles/index.module.scss'
 
 export default function ResetAlert({
   open,
@@ -23,7 +23,6 @@ export default function ResetAlert({
   resetBuild: () => void
 }) {
   const potatoMode = useSelector(selectPotatoMode)
-
   const [isLongPressing, setIsLongPressing] = useState(false)
 
   const gestures = useLongPress(
@@ -59,10 +58,10 @@ export default function ResetAlert({
         <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-300"
+            enter="ease-out-expo duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="ease-in duration-200"
+            leave="ease-in-out-expo duration-200"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
@@ -80,10 +79,10 @@ export default function ResetAlert({
           </span>
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-300"
+            enter="ease-out-expo duration-300"
             enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
+            leave="ease-in-out-expo duration-200"
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
@@ -108,14 +107,14 @@ export default function ResetAlert({
                   <span className="rounded-full bg-brand-dark flex items-center justify-center mr-2 p-1">
                     <Icon icon={alertTriangle} className="h-5 w-5 text-white" inline={true} />
                   </span>
-                  <Dialog.Title as="h3" className="font-body font-bold text-red-400 text-lg">
+                  <Dialog.Title as="h3" className="font-body font-semibold text-red-400 text-xl">
                     RESET BUILD
                   </Dialog.Title>
                 </div>
                 <div className="text-center sm:mt-0 sm:text-left">
                   <p className="text-base text-gray-200">
-                    <span className="text-red-400 font-semibold">WARNING: </span>This will reset your build to the
-                    default.
+                    <span className="text-red-400 font-semibold">WARNING: </span>This will delete your current build,
+                    all progress will be lost.
                   </p>
                   <br />
                   <fieldset className="text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5">
@@ -123,8 +122,8 @@ export default function ResetAlert({
                       <Icon icon={infoCircle} className="h-5 w-5 mr-1" inline={true} />
                       <b>TIP</b>
                     </legend>
-                    To safely keep your progress, click on the <b>Export Build</b> button in the settings section of
-                    this webpage.
+                    To safely keep your progress, click on the <b>Export Build</b> button in the settings section of the
+                    site.
                   </fieldset>
                 </div>
               </div>

@@ -1,7 +1,7 @@
-import { MouseEvent, TouchEvent, useCallback, useRef } from 'react'
+import React, { KeyboardEvent, MouseEvent, TouchEvent, useCallback, useRef } from 'react'
 
 export function useLongPress(
-  callback: (e: MouseEvent | TouchEvent) => void,
+  callback: (e: MouseEvent | TouchEvent | KeyboardEvent) => void,
   startCallback: () => void,
   cancelCallback: () => void,
   duration: number = 500
@@ -10,16 +10,25 @@ export function useLongPress(
   // if the user moves or releases their pointer.
   const timeout = useRef<NodeJS.Timeout | null>(null)
 
-  // Create an event handler for mouse down and touch start events. We wrap the
-  // handler in the `useCallback` hook and pass `callback` and `duration` as
+  // Create an event handler for mouse down and touch start events and keydown events.
+  // We wrap the handler in the `useCallback` hook and pass `callback` and `duration` as
   // dependencies so it only creates a new callback if either of these changes.
   const onPressStart = useCallback(
-    (event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>) => {
-      // Prevent the browser's default response to this event. On mobile browsers
-      // long presses are used . This will also block touch scrolling - a more
-      // robust implementation will take this into account, but this is fine
-      // for prototyping.
-      event.preventDefault()
+    (event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => {
+      // Detect if event is of type KeyboardEvent
+      if (event.type === 'keydown') {
+        const keyboardEvent = event as KeyboardEvent<HTMLElement>
+        // If event is of type KeyboardEvent, check if key is Space or Enter and if event is not a repeat
+        if ((keyboardEvent.key !== ' ' && keyboardEvent.key !== 'Enter') || keyboardEvent.repeat) {
+          return
+        }
+      } else {
+        // Prevent the browser's default response to this event. On mobile browsers
+        // long presses are used . This will also block touch scrolling - a more
+        // robust implementation will take this into account, but this is fine
+        // for prototyping.
+        event.preventDefault()
+      }
 
       // Start a timeout that, after the provided `duration`, will fire the
       // supplied callback.
@@ -41,20 +50,14 @@ export function useLongPress(
   }, [])
 
   return {
-    // Initiate the gesture on mouse down or touch start
     onMouseDown: onPressStart,
     onTouchStart: onPressStart,
+    onKeyDown: onPressStart,
 
-    // Cancel the gesture if the pointer is moved. This is quite an aggressive
-    // approach so you might want to make an alternative function here that
-    // detects how far the pointer has moved from its origin using `e.pageX`
-    // for `MouseEvent`s or `e.touches[0].pageX` for `TouchEvent`s.
-    // onMouseMove: cancelTimeout,
-    // onTouchMove: cancelTimeout,
     onMouseLeave: cancelTimeout,
-
-    // Cancel the timeout when the pointer session is ended.
     onMouseUp: cancelTimeout,
     onTouchEnd: cancelTimeout,
+    onTouchCancel: cancelTimeout,
+    onKeyUp: cancelTimeout,
   }
 }

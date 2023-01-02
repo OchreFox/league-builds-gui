@@ -17,6 +17,7 @@ export default function SliderOverlay() {
 
   const hideMenu = useCallback(() => {
     dispatch(setMenuShow(false))
+    return true
   }, [dispatch])
 
   return (
@@ -59,7 +60,7 @@ export default function SliderOverlay() {
                       <div className="ml-3 flex h-7 items-center">
                         <Button
                           icon="tabler:x"
-                          background="bg-brand-default"
+                          bgColor="bg-brand-default"
                           color="text-white"
                           reactive={false}
                           bgClick="bg-brand-dark"
@@ -84,7 +85,7 @@ export default function SliderOverlay() {
                         reactionsEnabled="0"
                         emitMetadata="0"
                         inputPosition="top"
-                        theme="dark"
+                        theme="transparent_dark"
                         lang="en"
                         loading="lazy"
                       />

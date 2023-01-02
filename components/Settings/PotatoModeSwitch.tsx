@@ -1,22 +1,21 @@
+import { selectPotatoMode, setPotatoMode, unsetPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { Switch } from '@headlessui/react'
-import { useContext } from 'react'
+import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
-
-import { selectPotatoMode, setPotatoMode, unsetPotatoMode } from './store/potatoModeSlice'
-import { useAppDispatch } from './store/store'
 
 export default function PotatoModeSwitch() {
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
 
-  const toggleState = () => {
+  const toggleState = useCallback(() => {
     if (!potatoMode) {
       dispatch(setPotatoMode())
     } else {
       dispatch(unsetPotatoMode())
     }
-  }
+  }, [potatoMode, dispatch])
 
   return (
     <Switch.Group as="div" className="flex items-center">

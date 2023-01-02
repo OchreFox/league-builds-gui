@@ -47,9 +47,15 @@ export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attrib
             <h3 className="font-body font-semibold text-red-400 text-lg">Confirm delete</h3>
           </div>
           <p className="text-gray-200">Are you sure you want to delete this section?</p>
-          <div className="flex flex-row w-full mt-2">
+          <div className="flex flex-row w-full mt-2 space-x-2">
             <button
-              className="mr-2 px-2 py-1 bg-brand-dark hover:bg-red-800 transition-colors duration-200 ease-out rounded-md flex grow items-center justify-center"
+              className="px-2 py-1 bg-transparent hover:bg-gray-700 transition-colors duration-200 ease-out rounded-md inline-flex grow items-center border-2 border-gray-500 text-center justify-center"
+              onClick={() => dispatch(setBuildDeletePopup(null))}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-2 py-1 bg-brand-dark hover:bg-red-800 transition-colors duration-200 ease-out rounded-md flex grow items-center justify-center"
               onClick={() => {
                 batch(() => {
                   dispatch(removeBlock(id))
@@ -59,13 +65,6 @@ export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attrib
             >
               <Icon icon="tabler:trash" className="h-5 w-5 text-gray-300 mr-1" inline={true} />
               Delete
-            </button>
-            <button
-              className="px-2 py-1 bg-transparent hover:bg-gray-700 transition-colors duration-200 ease-out rounded-md inline-flex grow items-center border-2 border-gray-500 text-center justify-center"
-              onClick={() => dispatch(setBuildDeletePopup(null))}
-            >
-              <Icon icon="tabler:x" className="h-5 w-5 text-gray-300 mr-1" inline={true} />
-              Cancel
             </button>
           </div>
         </div>

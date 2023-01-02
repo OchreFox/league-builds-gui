@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 
-import StyledContainer from '../components/layout/StyledContainer'
+import StyledContainer from '../components/Layout/StyledContainer'
 
 export default {
   title: 'Layout/StyledContainer',

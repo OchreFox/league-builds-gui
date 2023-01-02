@@ -10,6 +10,11 @@ export interface ItemBuild extends ItemBuildSettings {
   blocks: BlockState[]
 }
 
+export interface RiotItemBuild extends ItemBuildSettings {
+  associatedChampions: number[]
+  blocks: Block[]
+}
+
 export interface Block {
   items: Item[]
   type: string

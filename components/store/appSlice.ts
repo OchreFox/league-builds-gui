@@ -48,6 +48,8 @@ const initialState: AppState = {
       show: false,
       item: null,
     },
+    allowSave: false,
+    savePopup: false,
   },
 }
 
@@ -56,7 +58,14 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     resetApp: (_state) => {
-      return initialState
+      // Reset the app state to the initial state, except for the itemPicker.containers
+      return {
+        ...initialState,
+        itemPicker: {
+          ...initialState.itemPicker,
+          containers: _state.itemPicker.containers,
+        },
+      }
     },
     setItemFiltersClass: (state, action: PayloadAction<ChampionClass>) => {
       state.itemFilters.class = action.payload
@@ -161,6 +170,9 @@ export const appSlice = createSlice({
     setBuildItemContextMenuItem: (state, action: PayloadAction<number | null>) => {
       state.build.itemContextMenu.item = action.payload
     },
+    setBuildAllowSave: (state, action: PayloadAction<boolean>) => {
+      state.build.allowSave = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(hydrate, (state, action) => {
@@ -211,4 +223,5 @@ export const {
   setBuildDeletePopup,
   setBuildItemContextMenuShow,
   setBuildItemContextMenuItem,
+  setBuildAllowSave,
 } = appSlice.actions

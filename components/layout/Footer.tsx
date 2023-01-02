@@ -1,10 +1,8 @@
+import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
-import { useContext } from 'react'
+import packageJson from 'package.json'
 import { useSelector } from 'react-redux'
-
-import packageJson from '../package.json'
-import { selectPotatoMode } from './store/potatoModeSlice'
 
 export default function Footer() {
   const potatoMode = useSelector(selectPotatoMode)

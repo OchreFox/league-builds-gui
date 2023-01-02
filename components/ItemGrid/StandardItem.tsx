@@ -92,21 +92,28 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
     })
   }, [reference])
 
-  useEffect(() => {}, [])
-
   useEffect(() => {
+    let timer: NodeJS.Timeout | null = null
     if (mouseEnter && !buttonClick) {
       setShowTooltip(true)
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setShowPopper(true)
         setShowTooltip(false)
         dispatch(setItemPickerHoveredItem(item.id))
       }, 700)
-      return () => clearTimeout(timer)
+
+      return () => {
+        if (timer) {
+          clearTimeout(timer)
+        }
+      }
     } else {
       setShowTooltip(false)
       dispatch(setItemPickerHoveredItem(null))
       setShowPopper(false)
+      if (timer) {
+        clearTimeout(timer)
+      }
     }
   }, [mouseEnter, buttonClick])
 

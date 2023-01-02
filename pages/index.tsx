@@ -7,19 +7,19 @@ import styles from 'styles/index.module.scss'
 import { SortDirection } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
-import Footer from 'components/Footer'
-import Header from 'components/Header/Header'
 import { BuildMaker } from 'components/ItemBuild/BuildMaker'
 import { BuildTreeContainer } from 'components/ItemBuildTree/BuildTreeContainer'
 import FilterItemsByClass from 'components/ItemFilters/FilterItemsByClass'
 import FilterItemsByRarity from 'components/ItemFilters/FilterItemsByRarity'
 import FilterItemsByType from 'components/ItemFilters/FilterItemsByType'
+import SearchBar from 'components/ItemFilters/SearchBar'
 import SortByGold from 'components/ItemFilters/SortByGold'
 import ItemGrid from 'components/ItemGrid/ItemGrid'
-import SearchBar from 'components/SearchBar'
-import Settings from 'components/Settings'
+import Footer from 'components/Layout/Footer'
+import Header from 'components/Layout/Header/Header'
+import Settings from 'components/Settings/Settings'
 
-const DynamicSliderOverlay = dynamic(() => import('components/layout/SliderOverlay'), {
+const DynamicSliderOverlay = dynamic(() => import('components/Layout/SliderOverlay'), {
   ssr: false,
 })
 

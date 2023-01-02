@@ -3,8 +3,10 @@ import type { AppProps } from 'next/app'
 import store from '@/store/store'
 import { MotionConfig } from 'framer-motion'
 import 'pattern.css/dist/pattern.min.css'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Provider, useSelector } from 'react-redux'
+import { ToastContainer, ToastPosition, TypeOptions } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 import 'styles/globals.css'
 import { ReducedMotionType } from 'types/PotatoMode'
 
@@ -54,6 +56,16 @@ function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <MyApp>
         <Component {...pageProps} />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnHover
+          theme="dark"
+        />
       </MyApp>
     </Provider>
   )

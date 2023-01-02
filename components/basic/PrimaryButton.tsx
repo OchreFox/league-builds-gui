@@ -13,17 +13,19 @@ export const PrimaryButton = ({
     <Button
       label={label}
       icon={icon}
-      background="bg-brand-default"
+      bgColor="bg-brand-default"
       color="text-white"
+      bold={true}
       reactive={true}
       labelReactive={labelReactive}
       iconReactive={iconReactive}
-      bgClick="bg-green-400"
+      bgClick="focus:bg-green-400"
       colorReactive="text-black"
       rounded="rounded-full"
       dropReactive={dropReactive}
       handleClick={handleClick}
       handleDrop={handleDrop}
+      className="py-5"
     />
   )
 }
