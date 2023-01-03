@@ -9,7 +9,7 @@ import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import React, { RefObject, useEffect, useMemo, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { batch, useSelector } from 'react-redux'
 import { ItemFilters } from 'types/App'
 import { ItemRefArrayType, ItemSectionState, Rarity } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
@@ -37,14 +37,20 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
       const height = fallbackTitleRef.current?.getBoundingClientRect().height ?? 0
       dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: height }))
     }
-  }, [items, titleRef.current])
-
-  useEffect(() => {
     if (containerRef.current) {
       const height = Math.ceil(containerRef.current.getBoundingClientRect().height)
       dispatch(setItemPickerContainerHeight({ rarity: rarity, height: height }))
     }
-  }, [items, containerRef.current])
+  }, [items, titleRef.current])
+
+  useEffect(() => {
+    return () => {
+      batch(() => {
+        dispatch(setItemPickerContainerHeight({ rarity: rarity, height: 0 }))
+        dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: 0 }))
+      })
+    }
+  }, [])
 
   return (
     <div ref={containerRef} id={'container-' + rarity.toLowerCase()}>

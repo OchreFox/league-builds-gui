@@ -241,7 +241,33 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
             <div
               className={cx(
                 'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
-                styles['container-background']
+                styles['container-background'],
+                css`
+                  &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: radial-gradient(rgba(8, 145, 178, 0.75) 0%, rgba(0, 0, 0, 0) 50%);
+                    background-size: 200% 200%;
+                    background-position: 100% 100%;
+
+                    animation: move-gradient 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+                    @keyframes move-gradient {
+                      0% {
+                        background-position: 0 0;
+                        opacity: 1;
+                      }
+                      100% {
+                        background-position: 100% 100%;
+                        opacity: 0.25;
+                      }
+                    }
+                  }
+                `
               )}
             >
               <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block z-10">
@@ -273,14 +299,22 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                 initial={{ opacity: 0, y: '20%' }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: '-20%' }}
-                transition={{ ...easeOutExpo, duration: 0.5, delay: 0.2 }}
+                transition={{ ...easeOutExpo, duration: 0.5, delay: 0.2, staggerChildren: 1 }}
               >
                 <p className="text-base text-gray-200">
                   <span className="text-red-400 font-semibold">WARNING: </span> Importing a build will{' '}
                   <u className="decoration-red-400 text-red-400 decoration-2">overwrite</u> your current build.
                 </p>
-                <fieldset className="text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5">
-                  <legend className="text-cyan-400 px-2 bg-slate-700 rounded-md inline-flex py-0.5 items-center justify-center">
+                <fieldset
+                  className={cx(
+                    'text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5',
+                    css`
+                      filter: drop-shadow(0 0 2rem rgba(165, 243, 252, 0.25))
+                        drop-shadow(0 0 0.25rem rgba(165, 243, 252, 0.3));
+                    `
+                  )}
+                >
+                  <legend className="text-cyan-400 px-2 bg-slate-700 rounded-md inline-flex py-0.5 items-center justify-center border border-cyan-400">
                     <Icon icon={infoCircle} className="h-5 w-5 mr-1" inline={true} />
                     <b>TIP</b>
                   </legend>

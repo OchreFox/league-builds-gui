@@ -18,7 +18,7 @@ import { ItemNameTooltipVariants, itemTooltipClass } from 'components/ItemGrid/I
 import { Block, Item, ItemBuild } from '../../types/Build'
 import { easeInOutExpo, easeInOutQuad } from '../../utils/Transition'
 import Button from '../basic/Button'
-import { resetApp, setBuildAllowSave } from '../store/appSlice'
+import { resetApp } from '../store/appSlice'
 import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from '../store/itemBuildSlice'
 import { selectPotatoMode } from '../store/potatoModeSlice'
 import { useAppDispatch } from '../store/store'
@@ -78,7 +78,6 @@ const Settings = () => {
   })
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log('Title changed to: ', data.title)
     dispatch(setTitle(data.title))
     // Reset form with new value to reset isDirty
     reset({ title: data.title })
@@ -124,7 +123,6 @@ const Settings = () => {
         navigator.clipboard.writeText(JSON.stringify(cleanState.itemBuild))
         return true
       } else {
-        console.log('Cannot copy build with unsaved changes')
         setError('title', {
           type: 'manual',
           message: 'Cannot copy build with unsaved changes',
@@ -143,7 +141,8 @@ const Settings = () => {
   const handleExportBuild = useCallback(() => {
     if (itemBuild && !isDirty) {
       let cleanState = deleteIdFromBlocks(itemBuild)
-      const docTitle = `${itemBuild.title.replace(/[/\\?%*:|"<>]/g, '').trim()}.json` || 'My Build.json'
+      const docTitle =
+        itemBuild.title !== '' ? `${itemBuild.title.replace(/[/\\?%*:|"<>]/g, '').trim()}.json` : 'My Build.json'
       const downloadContent = `data:text/json;charset=utf-8,${encodeURIComponent(
         JSON.stringify(cleanState.itemBuild, null, 2)
       )}`
@@ -155,7 +154,6 @@ const Settings = () => {
 
       return true
     } else {
-      console.log('Cannot export build with unsaved changes')
       setError('title', {
         type: 'manual',
         message: 'Cannot export build with unsaved changes',
@@ -170,7 +168,6 @@ const Settings = () => {
   }, [])
 
   const resetBuild = useCallback(() => {
-    console.log('Resetting build...')
     batch(() => {
       dispatch(resetItemBuild())
       dispatch(resetApp())
@@ -181,21 +178,9 @@ const Settings = () => {
   // On itemBuild.title change, reset the form with the new value
   useEffect(() => {
     if (watch('title') !== itemBuild.title) {
-      console.log('Resetting form title...')
       reset({ title: itemBuild.title })
     }
   }, [itemBuild.title, reset, watch])
-
-  // When isDirty changes, set allowSave
-  useEffect(() => {
-    if (isDirty) {
-      console.log('Form is dirty')
-      dispatch(setBuildAllowSave(false))
-    } else {
-      console.log('Form is not dirty')
-      dispatch(setBuildAllowSave(true))
-    }
-  }, [dispatch, isDirty])
 
   return (
     <>

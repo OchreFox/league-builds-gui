@@ -1,5 +1,6 @@
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import arrowNarrowDown from '@iconify/icons-tabler/arrow-narrow-down'
+import arrowNarrowUp from '@iconify/icons-tabler/arrow-narrow-up'
 import { Icon } from '@iconify/react'
 import GoldIcon from 'public/icons/gold.svg'
 import React from 'react'
@@ -25,37 +26,11 @@ const SortByGold = ({
       title={`Sort by ${direction === SortDirection.Asc ? 'highest' : 'lowest'} gold`}
     >
       <GoldIcon className="h-5 w-5" />
-      <Icon
-        icon={arrowNarrowDown}
-        width="24px"
-        className={cx(
-          '-mr-1',
-
-          direction === SortDirection.Asc
-            ? css`
-                animation: rotate 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                @keyframes rotate {
-                  0% {
-                    transform: rotate(0deg);
-                  }
-                  100% {
-                    transform: rotate(180deg);
-                  }
-                }
-              `
-            : css`
-                animation: rotate-back 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                @keyframes rotate-back {
-                  0% {
-                    transform: rotate(180deg);
-                  }
-                  100% {
-                    transform: rotate(0deg);
-                  }
-                }
-              `
-        )}
-      />
+      {direction === SortDirection.Asc ? (
+        <Icon icon={arrowNarrowUp} width="24px" className="-mr-1" />
+      ) : (
+        <Icon icon={arrowNarrowDown} width="24px" className="-mr-1" />
+      )}
     </div>
   )
 }

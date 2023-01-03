@@ -33,8 +33,10 @@ export default function FilterItemsByClass() {
             dispatch(setItemFiltersClass(e.target.value as ChampionClass))
           }}
         >
-          {Object.values(ClassFilters).map((item) => (
-            <option key={item.name}>{item.name}</option>
+          {Object.entries(ClassFilters).map(([championClass, item]) => (
+            <option key={item.name} value={championClass}>
+              {item.name}
+            </option>
           ))}
         </select>
       </div>

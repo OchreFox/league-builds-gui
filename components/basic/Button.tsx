@@ -9,7 +9,7 @@ export interface BaseButtonProps {
   icon?: string | IconifyIcon
   labelReactive?: string
   iconReactive?: string | IconifyIcon
-  dropReactive?: boolean
+  dropReactive?: string
   handleClick?: (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => boolean
   handleDrop?: (e: React.DragEvent<HTMLButtonElement>) => void
 
@@ -125,7 +125,7 @@ const Button = ({
         bgHover,
         buttonError ? bgClickError : bgClick,
         rounded !== 'rounded-none' && (rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md'),
-        dropReactive && dragOver && `drop-shadow-lg ${buttonError ? bgClickError : bgClick} ${colorReactive}`,
+        dropReactive && dragOver && `drop-shadow-lg ${dropReactive} ${colorReactive}`,
         outlined ? `border-2 ${outlineColor}` : 'border-transparent',
         className
       )}

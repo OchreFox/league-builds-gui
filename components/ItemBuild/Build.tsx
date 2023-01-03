@@ -56,7 +56,6 @@ const Build = () => {
               icon="tabler:apps"
               labelReactive="Added"
               iconReactive="tabler:check"
-              dropReactive={true}
               handleClick={handleClick}
               handleDrop={handleDrop}
             />

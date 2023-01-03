@@ -5,7 +5,6 @@ export const PrimaryButton = ({
   icon,
   labelReactive,
   iconReactive,
-  dropReactive,
   handleClick,
   handleDrop,
 }: BaseButtonProps) => {
@@ -22,7 +21,7 @@ export const PrimaryButton = ({
       bgClick="focus:bg-green-400"
       colorReactive="text-black"
       rounded="rounded-full"
-      dropReactive={dropReactive}
+      dropReactive="bg-green-400"
       handleClick={handleClick}
       handleDrop={handleDrop}
       className="py-5"

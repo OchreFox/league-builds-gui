@@ -48,8 +48,6 @@ const initialState: AppState = {
       show: false,
       item: null,
     },
-    allowSave: false,
-    savePopup: false,
   },
 }
 
@@ -170,9 +168,6 @@ export const appSlice = createSlice({
     setBuildItemContextMenuItem: (state, action: PayloadAction<number | null>) => {
       state.build.itemContextMenu.item = action.payload
     },
-    setBuildAllowSave: (state, action: PayloadAction<boolean>) => {
-      state.build.allowSave = action.payload
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(hydrate, (state, action) => {
@@ -223,5 +218,4 @@ export const {
   setBuildDeletePopup,
   setBuildItemContextMenuShow,
   setBuildItemContextMenuItem,
-  setBuildAllowSave,
 } = appSlice.actions

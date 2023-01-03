@@ -11,6 +11,8 @@ import { animate, motion, useMotionTemplate, useMotionValue } from 'framer-motio
 import React, { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
+import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
+
 import styles from '/styles/index.module.scss'
 
 export default function ResetAlert({
@@ -80,54 +82,104 @@ export default function ResetAlert({
           <Transition.Child
             as={Fragment}
             enter="ease-out-expo duration-300"
-            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enterTo="opacity-100 translate-y-0 sm:scale-100"
+            enterFrom="opacity-0 translate-x-16"
+            enterTo="opacity-100 translate-x-0"
             leave="ease-in-out-expo duration-200"
-            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            leaveFrom="opacity-100 translate-x-0"
+            leaveTo="opacity-0 -translate-x-16"
           >
             <div
               className={cx(
                 'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
-                styles['container-background']
+                styles['container-background'],
+                css`
+                  &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: radial-gradient(rgba(220, 38, 38, 0.75) 0%, rgba(0, 0, 0, 0) 50%);
+                    background-size: 200% 200%;
+                    background-position: 100% 100%;
+
+                    animation: move-gradient 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+                    @keyframes move-gradient {
+                      0% {
+                        background-position: 0 0;
+                        opacity: 1;
+                      }
+                      100% {
+                        background-position: 100% 100%;
+                        opacity: 0.25;
+                      }
+                    }
+                  }
+                `
               )}
             >
-              <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+              <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block z-10">
                 <button
                   type="button"
                   className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
                   onClick={() => setOpen(false)}
                 >
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only pointer-events-none">Close</span>
                   <Icon icon={xIcon} className="h-6 w-6" inline={true} />
                 </button>
               </div>
+
               <div className="flex flex-col w-full">
-                <div className="flex pb-2 mb-2 border-b border-yellow-900 items-center">
-                  <span className="rounded-full bg-brand-dark flex items-center justify-center mr-2 p-1">
+                <motion.div
+                  className="flex items-center space-x-2 pb-2 font-body font-semibold text-red-400 text-xl border-b border-yellow-900"
+                  initial={{ opacity: 0, x: '50%' }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: '-50%' }}
+                  transition={{ ...easeOutExpo, duration: 0.5, delay: 0.1 }}
+                >
+                  <span className="rounded-full bg-red-600 inline-flex items-center justify-center p-1">
                     <Icon icon={alertTriangle} className="h-5 w-5 text-white" inline={true} />
                   </span>
-                  <Dialog.Title as="h3" className="font-body font-semibold text-red-400 text-xl">
-                    RESET BUILD
-                  </Dialog.Title>
-                </div>
-                <div className="text-center sm:mt-0 sm:text-left">
-                  <p className="text-base text-gray-200">
-                    <span className="text-red-400 font-semibold">WARNING: </span>This will delete your current build,
-                    all progress will be lost.
-                  </p>
-                  <br />
-                  <fieldset className="text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5">
-                    <legend className="text-cyan-400 px-2 bg-slate-700 rounded-md inline-flex py-0.5 items-center justify-center">
-                      <Icon icon={infoCircle} className="h-5 w-5 mr-1" inline={true} />
-                      <b>TIP</b>
-                    </legend>
-                    To safely keep your progress, click on the <b>Export Build</b> button in the settings section of the
-                    site.
-                  </fieldset>
-                </div>
+                  <Dialog.Title as="h3">RESET BUILD</Dialog.Title>
+                </motion.div>
               </div>
-              <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+              <motion.div
+                className="text-center sm:mt-0 sm:text-left flex flex-col justify-center py-4 space-y-4"
+                initial={{ opacity: 0, y: '20%' }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: '-20%' }}
+                transition={{ ...easeOutExpo, duration: 0.5, delay: 0.2 }}
+              >
+                <p className="text-base text-gray-200">
+                  <span className="text-red-400 font-semibold">WARNING: </span>This will delete your current build, all
+                  progress will be lost.
+                </p>
+                <fieldset
+                  className={cx(
+                    'text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5',
+                    css`
+                      filter: drop-shadow(0 0 2rem rgba(165, 243, 252, 0.25))
+                        drop-shadow(0 0 0.25rem rgba(165, 243, 252, 0.3));
+                    `
+                  )}
+                >
+                  <legend className="text-cyan-400 px-2 bg-slate-700 rounded-md inline-flex py-0.5 items-center justify-center border border-cyan-400">
+                    <Icon icon={infoCircle} className="h-5 w-5 mr-1" inline={true} />
+                    <b>TIP</b>
+                  </legend>
+                  To safely keep your progress, click on the <b>Export Build</b> button in the settings section of the
+                  site.
+                </fieldset>
+              </motion.div>
+              <motion.div
+                className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse"
+                initial={{ opacity: 0, x: '50%' }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: '-50%' }}
+                transition={{ ...easeOutExpo, duration: 1, delay: 0.2 }}
+              >
                 <button
                   type="button"
                   className={cx(
@@ -169,7 +221,7 @@ export default function ResetAlert({
                 >
                   Cancel
                 </button>
-              </div>
+              </motion.div>
             </div>
           </Transition.Child>
         </div>

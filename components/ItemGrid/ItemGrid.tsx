@@ -284,7 +284,7 @@ export default function ItemGrid({
     if (itemPicker) {
       handleScrollShow({ target: itemGridRef.current })
     }
-  }, [itemPicker])
+  }, [itemPicker.containers])
 
   // Handle scroll to bottom
   const handleScroll = (e: any) => {
