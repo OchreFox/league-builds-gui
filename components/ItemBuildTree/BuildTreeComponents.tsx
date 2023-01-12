@@ -28,7 +28,7 @@ export function scrollIntoItem(
     if (itemRef && itemGridRef.current) {
       // Scroll to item in itemGridRef
       itemGridRef.current.scrollTo({
-        top: itemRef.offsetTop - 100,
+        top: itemRef.offsetTop - 50,
         behavior: 'smooth',
       })
     }

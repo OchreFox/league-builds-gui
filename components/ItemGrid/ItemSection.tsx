@@ -8,11 +8,9 @@ import {
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import React, { RefObject, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { batch, useSelector } from 'react-redux'
-import { ItemFilters } from 'types/App'
-import { ItemRefArrayType, ItemSectionState, Rarity } from 'types/FilterProps'
-import { ItemsSchema } from 'types/Items'
+import { ItemSectionState, Rarity } from 'types/FilterProps'
 
 import { ItemContainer } from './ItemContainer'
 import { getPluralFromItems, itemSectionConstants, titleVariants, transitionVariant } from './ItemGridComponents'
@@ -29,19 +27,39 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
   const titleRef = useRef<HTMLHeadingElement>(null)
   const fallbackTitleRef = useRef<HTMLParagraphElement>(null)
 
-  useEffect(() => {
+  const titleStyle = useMemo(() => {
     if (titleRef.current) {
-      const height = titleRef.current.getBoundingClientRect().height
+      return window.getComputedStyle(titleRef.current)
+    } else if (fallbackTitleRef.current) {
+      return window.getComputedStyle(fallbackTitleRef.current)
+    }
+    return {
+      marginTop: '0px',
+      marginBottom: '0px',
+    }
+  }, [titleRef.current, fallbackTitleRef.current])
+
+  useEffect(() => {
+    // Title height
+    if (titleRef.current) {
+      const height =
+        titleRef.current.getBoundingClientRect().height +
+        parseInt(titleStyle.marginTop) +
+        parseInt(titleStyle.marginBottom)
       dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: height }))
-    } else {
-      const height = fallbackTitleRef.current?.getBoundingClientRect().height ?? 0
+    } else if (fallbackTitleRef.current) {
+      const height =
+        fallbackTitleRef.current.getBoundingClientRect().height +
+        parseInt(titleStyle.marginTop) +
+        parseInt(titleStyle.marginBottom)
       dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: height }))
     }
+    // Container height
     if (containerRef.current) {
       const height = Math.ceil(containerRef.current.getBoundingClientRect().height)
       dispatch(setItemPickerContainerHeight({ rarity: rarity, height: height }))
     }
-  }, [items, titleRef.current])
+  }, [items, titleRef.current, fallbackTitleRef.current, containerRef.current])
 
   useEffect(() => {
     return () => {

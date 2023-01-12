@@ -72,7 +72,6 @@ export const BuildTreeItem = ({
           onClick={(e) => {
             setTriggerSelection(baseItem.id)
             dispatch(setItemPickerSelectedItem(item))
-            scrollIntoItem(item, itemRefArray, itemGridRef)
             e.stopPropagation()
           }}
         >

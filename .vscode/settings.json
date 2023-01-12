@@ -32,5 +32,6 @@
     "webp"
   ],
   "docwriter.style": "Auto-detect",
-  "svg.preview.background": "dark-transparent"
+  "svg.preview.background": "dark-transparent",
+  "scss.lint.unknownAtRules": "ignore"
 }

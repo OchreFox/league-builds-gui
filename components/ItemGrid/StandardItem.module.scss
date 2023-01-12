@@ -1,0 +1,179 @@
+.itemButton {
+  $angle: 0deg;
+  $duration: 4s;
+  $steps: 360;
+  $step-duration: $duration / $steps;
+  $step-angle: 360deg / $steps;
+  $gradient-color: #a5f3fc;
+  $scroll-gradient-color: rgba(161, 97, 7, 0.75);
+
+  @apply relative -m-1 flex flex-col items-center bg-transparent px-2 py-2 text-center transition-colors duration-200 ease-in-out;
+  border: 2px solid rgba(0, 0, 0, 0);
+  &:hover {
+    @apply bg-white/25;
+  }
+  &.itemButtonHovered {
+    @apply z-10 ring-2 ring-cyan-50;
+    box-shadow: 0 0 25px 3px rgba(250, 204, 21, 0.5), 0 0 30px 5px rgba(207, 250, 254, 0.5),
+      inset 0 0 0 1px rgba(161, 98, 7, 1);
+    &:hover {
+      @apply bg-gray-800;
+    }
+  }
+  &.itemButtonSelected {
+    box-sizing: content-box;
+    border-width: 2px;
+    border-style: solid;
+    animation: rotate-gradient $duration linear infinite;
+
+    @supports (background: paint(something)) {
+      border-image: conic-gradient(
+          from var(--angle),
+          transparent 0deg,
+          $gradient-color 100deg,
+          transparent 100deg,
+          transparent 180deg,
+          $gradient-color 280deg,
+          transparent 280deg
+        )
+        1;
+
+      @keyframes rotate-gradient {
+        to {
+          --angle: 360deg;
+        }
+      }
+    }
+
+    @supports not (background: paint(something)) {
+      @keyframes rotate-gradient {
+        @for $i from 1 through $steps {
+          $percentage: $i * 100% / $steps;
+          #{$percentage} {
+            border-image: conic-gradient(
+                from $angle,
+                transparent 0deg,
+                $gradient-color 100deg,
+                transparent 100deg,
+                transparent 180deg,
+                $gradient-color 280deg,
+                transparent 280deg
+              )
+              1;
+            $angle: $angle + $step-angle;
+          }
+        }
+      }
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, $scroll-gradient-color 50%, rgba(0, 0, 0, 0) 100%);
+      background-size: 600% 600%;
+      animation: scroll 15s linear infinite;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      border: 2px solid rgba(255, 255, 255, 1);
+      opacity: 0;
+      animation: pulse-out 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+  }
+}
+
+.itemMythicOverlay {
+  @apply relative inline-flex shrink-0 items-center justify-center border border-yellow-700;
+  background: linear-gradient(180deg, rgba(234, 179, 8, 1) 0%, rgba(161, 98, 7, 1) 50%, rgba(205, 46, 52, 1) 100%);
+  background-size: 400% 400%;
+  animation: glow 3s ease infinite;
+  padding: 2px;
+}
+
+.itemTooltip {
+  @apply z-20 border border-yellow-700 bg-slate-700/50 px-2 py-1 text-center font-semibold text-white shadow-lg;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.itemTooltipArrow {
+  @apply bg-slate-700/50;
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  backdrop-filter: blur(5px);
+
+  &[data-tooltip-placement='top'] {
+    --tw-border-opacity: 1;
+    --border-color: rgb(161 98 7 / var(--tw-border-opacity));
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-top: none;
+    border-left: none;
+    clip-path: polygon(100% 100%, 0 100%, 100% 0);
+  }
+  &[data-tooltip-placement='bottom'] {
+    bottom: 28px;
+    --tw-border-opacity: 1;
+    --border-color: rgb(161 98 7 / var(--tw-border-opacity));
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    clip-path: polygon(0 0, 0 100%, 100% 0);
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes scroll {
+  0% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 50% -600%;
+  }
+}
+
+@keyframes pulse-out {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  33% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+  0% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 50% 0%;
+  }
+}

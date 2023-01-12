@@ -1,4 +1,3 @@
-import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { cx } from '@emotion/css'
 import { Portal } from '@headlessui/react'
 import gripHorizontal from '@iconify/icons-tabler/grip-horizontal'
@@ -7,10 +6,9 @@ import plusIcon from '@iconify/icons-tabler/plus'
 import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import React, { Fragment } from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react'
 
-import { setPopperBg } from 'components/ItemGrid/ItemComponents'
+import styles from './BuildItemContextMenu.module.scss'
 
 export const BuildItemContextMenu = ({
   blockId,
@@ -23,8 +21,6 @@ export const BuildItemContextMenu = ({
   anchorPoint: { x: number; y: number }
   show: boolean
 }) => {
-  const potatoMode = useSelector(selectPotatoMode)
-
   return (
     <Portal>
       <motion.div
@@ -35,23 +31,24 @@ export const BuildItemContextMenu = ({
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.1 }}
       >
-        <div
-          className={cx(
-            'origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-yellow-900 backdrop-blur-md',
-            setPopperBg(potatoMode)
-          )}
-        >
+        <div className={styles.contextMenu}>
           <ul className="divide-y divide-gray-600 text-white overflow-hidden">
-            <li className="rounded-t-md grid grid-cols-2 divide-x divide-gray-600">
-              <a href="#" className="group flex items-center justify-center px-4 py-2 text-sm hover:bg-red-700/50">
+            <li className="rounded-t-md grid grid-cols-2 divide-x divide-gray-600 brightness-50">
+              <a
+                href="#"
+                className="group flex items-center justify-center px-4 py-2 text-sm hover:bg-red-700/50 cursor-not-allowed"
+              >
                 <Icon icon={minusIcon} className="h-5 w-5 text-red-400 group-hover:text-white" aria-hidden="true" />
               </a>
-              <a href="#" className="group flex items-center justify-center px-4 py-2 text-sm hover:bg-green-700/50">
+              <a
+                href="#"
+                className="group flex items-center justify-center px-4 py-2 text-sm hover:bg-green-700/50 cursor-not-allowed"
+              >
                 <Icon icon={plusIcon} className="h-5 w-5 text-green-400 group-hover:text-white" aria-hidden="true" />
               </a>
             </li>
-            <li className="hover:bg-slate-500">
-              <a href="#" className="group flex items-center px-4 py-2 text-sm">
+            <li className="hover:bg-slate-500 brightness-50">
+              <a href="#" className="group flex items-center px-4 py-2 text-sm cursor-not-allowed">
                 <Icon
                   icon={gripHorizontal}
                   className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-200"
@@ -60,8 +57,8 @@ export const BuildItemContextMenu = ({
                 Change Hotkey
               </a>
             </li>
-            <li className="hover:bg-slate-500 rounded-b-md">
-              <a href="#" className="group flex items-center px-4 py-2 text-sm">
+            <li className="hover:bg-slate-500 rounded-b-md brightness-50">
+              <a href="#" className="group flex items-center px-4 py-2 text-sm cursor-not-allowed">
                 <Icon
                   icon={trashIcon}
                   className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-200"
@@ -69,6 +66,11 @@ export const BuildItemContextMenu = ({
                 />
                 Delete
               </a>
+            </li>
+            <li className="hover:bg-slate-500 rounded-b-md text-center bg-slate-800">
+              <p className="group flex justify-center items-center px-4 py-2 text-sm font-bold cursor-help">
+                Coming Soon!
+              </p>
             </li>
           </ul>
         </div>

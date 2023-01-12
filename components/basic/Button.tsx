@@ -4,6 +4,8 @@ import { Icon, IconifyIcon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
+import { ButtonError, ButtonLabel, ButtonLabelReactive, setButtonTimer } from './ButtonComponents'
+
 export interface BaseButtonProps {
   label?: string
   icon?: string | IconifyIcon
@@ -68,7 +70,6 @@ const Button = ({
       if (handleClick) {
         setButtonError(false)
         const res = handleClick(e)
-        console.log(res)
         if (res) {
           reactive && setButtonClick(true)
         } else {
@@ -82,33 +83,11 @@ const Button = ({
   )
 
   useEffect(() => {
-    const setTimer = () => {
-      return setTimeout(() => {
-        if (buttonClick) {
-          setButtonClick(false)
-          buttonRef.current?.blur()
-        }
-      }, 1500)
-    }
-    if (buttonClick) {
-      let timer = setTimer()
-      return () => clearTimeout(timer)
-    }
+    setButtonTimer(buttonClick, setButtonClick, buttonRef)
   }, [buttonClick])
 
   useEffect(() => {
-    const setTimer = () => {
-      return setTimeout(() => {
-        if (buttonError) {
-          setButtonError(false)
-          buttonRef.current?.blur()
-        }
-      }, 1500)
-    }
-    if (buttonError) {
-      let timer = setTimer()
-      return () => clearTimeout(timer)
-    }
+    setButtonTimer(buttonError, setButtonError, buttonRef)
   }, [buttonError])
 
   return (
@@ -152,39 +131,32 @@ const Button = ({
       }}
       {...rest}
     >
-      <motion.span
-        className={cx(reactive && 'absolute', 'inset-0 flex items-center justify-center', color)}
-        initial={{ y: 0 }}
-        animate={{ y: reactive && (buttonClick || buttonError) ? '-200%' : 0 }}
-      >
-        {icon && <Icon icon={icon} className={cx('h-5 w-5', label && 'mr-1')} inline={true} />}
-        {label && <span className={cx(bold && 'font-bold')}>{label}</span>}
-      </motion.span>
+      <ButtonLabel
+        label={label}
+        icon={icon}
+        color={color}
+        bold={bold}
+        buttonClick={buttonClick}
+        buttonError={buttonError}
+        reactive={reactive}
+      />
       {reactive && (
-        <motion.span
-          className={cx('absolute inset-0 flex items-center justify-center', colorReactive)}
-          initial={{ y: '200%' }}
-          animate={{ y: buttonClick ? 0 : '200%' }}
-          whileTap={{ scale: 0.9 }}
-        >
-          {iconReactive && <Icon icon={iconReactive} className="mr-1 h-5 w-5" inline={true} />}
-          <span className={cx(bold && 'font-bold')}>{labelReactive}</span>
-        </motion.span>
+        <ButtonLabelReactive
+          show={buttonClick}
+          colorReactive={colorReactive}
+          labelReactive={labelReactive}
+          iconReactive={iconReactive}
+          bold={bold}
+        />
       )}
       {reactive && buttonError && (
-        <motion.span
-          className={cx(
-            'absolute inset-0 flex items-center justify-center',
-            buttonError ? bgClickError : bgClick,
-            colorError
-          )}
-          initial={{ y: '200%' }}
-          animate={{ y: buttonError ? 0 : '200%' }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <Icon icon={alertCircle} className="mr-1 h-5 w-5" inline={true} />
-          <span className={cx(bold && 'font-bold')}>Error!</span>
-        </motion.span>
+        <ButtonError
+          show={buttonError}
+          bgClick={bgClick}
+          bgClickError={bgClickError}
+          colorError={colorError}
+          bold={bold}
+        />
       )}
     </motion.button>
   )

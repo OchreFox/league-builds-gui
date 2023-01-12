@@ -41,16 +41,8 @@ export interface TypeFilter {
 
 export type ItemGridProps = {
   goldOrderDirection: SortDirection
-  searchFilter: string
-  setAutocompleteResults: Dispatch<SetStateAction<Fuzzysort.KeysResults<ItemsSchema> | undefined>>
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
-}
-
-export type FilterBySearchState = {
-  searchTerm: string
-  setSearchTerm: Dispatch<SetStateAction<string>>
-  autocompleteResults: Fuzzysort.KeysResults<ItemsSchema> | undefined
 }
 
 export interface ItemSectionState {
@@ -59,6 +51,7 @@ export interface ItemSectionState {
   tier: number
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
+  // style: React.CSSProperties
 }
 
 export type ItemContainerState = {

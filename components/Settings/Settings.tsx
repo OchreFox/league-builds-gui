@@ -13,7 +13,8 @@ import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState }
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { batch, useSelector } from 'react-redux'
 
-import { ItemNameTooltipVariants, itemTooltipClass } from 'components/ItemGrid/ItemComponents'
+import { ItemNameTooltipVariants } from 'components/ItemGrid/ItemComponents'
+import itemStyles from 'components/ItemGrid/StandardItem.module.scss'
 
 import { Block, Item, ItemBuild } from '../../types/Build'
 import { easeInOutExpo, easeInOutQuad } from '../../utils/Transition'
@@ -234,14 +235,7 @@ const Settings = () => {
                   left: x ?? 0,
                   width: 'max-content',
                 }}
-                className={cx(
-                  'z-20 px-2 py-1 border border-yellow-700 shadow-lg text-white font-semibold text-center bg-yellow-700/50',
-                  !potatoMode &&
-                    css`
-                      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-                      backdrop-filter: blur(5px);
-                    `
-                )}
+                className={itemStyles.itemTooltip}
                 variants={ItemNameTooltipVariants}
                 initial="initial"
                 animate="animate"
@@ -252,7 +246,15 @@ const Settings = () => {
                 }}
               >
                 <span>{errors.title.message}</span>
-                <div ref={arrowTooltipRef} className={itemTooltipClass(placement, arrowX, arrowY, potatoMode, true)} />
+                <div
+                  ref={arrowTooltipRef}
+                  data-tooltip-placement={placement}
+                  className={itemStyles.itemTooltipArrow}
+                  style={{
+                    top: arrowY,
+                    left: arrowX,
+                  }}
+                />
               </motion.div>
             )}
           </AnimatePresence>

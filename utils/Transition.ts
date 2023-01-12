@@ -9,3 +9,9 @@ export const easeInOutQuad = {
   ease: [0.45, 0, 0.55, 1],
   duration: 0.7,
 }
+
+export const easeOutExpo = {
+  type: 'tween',
+  ease: [0.16, 1, 0.3, 1],
+  duration: 0.4,
+}

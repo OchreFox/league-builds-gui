@@ -1,17 +1,26 @@
 import { useItems } from '@/hooks/useItems'
-import { selectItemFilters, selectItemPicker, setItemPickerContainerCount } from '@/store/appSlice'
+import {
+  selectItemFilters,
+  selectItemPicker,
+  setItemFiltersClass,
+  setItemFiltersRarity,
+  setItemPickerContainerCount,
+} from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import { AnimatePresence, motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
-import React, { Fragment, createRef, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Fragment, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch, useSelector } from 'react-redux'
+import { VariableSizeList as List } from 'react-window'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { ItemGridProps, Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
-import { isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
+import { scrollIntoItem } from 'components/ItemBuildTree/BuildTreeComponents'
+
+import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
 import { easeInOutExpo } from 'utils/Transition'
 
 import {
@@ -21,7 +30,6 @@ import {
   isFromChampionClass,
   isInStore,
   markItemsAsVisible,
-  matchesSearchQuery,
   overlayVariants,
   sortItems,
   titleVariants,
@@ -29,17 +37,10 @@ import {
 } from './ItemGridComponents'
 import ItemSection from './ItemSection'
 
-export default function ItemGrid({
-  goldOrderDirection,
-  searchFilter,
-  setAutocompleteResults,
-  itemRefArray,
-  itemGridRef,
-}: ItemGridProps) {
+export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef }: ItemGridProps) {
   const dispatch = useAppDispatch()
   const itemFilters = useSelector(selectItemFilters)
   const itemPicker = useSelector(selectItemPicker)
-  const { hoveredItem } = useSelector(selectItemPicker)
   const basicItemsCount = useMemo(() => itemPicker.containers[Rarity.Basic].count, [itemPicker.containers])
   const epicItemsCount = useMemo(() => itemPicker.containers[Rarity.Epic].count, [itemPicker.containers])
   const legendaryItemsCount = useMemo(() => itemPicker.containers[Rarity.Legendary].count, [itemPicker.containers])
@@ -62,10 +63,35 @@ export default function ItemGrid({
   // Scroll to bottom
   const [showScrollToBottom, setShowScrollToBottom] = useState(false)
   const [scrollToBottom, setScrollToBottom] = useState(false)
-  const topRef = useRef(0)
-  const bottomRef = useRef(0)
 
-  // Memoize total height of the item grid
+  // React window measures
+  // const rowHeights = useMemo(() => {
+  //   let heights: Array<number> = []
+  //   Object.values(Rarity).forEach((rarity) => {
+  //     if (rarity === Rarity.Empty) return
+  //     const container = itemPicker.containers[rarity]
+  //     heights.push(container.titleHeight)
+  //     const rowHeight = (container.gridHeight - 8 * (container.rows - 1)) / container.rows
+  //     const rowHeightArray = Array(container.rows).fill(rowHeight)
+  //     heights.push(...rowHeightArray)
+  //   })
+  //   console.log(heights)
+  //   return heights
+  // }, [itemPicker.containers])
+
+  // const itemCount = useMemo(() => {
+  //   let count = 0
+  //   Object.values(Rarity).forEach((rarity) => {
+  //     if (rarity === Rarity.Empty) return
+  //     const container = itemPicker.containers[rarity]
+  //     count += container.rows + 1
+  //   })
+  //   return count
+  // }, [itemPicker.containers])
+
+  // const getItemSize = (index: number) => rowHeights[index]
+
+  // Total height of the item grid
   const totalHeight = useMemo(() => {
     return Object.values(itemPicker.containers).reduce((acc, container) => {
       return acc + (container.height || 0)
@@ -76,7 +102,6 @@ export default function ItemGrid({
   const previousValues = useRef({
     goldOrderDirection,
     itemFilters,
-    searchFilter,
   })
 
   if (itemsError) {
@@ -168,9 +193,6 @@ export default function ItemGrid({
       console.error('No items array provided to reduceItems')
       return
     }
-
-    let filteredItems: ItemsSchema[]
-
     let basicVisibleItems: Array<ItemsSchema> = []
     let epicVisibleItems: Array<ItemsSchema> = []
     let legendaryVisibleItems: Array<ItemsSchema> = []
@@ -183,13 +205,7 @@ export default function ItemGrid({
 
     // If no filters are selected, return all items
     const hasCategoryAll = includesCategoryAll(categories)
-    if (
-      hasCategoryAll &&
-      championClass === ChampionClass.None &&
-      searchFilter === '' &&
-      goldOrderDirection === SortDirection.Asc
-    ) {
-      filteredItems = items
+    if (hasCategoryAll && championClass === ChampionClass.None && goldOrderDirection === SortDirection.Asc) {
       basicVisibleItems = initialBasicItems
       epicVisibleItems = initialEpicItems
       legendaryVisibleItems = initialLegendaryItems
@@ -204,11 +220,10 @@ export default function ItemGrid({
       let filterMethods: Array<Function> = [
         (item: ItemsSchema) => includesCategory(item, categories),
         (item: ItemsSchema) => isFromChampionClass(item, championClass),
-        (item: ItemsSchema) => matchesSearchQuery(item, searchFilter),
         (item: ItemsSchema) => isInStore(item),
       ]
 
-      filteredItems = Object.values(items).filter((item) => {
+      let filteredItems = Object.values(items).filter((item) => {
         // If any filter method returns false, the item is filtered out
         return filterMethods.every((method) => method(item))
       })
@@ -239,16 +254,6 @@ export default function ItemGrid({
       dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: legendaryVisibleItemsCount }))
       dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: mythicVisibleItemsCount }))
     })
-
-    // Check if the searchFilter has changed
-    if (previousValues.current.searchFilter !== searchFilter) {
-      // Return fuzzy search results
-      let fuzzySearchResults = fuzzysort.go(searchFilter, filteredItems, {
-        limit: 10,
-        keys: ['name', 'nicknames'],
-      })
-      setAutocompleteResults(fuzzySearchResults)
-    }
   }
 
   useEffect(() => {
@@ -262,22 +267,20 @@ export default function ItemGrid({
       // Return if no changes were made to the filters
       if (
         previousValues.current.goldOrderDirection === goldOrderDirection &&
-        previousValues.current.searchFilter === searchFilter &&
         previousValues.current.itemFilters === itemFilters
-      )
+      ) {
         return
-      else {
+      } else {
         // Reduce items
         const activeCategories = getActiveCategories(itemFilters.types)
         reduceItems(activeCategories, itemFilters.class)
 
         // Set previous values
         previousValues.current.goldOrderDirection = goldOrderDirection
-        previousValues.current.searchFilter = searchFilter
         previousValues.current.itemFilters = itemFilters
       }
     }
-  }, [items, goldOrderDirection, itemFilters, searchFilter])
+  }, [items, goldOrderDirection, itemFilters])
 
   // Listen for changes in itemPicker
   useEffect(() => {
@@ -286,13 +289,28 @@ export default function ItemGrid({
     }
   }, [itemPicker.containers])
 
+  // Listen for changes in selected item and scroll to it
+  useEffect(() => {
+    if (itemPicker.selectedItem) {
+      const selectedItem = itemPicker.selectedItem
+      const itemRarity = getRarity(selectedItem)
+
+      // If there is a rarity filter, change the filter to the item's rarity and scroll to it
+      if (itemFilters.rarity !== itemRarity && itemFilters.rarity !== Rarity.Empty) {
+        dispatch(setItemFiltersRarity(itemRarity))
+      }
+      // Remove champion class filter if the item is obfuscated by it
+      if (!isFromChampionClass(selectedItem, itemFilters.class)) {
+        dispatch(setItemFiltersClass(ChampionClass.None))
+      }
+
+      scrollIntoItem(selectedItem, itemRefArray, itemGridRef)
+    }
+  }, [itemPicker.selectedItem])
+
   // Handle scroll to bottom
   const handleScroll = (e: any) => {
     const div = e.target as HTMLDivElement
-    // topRef.current = div.scrollTop
-    // bottomRef.current = div.scrollTop + div.clientHeight
-    // console.log(topRef.current)
-    // console.log(bottomRef.current)
     const bottom = Math.abs(div.scrollHeight - div.clientHeight - div.scrollTop) < 1
     if (bottom) {
       setScrollToBottom(true)
@@ -312,6 +330,7 @@ export default function ItemGrid({
     }
   }
 
+  // Add scroll event listener to item grid
   useEffect(() => {
     itemGridRef.current?.addEventListener('scroll', handleScroll)
 
@@ -342,46 +361,34 @@ export default function ItemGrid({
         className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
         scrollableNodeProps={{ ref: itemGridRef }}
       >
-        <AnimatePresence>
-          {hoveredItem && (
-            <motion.div
-              className="absolute inset-0 w-full h-full z-[5] pointer-events-none bg-black/25"
-              variants={overlayVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              transition={easeInOutExpo}
-            ></motion.div>
-          )}
-        </AnimatePresence>
+        {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
+          <Fragment key="noItems">
+            <motion.h3
+              variants={titleVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={transitionVariant}
+              className={cx(
+                'mb-2 text-center font-body font-semibold text-gray-200',
+                itemFilters.rarity !== Rarity.Epic && 'mt-6'
+              )}
+            >
+              No items match your filters.
+            </motion.h3>
+            <motion.img
+              variants={titleVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={transitionVariant}
+              src="icons/poro_question.webp"
+              alt="Poro question mark"
+              className="mx-auto h-32 w-32 brightness-200"
+            />
+          </Fragment>
+        )}
         <div id="item-virtual-container">
-          {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
-            <Fragment key="noItems">
-              <motion.h3
-                variants={titleVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                className={cx(
-                  'mb-2 text-center font-body font-semibold text-gray-200',
-                  itemFilters.rarity !== Rarity.Epic && 'mt-6'
-                )}
-              >
-                No items match your filters.
-              </motion.h3>
-              <motion.img
-                variants={titleVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transitionVariant}
-                src="icons/poro_question.webp"
-                alt="Poro question mark"
-                className="mx-auto h-32 w-32 brightness-200"
-              />
-            </Fragment>
-          )}
           {basicItemsCount > 0 && (
             <ItemSection
               items={basicItems}
@@ -391,7 +398,6 @@ export default function ItemGrid({
               itemGridRef={itemGridRef}
             />
           )}
-
           {epicItemsCount > 0 && (
             <ItemSection
               items={epicItems}
@@ -401,7 +407,6 @@ export default function ItemGrid({
               itemGridRef={itemGridRef}
             />
           )}
-
           {legendaryItemsCount > 0 && (
             <ItemSection
               items={legendaryItems}
@@ -411,7 +416,6 @@ export default function ItemGrid({
               itemGridRef={itemGridRef}
             />
           )}
-
           {mythicItemsCount > 0 && (
             <ItemSection
               items={mythicItems}

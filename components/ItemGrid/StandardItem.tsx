@@ -1,16 +1,9 @@
-import {
-  selectItemPicker,
-  setItemPickerDraggedItem,
-  setItemPickerHoveredItem,
-  setItemPickerSelectedItem,
-} from '@/store/appSlice'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { selectItemPicker, setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
 import { AnimatePresence, motion } from 'framer-motion'
-import _ from 'lodash'
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux'
@@ -18,15 +11,15 @@ import { StandardItemState } from 'types/FilterProps'
 
 import { easeInOutQuad } from 'utils/Transition'
 
-import { ItemNameTooltipVariants, itemButtonClass, itemTooltipClass, mythicOverlayClass } from './ItemComponents'
+import { ItemNameTooltipVariants } from './ItemComponents'
 import { transitionVariant } from './ItemGridComponents'
 import { ItemIcon } from './ItemIcon'
 import { ItemPopper } from './ItemPopper'
+import itemStyles from './StandardItem.module.scss'
 
 export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemState) => {
   const dispatch = useAppDispatch()
-  const potatoMode = useSelector(selectPotatoMode)
-  const { selectedItem, hoveredItem } = useSelector(selectItemPicker)
+  const { selectedItem } = useSelector(selectItemPicker)
   const [showTooltip, setShowTooltip] = useState(false)
   const [showPopper, setShowPopper] = useState(false)
   const [mouseEnter, setMouseEnter] = useState(false)
@@ -71,17 +64,52 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
     middleware: [offset(2), shift({ padding: 5 }), flip(), arrow({ element: arrowTooltipRef })],
   })
 
-  const addToRefs = (el: HTMLElement | null) => {
-    if (el) {
-      let itemRefArrayIndex = _.findIndex(itemRefArray.current, (itemRef) => itemRef.itemId === item.id)
-      if (itemRefArrayIndex !== -1) {
-        itemRefArray.current[itemRefArrayIndex].ref.current = el
-        itemRef.current = el
-      }
-    }
-  }
+  const itemRefArrayIndex = useMemo(
+    () => itemRefArray.current.findIndex((itemRef) => itemRef.itemId === item.id),
+    [itemRefArray, item.id]
+  )
 
   const isSelected = useMemo(() => selectedItem !== null && selectedItem.id === item.id, [selectedItem, item.id])
+
+  const addToRefs = useCallback(
+    (el: HTMLElement | null) => {
+      if (el) {
+        // If the item is not in the array, add it
+        if (itemRefArrayIndex !== -1) {
+          itemRefArray.current[itemRefArrayIndex].ref.current = el
+          itemRef.current = el
+        }
+      }
+    },
+    [itemRefArray, item.id]
+  )
+
+  const itemDragStart = useCallback(
+    (e: React.DragEvent<HTMLLIElement>) => {
+      dispatch(setItemPickerDraggedItem(item.id))
+      e.dataTransfer.setData('text/plain', JSON.stringify(item))
+      e.currentTarget.style.opacity = '0.4'
+      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
+      setButtonClick(true)
+    },
+    [item]
+  )
+
+  const itemDragEnd = useCallback((e: React.DragEvent<HTMLLIElement>) => {
+    dispatch(setItemPickerDraggedItem(null))
+    e.currentTarget.style.opacity = '1'
+    e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0)'
+    setButtonClick(false)
+  }, [])
+
+  const toggleSelectedItem = useCallback(() => {
+    // Toggle selectedItem
+    if (isSelected) {
+      dispatch(setItemPickerSelectedItem(null))
+    } else {
+      dispatch(setItemPickerSelectedItem(item))
+    }
+  }, [isSelected, item])
 
   useLayoutEffect(() => {
     // Call reference with the virtual element inside an effect or event handler.
@@ -99,7 +127,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
       timer = setTimeout(() => {
         setShowPopper(true)
         setShowTooltip(false)
-        dispatch(setItemPickerHoveredItem(item.id))
+        // dispatch(setItemPickerHoveredItem(item.id))
       }, 700)
 
       return () => {
@@ -109,7 +137,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
       }
     } else {
       setShowTooltip(false)
-      dispatch(setItemPickerHoveredItem(null))
+      // dispatch(setItemPickerHoveredItem(null))
       setShowPopper(false)
       if (timer) {
         clearTimeout(timer)
@@ -120,7 +148,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
   useEffect(() => {
     if (buttonClick) {
       setShowPopper(false)
-      dispatch(setItemPickerHoveredItem(null))
+      // dispatch(setItemPickerHoveredItem(null))
     }
   }, [buttonClick])
 
@@ -136,19 +164,8 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
       data-item-id={item.id}
       className="relative list-none"
       ref={addToRefs}
-      onDragStart={(e) => {
-        dispatch(setItemPickerDraggedItem(item.id))
-        e.dataTransfer.setData('text/plain', JSON.stringify(item))
-        e.currentTarget.style.opacity = '0.4'
-        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
-        setButtonClick(true)
-      }}
-      onDragEnd={(e) => {
-        dispatch(setItemPickerDraggedItem(null))
-        e.currentTarget.style.opacity = '1'
-        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0)'
-        setButtonClick(false)
-      }}
+      onDragStart={itemDragStart}
+      onDragEnd={itemDragEnd}
     >
       <>
         <motion.button
@@ -158,7 +175,11 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           key={item.id}
-          className={itemButtonClass(item, hoveredItem, isSelected, potatoMode)}
+          className={cx(
+            itemStyles.itemButton,
+            showPopper && itemStyles.itemButtonHovered,
+            isSelected && itemStyles.itemButtonSelected
+          )}
           ref={buttonRef}
           onMouseEnter={() => {
             setMouseEnter(true)
@@ -166,14 +187,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
           onMouseLeave={() => {
             setMouseEnter(false)
           }}
-          onClick={() => {
-            // Toggle selectedItem
-            if (isSelected) {
-              dispatch(setItemPickerSelectedItem(null))
-            } else {
-              dispatch(setItemPickerSelectedItem(item))
-            }
-          }}
+          onClick={toggleSelectedItem}
           onMouseDown={() => {
             setButtonClick(true)
           }}
@@ -186,7 +200,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
           }}
         >
           {/* Mythic item overlay */}
-          <div ref={reference} className={mythicOverlayClass(item.mythic)} data-mythic={item.mythic}>
+          <div ref={reference} className={item.mythic ? itemStyles.itemMythicOverlay : ''}>
             <ItemIcon item={item} />
           </div>
           <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
@@ -201,15 +215,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
                 left: x ?? 0,
                 width: 'max-content',
               }}
-              className={cx(
-                'z-20 px-2 py-1 border border-yellow-700 shadow-lg text-white font-semibold text-center',
-                !potatoMode &&
-                  css`
-                    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-                    backdrop-filter: blur(5px);
-                  `,
-                isSelected ? 'bg-yellow-700/50' : 'bg-slate-700/50'
-              )}
+              className={itemStyles.itemTooltip}
               variants={ItemNameTooltipVariants}
               initial="initial"
               animate="animate"
@@ -219,10 +225,15 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
                 duration: 0.1,
               }}
             >
-              <span>{item.name}</span>
+              <motion.span className="pointer-events-none">{item.name}</motion.span>
               <div
                 ref={arrowTooltipRef}
-                className={itemTooltipClass(placement, arrowX, arrowY, potatoMode, isSelected)}
+                data-tooltip-placement={placement}
+                className={itemStyles.itemTooltipArrow}
+                style={{
+                  top: arrowY,
+                  left: arrowX,
+                }}
               />
             </motion.div>
           )}
@@ -234,7 +245,6 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
                 styles={styles}
                 attributes={attributes}
                 setArrowRef={setArrowRef}
-                hoveredItem={hoveredItem}
                 item={item}
               />,
               document.querySelector('#item-container') as HTMLElement

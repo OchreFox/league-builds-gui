@@ -96,7 +96,7 @@ export const matchesSearchQuery = (item: ItemsSchema, searchQuery: string) => {
 }
 
 export const isInStore = (item: ItemsSchema) => {
-  return item.inStore
+  return item.inStore === true && (item.maps?.includes(11) || item.maps?.includes(12)) && item.tier !== 0
 }
 
 /**

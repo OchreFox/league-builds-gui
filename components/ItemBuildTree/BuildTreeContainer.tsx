@@ -13,14 +13,13 @@ import { ItemsSchema } from 'types/Items'
 import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 import styles from 'components/ItemFilters/FilterRarity.module.scss'
 
-import { isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
+import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
 
 import { itemSectionConstants } from '../ItemGrid/ItemGridComponents'
 import { BuildSuggestions } from './BuildSuggestions'
 import { BuildTreeRoot } from './BuildTreeRoot'
 
 export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeProps) => {
-  const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const { selectedItem } = useSelector(selectItemPicker)
   const [selectedItemRarity, setSelectedItemRarity] = useState<Rarity>(Rarity.Empty)
@@ -28,40 +27,6 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
   const { items } = useItems()
   const [triggerSelection, setTriggerSelection] = useState<number | null>()
   const [itemTitleQueue, setItemTitleQueue] = useState<string[]>([])
-
-  function scrollIntoItem(item: ItemsSchema) {
-    const itemIndex = _.findIndex(itemRefArray.current, (x) => x.itemId === item.id)
-    if (itemIndex > -1) {
-      // console.log('Scrolling to item ' + item.name + ' at index ', itemIndex)
-      const itemRef = itemRefArray.current[itemIndex].ref.current
-      if (itemRef && itemGridRef.current) {
-        // Scroll to item in itemGridRef
-        itemGridRef.current.scrollTo({
-          top: itemRef.offsetTop - 100,
-          behavior: 'smooth',
-        })
-      }
-    }
-  }
-
-  const getItemRarity = useCallback(
-    (item: ItemsSchema) => {
-      if (isBasic(item)) {
-        return Rarity.Basic
-      }
-      if (isEpic(item)) {
-        return Rarity.Epic
-      }
-      if (isLegendary(item)) {
-        return Rarity.Legendary
-      }
-      if (isMythic(item)) {
-        return Rarity.Mythic
-      }
-      return Rarity.Empty
-    },
-    [selectedItem]
-  )
 
   const pushItemTitleQueue = useCallback(
     (item: ItemsSchema) => {
@@ -76,7 +41,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
 
   useEffect(() => {
     if (selectedItem) {
-      setSelectedItemRarity(getItemRarity(selectedItem))
+      setSelectedItemRarity(getRarity(selectedItem))
       // Add the selected item to the queue if it's not already in there
       if (!itemTitleQueue.includes(selectedItem.name)) {
         pushItemTitleQueue(selectedItem)

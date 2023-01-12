@@ -35,7 +35,6 @@ const SuggestedItem = ({
       )}
       onClick={() => {
         dispatch(setItemPickerSelectedItem(item))
-        scrollIntoItem(item, itemRefArray, itemGridRef)
       }}
       draggable={true}
       onDragStart={(e) => {

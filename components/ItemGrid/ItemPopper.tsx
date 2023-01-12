@@ -1,5 +1,6 @@
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { cx } from '@emotion/css'
+import { motion } from 'framer-motion'
 // SVG imports
 import goldIcon from 'public/icons/gold.svg?url'
 import React, { useCallback } from 'react'
@@ -26,18 +27,16 @@ import {
   Stat,
   Stats,
   Status,
-  Tooltip,
   TrueDamage,
-  setPopperBg,
 } from './ItemComponents'
 import { ItemIcon } from './ItemIcon'
+import popperStyles from './ItemPopper.module.scss'
 
 export function ItemPopper({
   popperRef,
   styles,
   attributes,
   setArrowRef,
-  hoveredItem,
   item,
 }: {
   popperRef: React.MutableRefObject<null>
@@ -52,17 +51,14 @@ export function ItemPopper({
       | undefined
   }
   setArrowRef: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
-  hoveredItem: number | null
   item: ItemsSchema
 }): JSX.Element {
-  const potatoMode = useSelector(selectPotatoMode)
-
   const renderError = useCallback(
     (props: { error: string }) => <div className="text-red-500">{`${props.error}`}</div>,
     []
   )
   return (
-    <Tooltip
+    <motion.div
       ref={popperRef}
       style={styles.popper}
       {...attributes.popper}
@@ -79,15 +75,15 @@ export function ItemPopper({
         opacity: 0,
       }}
       key={'popper-' + item.id}
-      className={cx(!potatoMode && 'backdrop-blur-md', setPopperBg(potatoMode))}
+      className={popperStyles.itemDescriptionPopper}
     >
-      <div ref={setArrowRef} style={styles.arrow} id="arrow" key={'arrow-' + item.id} />
+      <div ref={setArrowRef} style={styles.arrow} key={'arrow-' + item.id} />
       {/* Item information */}
       <div className="flex flex-col w-full" key={'popper-content-' + item.id}>
         <div className="flex w-full">
-          <ItemIcon item={item} size={35} addPlaceholder={false} />
+          <ItemIcon item={item} size={35} />
           <div className="flex justify-between border-b border-yellow-900 pb-1 ml-4 w-full">
-            <h3 className="font-body font-semibold text-gray-200">{item.name}</h3>
+            <motion.h3 className="font-body font-semibold text-gray-200 pointer-events-none">{item.name}</motion.h3>
             <p className="inline-flex items-center font-sans font-bold text-yellow-600">
               <img className="mr-1 h-5 w-5" src={goldIcon} alt="gold" />
               <span className="ml-1">{item.gold?.total}</span>
@@ -128,6 +124,6 @@ export function ItemPopper({
           )}
         </div>
       </div>
-    </Tooltip>
+    </motion.div>
   )
 }

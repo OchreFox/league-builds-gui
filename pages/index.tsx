@@ -26,7 +26,6 @@ const DynamicSliderOverlay = dynamic(() => import('components/Layout/SliderOverl
 function Home() {
   const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
   const [searchTerm, setSearchTerm] = useState('')
-  const [autocompleteResults, setAutocompleteResults] = useState<Fuzzysort.KeysResults<ItemsSchema>>()
 
   // Array of itemRefs
   const itemRefArray = useRef<
@@ -80,11 +79,7 @@ function Home() {
                 id="item-container"
               >
                 {/* Search bar */}
-                <SearchBar
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  autocompleteResults={autocompleteResults}
-                />
+                <SearchBar />
                 <div className="flex px-2 py-1 mt-2 border-b border-yellow-900 items-center space-x-4">
                   <h3 className="font-body font-semibold text-gray-200 xl:shrink-0 border-r border-yellow-900 pr-2">
                     ITEM RARITY
@@ -95,8 +90,6 @@ function Home() {
                 {/* Item grid */}
                 <ItemGrid
                   goldOrderDirection={goldOrderDirection}
-                  searchFilter={searchTerm}
-                  setAutocompleteResults={setAutocompleteResults}
                   itemRefArray={itemRefArray}
                   itemGridRef={itemGridRef}
                 />

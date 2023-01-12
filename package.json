@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "league-builds-gui",
-  "version": "0.6.1-beta",
+  "version": "0.6.2-beta",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -40,6 +40,7 @@
     "@types/three": "^0.146.0",
     "ajv": "^8.11.2",
     "blurhash": "^2.0.4",
+    "classnames": "^2.3.2",
     "color.js": "^1.2.0",
     "fast-blurhash": "^1.1.2",
     "framer-motion": "^7.6.15",

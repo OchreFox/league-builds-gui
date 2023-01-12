@@ -1,10 +1,11 @@
 import { cx } from '@emotion/css'
 import Giscus from '@giscus/react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useCallback, useEffect } from 'react'
+import xIcon from '@iconify/icons-tabler/x'
+import { Icon } from '@iconify/react'
+import { Fragment, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
-import Button from '../basic/Button'
 import { selectMenu, setMenuShow } from '../store/appSlice'
 import { selectPotatoMode } from '../store/potatoModeSlice'
 import { useAppDispatch } from '../store/store'
@@ -56,25 +57,23 @@ export default function SliderOverlay() {
                 >
                   <div className="px-4 sm:px-6">
                     <div className="flex items-start justify-between">
-                      <Dialog.Title className="text-lg font-medium text-gray-900"> Panel title </Dialog.Title>
-                      <div className="ml-3 flex h-7 items-center">
-                        <Button
-                          icon="tabler:x"
-                          bgColor="bg-brand-default"
-                          color="text-white"
-                          reactive={false}
-                          bgClick="bg-brand-dark"
-                          rounded="rounded-md"
-                          handleClick={hideMenu}
-                        />
+                      <Dialog.Title className="font-body text-2xl font-bold select-none pointer-events-none text-white mb-4">
+                        Share your feedback!
+                      </Dialog.Title>
+                      <div className="ml-3 flex items-center">
+                        <button
+                          type="button"
+                          className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
+                          onClick={hideMenu}
+                        >
+                          <span className="sr-only pointer-events-none">Close</span>
+                          <Icon icon={xIcon} className="h-6 w-6" inline={true} />
+                        </button>
                       </div>
                     </div>
                   </div>
                   <div className="relative mt-6 flex-1 px-4 sm:px-6">
                     <div className="absolute inset-0 px-4 sm:px-6">
-                      <h1 className="font-body text-2xl font-bold select-none pointer-events-none text-white mb-4">
-                        Share your feedback!
-                      </h1>
                       <Giscus
                         id="Feedback"
                         repo="OchreFox/league-builds-gui"

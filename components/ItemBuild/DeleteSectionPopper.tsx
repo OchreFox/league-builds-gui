@@ -5,18 +5,18 @@ import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { Portal } from '@headlessui/react'
 import { Icon } from '@iconify/react'
+import { motion } from 'framer-motion'
 import React from 'react'
 import { batch, useSelector } from 'react-redux'
 import { DeleteSectionPopperProps } from 'types/Build'
 
-import { Tooltip, setPopperBg } from 'components/ItemGrid/ItemComponents'
+import popperStyles from 'components/ItemGrid/ItemPopper.module.scss'
 
 export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attributes }: DeleteSectionPopperProps) {
   const dispatch = useAppDispatch()
-  const potatoMode = useSelector(selectPotatoMode)
   return (
     <Portal>
-      <Tooltip
+      <motion.div
         ref={popperRef}
         style={styles.popper}
         {...attributes.popper}
@@ -35,10 +35,10 @@ export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attrib
         key={'popper-' + id}
         className={cx(
           'bg-gray-700/50 border border-yellow-900 text-white text-sm rounded-md shadow-lg backdrop-blur-md',
-          setPopperBg(potatoMode)
+          popperStyles.itemDescriptionPopper
         )}
       >
-        <div ref={setArrowRef} style={styles.arrow} id="arrow" key={'arrow-' + id} />
+        <div ref={setArrowRef} style={styles.arrow} key={'arrow-' + id} />
         <div className="flex flex-col w-full" key={'popper-content-' + id}>
           <div className="flex pb-1 mb-1 border-b border-yellow-900 items-center">
             <span className="rounded-full bg-brand-dark flex items-center justify-center mr-2 p-1">
@@ -68,7 +68,7 @@ export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attrib
             </button>
           </div>
         </div>
-      </Tooltip>
+      </motion.div>
     </Portal>
   )
 }

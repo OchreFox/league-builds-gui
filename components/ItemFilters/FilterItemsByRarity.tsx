@@ -68,7 +68,6 @@ export default function FilterItemsByRarity() {
           id="filterItemsByRarity"
           name="filterItemsByRarity"
           className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-          defaultValue={itemFilters.rarity}
           onChange={(e) => setRarity(e.target.value as Rarity)}
           value={itemFilters.rarity}
         >
