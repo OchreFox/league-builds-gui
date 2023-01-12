@@ -91,6 +91,7 @@ export default function FilterItemsByRarity() {
               rarity === Rarity.Empty && styles.all
             )}
             onClick={toggleRarity(rarity)}
+            tabIndex={-1}
           >
             {itemFilters.rarity === rarity ? (
               <motion.div

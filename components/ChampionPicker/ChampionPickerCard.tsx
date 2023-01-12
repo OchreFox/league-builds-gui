@@ -15,6 +15,7 @@ import { css, cx } from '@emotion/css'
 import appsIcon from '@iconify/icons-tabler/apps'
 import chevronUp from '@iconify/icons-tabler/chevron-up'
 import circleX from '@iconify/icons-tabler/circle-x'
+import searchIcon from '@iconify/icons-tabler/search'
 import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
 import { VariantLabels, Variants, motion, useAnimation } from 'framer-motion'
@@ -52,15 +53,6 @@ const ChampionPickerCard = () => {
 
   const selectedChampionsLength = useMemo(() => selectedChampions.length, [selectedChampions])
 
-  useEffect(() => {
-    if (cardRef.current) {
-      setSize({
-        width: cardRef.current.offsetWidth,
-        height: cardRef.current.offsetHeight,
-      })
-    }
-  }, [cardRef])
-
   const handleSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(setChampionPickerQuery(event.target.value))
@@ -68,9 +60,9 @@ const ChampionPickerCard = () => {
     [championPicker.query]
   )
 
-  const handleMouseEnter = useCallback(() => dispatch(setChampionPickerHint(true)), [championPicker.hint])
+  const handleIconMouseEnter = useCallback(() => dispatch(setChampionPickerHint(true)), [championPicker.hint])
 
-  const getChampionPickerAnimation = useCallback((): VariantLabels => {
+  const championPickerAnimation = useMemo((): VariantLabels => {
     if (championPicker.isLoading) {
       return 'loading'
     }
@@ -83,7 +75,7 @@ const ChampionPickerCard = () => {
     return 'default'
   }, [championPicker.show, championPicker.hint, championPicker.isLoading])
 
-  const title = useCallback((): string => {
+  const title = useMemo((): string => {
     // Only show the first two champions in the title and the rest in the description
     if (selectedChampionsLength > 0) {
       return (
@@ -96,7 +88,7 @@ const ChampionPickerCard = () => {
     return 'Select Champions'
   }, [selectedChampions])
 
-  const description = useCallback((): JSX.Element => {
+  const description = useMemo((): JSX.Element => {
     // If only one champion is selected, show the champion's title
     if (selectedChampionsLength === 1) {
       const champion = selectedChampions[0]
@@ -123,12 +115,21 @@ const ChampionPickerCard = () => {
     return <>Click to select champions</>
   }, [selectedChampions])
 
-  const titleColor = (): string => {
+  const titleColor = useMemo((): string => {
     if (selectedChampions.length === 1) {
       return selectedChampions[0].colors?.[0]
     }
     return '#fff'
-  }
+  }, [selectedChampions])
+
+  useEffect(() => {
+    if (cardRef.current) {
+      setSize({
+        width: cardRef.current.offsetWidth,
+        height: cardRef.current.offsetHeight,
+      })
+    }
+  }, [cardRef])
 
   return (
     <motion.div
@@ -176,7 +177,7 @@ const ChampionPickerCard = () => {
         )}
         <motion.div
           variants={titleHoverVariants}
-          animate={getChampionPickerAnimation()}
+          animate={championPickerAnimation}
           transition={easeInOutExpo}
           className="relative pointer-events-none"
         >
@@ -184,7 +185,7 @@ const ChampionPickerCard = () => {
             className={cx(
               'font-body text-2xl font-bold select-none pointer-events-none',
               css`
-                color: ${titleColor()};
+                color: ${titleColor};
               `
             )}
             variants={championNameVariants}
@@ -192,7 +193,7 @@ const ChampionPickerCard = () => {
             animate="animate"
             transition={easeInOutExpo}
           >
-            {title()}
+            {title}
           </motion.h3>
           <motion.p
             className="h-8 font-body text-sm capitalize text-gray-300 select-none pointer-events-none"
@@ -200,14 +201,14 @@ const ChampionPickerCard = () => {
             initial="initial"
             animate="animate"
           >
-            {description()}
+            {description}
           </motion.p>
           <Icon
             className="text-gray-700 bg-white/50 p-1 rounded-full absolute bottom-0 right-0 pointer-events-auto"
             icon={chevronUp}
             width="24"
             height="24"
-            onMouseEnter={handleMouseEnter}
+            onMouseEnter={handleIconMouseEnter}
           />
         </motion.div>
         <ChampionPickerHover
@@ -217,7 +218,7 @@ const ChampionPickerCard = () => {
           )}
           variants={descriptionHoverVariants}
           initial="default"
-          animate={getChampionPickerAnimation()}
+          animate={championPickerAnimation}
           transition={easeInOutExpo}
         >
           <span
@@ -238,7 +239,7 @@ const ChampionPickerCard = () => {
         </ChampionPickerHover>
         <motion.div
           className={cx(
-            'absolute bottom-0 -ml-4 flex h-full w-full select-none items-center justify-center overflow-hidden font-body text-xl font-bold text-gray-200',
+            'absolute bottom-0 -ml-4 flex h-full w-full select-none items-center justify-center overflow-hidden text-xl font-medium text-gray-200 text-center font-sans',
             css`
               background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 1) 100%),
                 url('/background-default.webp');
@@ -247,59 +248,43 @@ const ChampionPickerCard = () => {
           )}
           variants={championPickerVariants}
           initial="default"
-          animate={getChampionPickerAnimation()}
+          animate={championPickerAnimation}
           transition={easeInOutExpo}
         >
-          <div className="relative flex h-full w-full items-center justify-center text-center">
-            <div className="z-10 px-6 py-2">
-              <div className="flex" onClick={(e) => e.stopPropagation()}>
-                <select
-                  className="z-10 rounded-l-lg border border-gray-600 bg-gray-700 py-2.5 px-4 font-sans text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-brand-light"
-                  onChange={(e) => {
-                    dispatch(setChampionPickerCategory(e.target.value as Tag))
-                  }}
+          <div className="z-10 px-6 py-2 flex" onClick={(e) => e.stopPropagation()}>
+            <select
+              className="z-10 rounded-l-lg border border-gray-600 bg-gray-700 py-2.5 px-4 text-sm text-white hover:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-brand-light"
+              onChange={(e) => {
+                dispatch(setChampionPickerCategory(e.target.value as Tag))
+              }}
+            >
+              {Object.values(Tag).map((championClass) => (
+                <option
+                  key={'champion-class-' + championClass}
+                  value={championClass}
+                  className={cx(
+                    'inline-flex w-full py-2 px-4 hover:bg-gray-600 hover:text-white',
+                    championClass === championPicker.category && 'bg-gray-500 text-white'
+                  )}
                 >
-                  {Object.values(Tag).map((championClass) => (
-                    <option
-                      key={'champion-class-' + championClass}
-                      value={championClass}
-                      className={cx(
-                        'inline-flex w-full py-2 px-4 hover:bg-gray-600 hover:text-white',
-                        championClass === championPicker.category && 'bg-gray-500 text-white'
-                      )}
-                    >
-                      {championClass}
-                    </option>
-                  ))}
-                </select>
-                <div className="relative w-full">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6  6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="search"
-                    className="z-20 block w-full rounded-r-lg border border-l-0 border-gray-600 bg-gray-900 p-2.5 pl-10 font-sans text-sm text-white placeholder-gray-400 focus:border-brand-light focus:ring-brand-light"
-                    placeholder="Search champions"
-                    onChange={handleSearchQuery}
-                  />
-                </div>
+                  {championClass}
+                </option>
+              ))}
+            </select>
+            <div className="relative w-full">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <Icon className="h-5 w-5 text-gray-400" icon={searchIcon} />
               </div>
+              <input
+                type="search"
+                className="z-20 block w-full rounded-r-lg border border-l-0 border-gray-600 bg-gray-900 p-2.5 pl-10 text-sm text-white placeholder-gray-400 focus:border-brand-light focus:ring-brand-light"
+                placeholder="Search champions"
+                onChange={handleSearchQuery}
+              />
             </div>
-            <div className="flex items-center justify-center font-sans text-xs font-normal text-white/50 transition duration-100 group-hover:text-white">
-              <Icon className="" icon={xIcon} width="16" height="16" /> CLOSE
-            </div>
+          </div>
+          <div className="flex items-center justify-center text-xs font-normal text-white/50 transition-colors duration-200 group-hover:text-white">
+            <Icon className="" icon={xIcon} width="16" height="16" /> CLOSE
           </div>
         </motion.div>
       </motion.div>

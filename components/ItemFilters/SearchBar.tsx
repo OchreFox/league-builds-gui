@@ -3,8 +3,8 @@ import Image from 'next/image'
 import { useItems } from '@/hooks/useItems'
 import { setItemPickerSelectedItem } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import { css, cx } from '@emotion/css'
-import { Combobox, Transition } from '@headlessui/react'
+import { cx } from '@emotion/css'
+import { Combobox } from '@headlessui/react'
 import moodSad from '@iconify/icons-tabler/mood-sad'
 import searchIcon from '@iconify/icons-tabler/search'
 import { Icon } from '@iconify/react'
@@ -22,9 +22,11 @@ import { CustomLoader } from '../../utils/CustomLoader'
 const optionsVariants: Variants = {
   open: {
     paddingTop: '3.5rem',
+    opacity: 1,
   },
   closed: {
     paddingTop: 0,
+    opacity: 0,
   },
 }
 
@@ -53,7 +55,7 @@ export default function SearchBar() {
     if (!event.target.value) {
       clearQuery()
     }
-    setQuery(event.target.value)
+    setQuery(event.target.value.trim())
   }, [])
 
   useEffect(() => {
@@ -66,7 +68,7 @@ export default function SearchBar() {
   useEffect(() => {
     if (items && query) {
       let fuzzySearchResults = fuzzysort.go(query, filteredItems, {
-        limit: 10,
+        limit: 12,
         keys: ['name', 'nicknames'],
       })
       setFuzzyResults(fuzzySearchResults)
@@ -103,46 +105,34 @@ export default function SearchBar() {
           />
         </div>
 
-        <Transition
-          as={Fragment}
-          enter="transition ease-out-expo duration-200"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition ease-out-expo duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+        <Combobox.Options
+          as={motion.ul}
+          className="absolute -z-1 top-0 left-0 right-0 grid grid-cols-4 overflow-auto bg-black/50 p-1 backdrop-blur-md border border-league-gold text-base drop-shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          initial="closed"
+          animate={isFocused ? 'open' : 'closed'}
+          exit="closed"
+          variants={optionsVariants}
+          transition={easeOutExpo}
+          style={{
+            borderRadius: '0.375rem',
+          }}
+          onMouseDown={(e: any) => e.preventDefault()}
         >
-          <Combobox.Options
-            as={motion.ul}
-            className="absolute -z-1 top-0 left-0 right-0 grid grid-cols-4 overflow-auto bg-black/50 p-1 backdrop-blur-md border border-league-gold text-base drop-shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-            initial="closed"
-            animate={isFocused ? 'open' : 'closed'}
-            exit="closed"
-            variants={optionsVariants}
-            transition={easeOutExpo}
-            style={{
-              borderRadius: '0.375rem',
-            }}
-            onMouseDown={(e: any) => e.preventDefault()}
-          >
-            <AnimatePresence>
-              {query === '' && isFocused && (
-                <div className="flex flex-wrap items-center py-2.5 px-4 mr-2 text-sm text-gray-200">
-                  <p>Type to search...</p>
-                </div>
-              )}
-              {fuzzyResults?.length === 0 && query !== '' ? (
-                <span className="flex flex-row w-full items-center py-2.5 px-4 mr-2 text-sm text-gray-200">
-                  <Icon icon={moodSad} inline={true} className="mr-1" />
-                  <p>No results found</p>
-                </span>
-              ) : (
-                fuzzyResults?.map((result) => (
-                  <Combobox.Option
-                    key={'result-' + result.obj.id}
-                    value={result.obj}
-                    className="relative m-1 flex cursor-pointer select-none items-center rounded-md py-2 px-2 text-gray-200 bg-gray-900 border border-gray-700 hover:bg-gray-700 hover:border-gray-500"
-                  >
+          <AnimatePresence>
+            {query === '' && isFocused && (
+              <div className="flex flex-wrap items-center py-2.5 px-4 mr-2 text-sm text-gray-200">
+                <p>Type to search...</p>
+              </div>
+            )}
+            {fuzzyResults?.length === 0 && query !== '' ? (
+              <span className="flex flex-row w-full items-center py-2.5 px-4 mr-2 text-sm text-gray-200">
+                <Icon icon={moodSad} inline={true} className="mr-1" />
+                <p>No results found</p>
+              </span>
+            ) : (
+              fuzzyResults?.map((result) => (
+                <Combobox.Option as={Fragment} key={'result-' + result.obj.id} value={result.obj}>
+                  <button className="relative m-1 flex items-center rounded-md py-2 px-2 text-gray-200 border bg-gray-900 border-gray-700 hover:bg-gray-700 hover:border-gray-500">
                     <div className="mr-2 border border-black object-cover ring-1 ring-yellow-700 flex h-8 w-8 shrink-0">
                       <Image
                         loader={CustomLoader}
@@ -152,13 +142,13 @@ export default function SearchBar() {
                         alt={result.obj.name ?? ''}
                       />
                     </div>
-                    {result.obj.name}
-                  </Combobox.Option>
-                ))
-              )}
-            </AnimatePresence>
-          </Combobox.Options>
-        </Transition>
+                    <p> {result.obj.name}</p>
+                  </button>
+                </Combobox.Option>
+              ))
+            )}
+          </AnimatePresence>
+        </Combobox.Options>
       </Combobox>
     </div>
   )
