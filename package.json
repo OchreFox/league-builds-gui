@@ -33,7 +33,7 @@
     "@next/bundle-analyzer": "^13.0.5",
     "@pixi/particle-emitter": "^5.0.8",
     "@popperjs/core": "^2.11.6",
-    "@reduxjs/toolkit": "^1.9.0",
+    "@reduxjs/toolkit": "^1.9.1",
     "@types/lodash": "^4.14.190",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
