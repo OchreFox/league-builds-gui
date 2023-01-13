@@ -68,11 +68,11 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
     return (
       items && (
         <>
-          <div className="flex py-1 mb-2 border-b border-yellow-900 items-center space-x-4">
-            <h3 className="font-body font-semibold text-gray-200 shrink-0 border-r border-yellow-900 pr-2">ITEM</h3>
+          <div className="mb-2 flex items-center space-x-4 border-b border-yellow-900 py-1">
+            <h3 className="shrink-0 border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200">ITEM</h3>
             <button
               className={cx(
-                'group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-white hover:bg-cyan-900 hover:text-white',
+                'group relative inline-flex flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-white hover:bg-cyan-900 hover:text-white',
                 styles.filterButtonActive,
                 styles.all
               )}
@@ -80,33 +80,33 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
               Build Path
               <motion.div
                 layoutId="item-details-border"
-                className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
+                className="absolute inset-x-0 bottom-0 h-0.5 w-full bg-brand-default"
               />
             </button>
             <button
               disabled
-              className="group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-gray-600 cursor-help"
+              className="group relative inline-flex cursor-help flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-gray-600"
               title="Coming soon!"
             >
               Description
               <motion.div
                 layoutId="item-details-border"
-                className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
+                className="absolute inset-x-0 bottom-0 h-0.5 w-full bg-brand-default"
               />
             </button>
           </div>
           {potatoMode ? (
-            <h3 className="font-bold text-lg text-white">{selectedItem.name}</h3>
+            <h3 className="text-lg font-bold text-white">{selectedItem.name}</h3>
           ) : (
             <>
-              <div className="w-full text-clip inline-flex shrink-0 relative">
+              <div className="relative inline-flex w-full shrink-0 text-clip">
                 <AnimatePresence>
                   {itemTitleQueue.length > 0 &&
                     itemTitleQueue.map((title) => {
                       return (
                         <motion.h3
                           key={title + '-build-path'}
-                          className="font-bold text-lg absolute top-0 left-0 text-white"
+                          className="absolute top-0 left-0 text-lg font-bold text-white"
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: 10 }}
@@ -121,7 +121,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
                     })}
                 </AnimatePresence>
               </div>
-              <p className="font-bold text-lg text-transparent select-none">{selectedItem.name}</p>
+              <p className="select-none text-lg font-bold text-transparent">{selectedItem.name}</p>
             </>
           )}
 
@@ -150,7 +150,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
   } else {
     return (
       <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
-        <img src="icons/poro_sleeping.webp" alt="Poro sleeping" className="mx-auto h-32 w-auto opacity-75" />
+        <img src="icons/poro_sleeping.webp" alt="Poro sleeping" className="mx-auto h-16 w-auto opacity-75 md:h-32" />
         <p className="italic text-gray-500">Select an item to see its build path tree</p>
       </div>
     )

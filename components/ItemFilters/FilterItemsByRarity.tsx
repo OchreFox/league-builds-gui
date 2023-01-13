@@ -27,15 +27,15 @@ const borderVariants: Variants = {
 const RarityIcon = ({ rarity }: { rarity: Rarity }) => {
   switch (rarity) {
     case Rarity.Basic:
-      return <Icon icon={circleDashed} className="mr-1 w-4 h-4 fill-gray-500 stroke-gray-300" />
+      return <Icon icon={circleDashed} className="mr-1 h-4 w-4 fill-gray-500 stroke-gray-300" />
     case Rarity.Epic:
-      return <Icon icon={triangleIcon} className="mr-1 w-4 h-4 fill-cyan-300 stroke-cyan-500" />
+      return <Icon icon={triangleIcon} className="mr-1 h-4 w-4 fill-cyan-300 stroke-cyan-500" />
     case Rarity.Legendary:
-      return <Icon icon={squareRotated} className="mr-1 w-4 h-4 fill-red-500 stroke-red-700" />
+      return <Icon icon={squareRotated} className="mr-1 h-4 w-4 fill-red-500 stroke-red-700" />
     case Rarity.Mythic:
-      return <Icon icon={diamondIcon} className="mr-1 w-4 h-4 fill-purple-500 stroke-purple-700" />
+      return <Icon icon={diamondIcon} className="mr-1 h-4 w-4 fill-purple-500 stroke-purple-700" />
     default:
-      return <AllClasses className="mr-1 w-4 h-auto" />
+      return <AllClasses className="mr-1 h-auto w-4" />
   }
 }
 
@@ -61,13 +61,13 @@ export default function FilterItemsByRarity() {
   }
 
   return (
-    <div className={cx('relative z-0 flex flex-row w-full', styles.rarityButtonContainer)}>
-      <div className="lg:hidden w-full">
+    <div className={cx('relative z-0 flex grow flex-row', styles.rarityButtonContainer)}>
+      <div className="w-full lg:hidden">
         <select
           title="Filter items by rarity"
           id="filterItemsByRarity"
           name="filterItemsByRarity"
-          className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+          className="block w-full rounded-md border-gray-300 px-2 py-1 focus:border-indigo-500 focus:ring-indigo-500"
           onChange={(e) => setRarity(e.target.value as Rarity)}
           value={itemFilters.rarity}
         >
@@ -86,7 +86,7 @@ export default function FilterItemsByRarity() {
             type="button"
             title="Basic"
             className={cx(
-              'group inline-flex flex-row items-center justify-center py-1 px-2 text-sm font-medium relative bg-transparent text-gray-600 hover:bg-cyan-900',
+              'group relative inline-flex flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-gray-600 hover:bg-cyan-900',
               itemFilters.rarity === rarity ? styles.filterButtonActive : 'hover:text-white',
               rarity === Rarity.Empty && styles.all
             )}
@@ -96,7 +96,7 @@ export default function FilterItemsByRarity() {
             {itemFilters.rarity === rarity ? (
               <motion.div
                 layoutId="rarity-border"
-                className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
+                className="absolute inset-x-0 bottom-0 h-0.5 w-full bg-brand-default"
               />
             ) : null}
             <RarityIcon rarity={rarity} />

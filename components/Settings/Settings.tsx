@@ -187,22 +187,28 @@ const Settings = () => {
     <>
       <div
         className={cx(
-          'z-10 col-span-2 -mt-2 grid grid-cols-1 gap-3 border-2 border-yellow-900 px-4 py-4 shadow-xl md:grid-flow-col md:grid-cols-2 md:grid-rows-2 md:gap-1 md:gap-x-6 md:pt-2',
+          'z-10 col-span-2 -mt-2 grid grid-cols-1 gap-3 border-2 border-yellow-900 px-4 py-4 shadow-xl @container sm:grid-cols-2 md:grid-flow-col md:grid-rows-2 md:gap-1 md:gap-x-6 md:pt-2',
           styles['container-background']
         )}
       >
-        <h3 className="flex items-center border-b border-yellow-900 font-body font-semibold text-gray-200">SETTINGS</h3>
+        <h3 className="flex items-center border-b border-yellow-900 font-body font-semibold text-gray-200 sm:col-span-2 md:col-span-1">
+          SETTINGS
+        </h3>
         {/* Item Build Page Name */}
-        <form onSubmit={handleSubmit(onSubmit)} className="row-span-1 flex" ref={reference}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="row-span-1 flex flex-col xs:flex-row sm:col-span-2 md:col-span-1"
+          ref={reference}
+        >
           <label htmlFor="text" className="text-sm font-medium text-gray-200">
             Build Name
           </label>
           <input
             type="text"
             className={cx(
-              'mt-1 flex w-full rounded-md bg-gray-700 py-1 px-2 text-white shadow-sm sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:bg-gray-800',
+              'mt-1 flex w-full rounded-md bg-gray-700 py-1 px-2 text-white shadow-sm focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:text-sm',
               !potatoMode && 'transition duration-150',
-              isDirty ? 'ring-2 ring-cyan-500 focus:ring-cyan-500 bg-gray-800' : 'focus:ring-brand-light'
+              isDirty ? 'bg-gray-800 ring-2 ring-cyan-500 focus:ring-cyan-500' : 'focus:ring-brand-light'
             )}
             placeholder="Enter a name..."
             {...register('title', {
@@ -216,11 +222,11 @@ const Settings = () => {
             type="submit"
             disabled={!isDirty}
             className={cx(
-              'ml-2 inline-flex items-center px-2 mt-1 border border-transparent text-xs font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light',
+              'mt-2 inline-flex items-center justify-center rounded-md border border-transparent px-2 py-1 text-xs font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 xs:mt-1 xs:ml-2',
               !potatoMode && 'transition duration-150',
               isDirty
-                ? 'bg-brand-light hover:bg-brand-dark text-white'
-                : 'bg-gray-700 cursor-not-allowed text-gray-400 opacity-50'
+                ? 'bg-brand-light text-white hover:bg-brand-dark'
+                : 'cursor-not-allowed bg-gray-700 text-gray-400 opacity-50'
             )}
           >
             Save
@@ -313,7 +319,7 @@ const Settings = () => {
         </div>
         <PotatoModeSwitch />
         {/*  Build Import/Export */}
-        <div className="w-full grid grid-cols-2 grid-rows-2 gap-2 row-span-2">
+        <div className="grid w-full grid-rows-4 gap-2 xs:grid-cols-2 xs:grid-rows-2 sm:col-span-2 sm:row-span-2 md:col-span-1">
           <Button
             className="text-sm"
             label="Import Build"

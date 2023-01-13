@@ -1,13 +1,12 @@
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
-import { cx } from '@emotion/css'
-import { MutableRefObject, createRef, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, createRef, useRef, useState } from 'react'
 import styles from 'styles/index.module.scss'
 import { SortDirection } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
-import { BuildMaker } from 'components/ItemBuild/BuildMaker'
+import { ItemBuild } from 'components/ItemBuild/ItemBuild'
 import { BuildTreeContainer } from 'components/ItemBuildTree/BuildTreeContainer'
 import FilterItemsByClass from 'components/ItemFilters/FilterItemsByClass'
 import FilterItemsByRarity from 'components/ItemFilters/FilterItemsByRarity'
@@ -25,8 +24,6 @@ const DynamicSliderOverlay = dynamic(() => import('components/Layout/SliderOverl
 
 function Home() {
   const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
-  const [searchTerm, setSearchTerm] = useState('')
-
   // Array of itemRefs
   const itemRefArray = useRef<
     Array<{
@@ -47,64 +44,61 @@ function Home() {
       {/* Main container */}
       <div className="relative flex min-h-screen w-full flex-col items-stretch">
         {/* Navbar and toolbar */}
-        <nav className="w-full flex-none flex-row px-4 pt-8">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <Header />
-            <Settings />
-          </div>
+        <nav className="grid w-full flex-none grid-cols-1 flex-row gap-4 px-4 pt-8 xl:grid-cols-3">
+          <Header />
+          <Settings />
         </nav>
         {/* Editor */}
-        <main className="mx-4 mt-4 mb-8 grow h-full min-h-full">
-          <div className="flex h-full min-h-full w-full flex-col space-y-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
-            {/* Item picker */}
-            <div
-              className={`${styles['smooth-shadow']} ${styles['container-background']} h-full min-h-full col-span-2 flex flex-col border-2 border-yellow-900 px-4 py-3 md:grid md:grid-cols-9 md:grid-rows-1 md:gap-2`}
-            >
-              {/* Item Filters */}
-              <section className="h-full min-h-full col-span-2 mb-4 border-r border-yellow-900 pr-4 md:mb-0">
-                {/* Filter items by class */}
-                <h3 className="mb-2 border-b border-yellow-900 font-body font-semibold text-gray-200">
+        <main className="mt-4 mb-8 flex h-full min-h-full w-full grow flex-col space-y-4 px-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
+          {/* Item picker */}
+          <div
+            className={`${styles['smooth-shadow']} ${styles['container-background']} col-span-2 flex h-full min-h-full flex-col border-2 border-yellow-900 px-4 py-3 md:grid md:grid-cols-9 md:grid-rows-1 md:gap-2`}
+          >
+            {/* Item Filters */}
+            <section className="col-span-2 mb-4 grid auto-rows-min grid-cols-1 gap-6 border-yellow-900 sm:grid-cols-2 md:mb-0 md:grid-cols-1 md:border-r md:pr-4">
+              <div className="col-span-1 flex flex-col sm:col-span-2 md:hidden">
+                <SearchBar />
+              </div>
+              <div className="flex w-full flex-row items-center space-x-2 md:flex-col md:items-stretch md:space-x-0">
+                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 md:mb-2 md:border-r-0 md:border-b md:p-0">
                   CHAMPION CLASS
                 </h3>
                 <FilterItemsByClass />
-                {/* Filter items by type */}
-                <h3 className="mt-6 mb-2 border-b border-yellow-900 font-body font-semibold text-gray-200">
+              </div>
+              <div className="flex h-full w-full flex-row items-center space-x-2 md:flex-col md:items-stretch md:space-x-0">
+                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 md:mb-2 md:border-r-0 md:border-b md:p-0">
                   ITEM TYPE
                 </h3>
                 <FilterItemsByType />
-              </section>
-              {/* Item container */}
-              <section
-                className="relative h-full min-h-full col-span-5 flex grow flex-col border-r border-yellow-900 pr-4"
-                id="item-container"
-              >
-                {/* Search bar */}
-                <SearchBar />
-                <div className="flex px-2 py-1 mt-2 border-b border-yellow-900 items-center space-x-4">
-                  <h3 className="font-body font-semibold text-gray-200 xl:shrink-0 border-r border-yellow-900 pr-2">
-                    ITEM RARITY
-                  </h3>
-                  <FilterItemsByRarity />
-                  <SortByGold direction={goldOrderDirection} setDirection={setNumericSortOrder} />
-                </div>
-                {/* Item grid */}
-                <ItemGrid
-                  goldOrderDirection={goldOrderDirection}
-                  itemRefArray={itemRefArray}
-                  itemGridRef={itemGridRef}
-                />
-              </section>
-              {/* Item tree view */}
-              <section className="h-full min-h-full col-span-2 flex flex-col text-white">
-                <BuildTreeContainer itemRefArray={itemRefArray} itemGridRef={itemGridRef} />
-              </section>
-            </div>
-            {/* Build maker */}
-            <div
-              className={`${styles['smooth-shadow']} ${styles['container-background']} border-2 border-yellow-900 bg-slate-900/60 text-white h-full min-h-full col-span-1`}
+              </div>
+            </section>
+            {/* Item container */}
+            <section
+              className="relative col-span-5 flex h-[70vh] min-h-full grow flex-col border-yellow-900 md:h-full md:border-r md:pr-4"
+              id="item-container"
             >
-              <BuildMaker />
-            </div>
+              <div className="hidden w-full flex-col md:flex">
+                <SearchBar />
+              </div>
+              <div className="flex items-center space-x-4 border-b border-yellow-900 py-1 md:mt-2 md:px-2">
+                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 xl:shrink-0">
+                  ITEM RARITY
+                </h3>
+                <FilterItemsByRarity />
+                <SortByGold direction={goldOrderDirection} setDirection={setNumericSortOrder} />
+              </div>
+              <ItemGrid goldOrderDirection={goldOrderDirection} itemRefArray={itemRefArray} itemGridRef={itemGridRef} />
+            </section>
+            {/* Item tree view */}
+            <section className="col-span-2 flex h-full min-h-full flex-col text-white">
+              <BuildTreeContainer itemRefArray={itemRefArray} itemGridRef={itemGridRef} />
+            </section>
+          </div>
+          {/* Build maker */}
+          <div
+            className={`${styles['smooth-shadow']} ${styles['container-background']} col-span-1 flex h-full w-full flex-col border-2 border-yellow-900 bg-slate-900/60 text-white`}
+          >
+            <ItemBuild />
           </div>
         </main>
         {/* Footer */}

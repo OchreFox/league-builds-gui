@@ -21,13 +21,13 @@ export default function FilterItemsByClass() {
   }
 
   return (
-    <div className="flex select-none flex-col">
-      <div className="xl:hidden">
+    <div className="flex grow select-none flex-col">
+      <div className="w-full xl:hidden">
         <select
           title="Filter items by class"
           id="filterItems"
           name="filterItems"
-          className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+          className="block w-full rounded-md border-gray-300 py-1 px-2 focus:border-indigo-500 focus:ring-indigo-500"
           defaultValue={itemFilters.class}
           onChange={(e) => {
             dispatch(setItemFiltersClass(e.target.value as ChampionClass))
@@ -41,7 +41,7 @@ export default function FilterItemsByClass() {
         </select>
       </div>
       <div className="hidden flex-col xl:flex">
-        <div className=" border-b border-slate-800">
+        <div className="border-b border-slate-800">
           <nav className="flex flex-row justify-around space-x-1" aria-label="Tabs">
             {Object.entries(ClassFilters).map(([championClass, item]) => {
               const Icon = item.icon
@@ -53,7 +53,7 @@ export default function FilterItemsByClass() {
                   type="button"
                   title={item.name}
                   className={cx(
-                    'group inline-flex flex-col items-center justify-center py-2 px-1 text-sm font-medium relative',
+                    'group relative inline-flex flex-col items-center justify-center py-2 px-1 text-sm font-medium',
                     itemFilters.class === championClass &&
                       css`
                         &::before {
@@ -85,13 +85,13 @@ export default function FilterItemsByClass() {
                   {itemFilters.class === championClass ? (
                     <motion.div
                       layoutId="filter-class-underline"
-                      className="bg-brand-default w-full h-0.5 inset-x-0 bottom-0 absolute"
+                      className="absolute inset-x-0 bottom-0 h-0.5 w-full bg-brand-default"
                     />
                   ) : null}
                   <Icon
                     className={cx(
                       itemFilters.class === championClass ? 'fill-league-gold' : 'fill-gray-600',
-                      'flex-shrink-0 transition duration-100 ease-out motion-reduce:transition-none group-hover:fill-gray-400',
+                      'flex-shrink-0 transition duration-100 ease-out group-hover:fill-gray-400 motion-reduce:transition-none',
                       championClass === 'All Classes' ? 'h-4 w-auto' : 'h-4 w-4'
                     )}
                   />

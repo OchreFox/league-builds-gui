@@ -89,12 +89,15 @@ export default function FilterItemsByType() {
   }
 
   return (
-    <nav className="flex select-none flex-col space-y-3 md:flex-col md:space-y-1" aria-label="Filter items by type">
+    <nav
+      className="flex grow select-none flex-col space-y-3 md:flex-col md:space-y-1"
+      aria-label="Filter items by type"
+    >
       <Menu as="div" className="md:hidden">
         {({ open }) => (
           <Fragment>
             <div>
-              <Menu.Button className="inline-flex w-full items-center justify-center rounded-md border border-yellow-900 bg-brand-dark px-4 py-2 text-sm  font-bold text-white shadow-sm hover:bg-brand-light focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-yellow-500">
+              <Menu.Button className="inline-flex w-full items-center justify-center rounded-md border border-yellow-900 bg-brand-dark px-4 py-1.5 text-sm font-bold text-white shadow-sm hover:bg-brand-light focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-yellow-500">
                 Item Type
                 <InlineIcon icon="bi:chevron-down" className="ml-1" />
               </Menu.Button>

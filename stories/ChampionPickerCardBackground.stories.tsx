@@ -11,6 +11,6 @@ export default {
   },
 } as ComponentMeta<typeof BackgroundRenderer>
 
-const Template: ComponentStory<typeof BackgroundRenderer> = (args) => <BackgroundRenderer {...args} />
+const Template: ComponentStory<typeof BackgroundRenderer> = () => <BackgroundRenderer />
 
 export const Default = Template.bind({})

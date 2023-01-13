@@ -14,12 +14,12 @@ import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
 import ChampionPickerCard from 'components/ChampionPicker/ChampionPickerCard'
-import { ChampionPickerContainer } from 'components/ChampionPicker/ChampionPickerContainer'
+import { BuildContainer } from 'components/ItemBuild/BuildContainer'
 import LinearProgress from 'components/basic/LinearProgress'
 
 import { getChampionSplash } from './BuildMakerComponents'
 
-export const BuildMaker = () => {
+export const ItemBuild = () => {
   const dispatch = useAppDispatch()
   const { championsData } = useChampions()
   const selectedChampions = useSelector(selectSelectedChampions)
@@ -54,18 +54,18 @@ export const BuildMaker = () => {
   }, [draggedItem])
 
   return (
-    <div className="flex h-full w-full flex-col" id="build-maker">
+    <>
       <ChampionPickerCard />
-      <div className="relative h-full w-full">
+      <div className="h-full w-full md:relative">
         {/* Loading Progress Bar */}
         <LinearProgress show={championPicker.isLoading} />
-        {/* Champion Picker */}
-        <ChampionPickerContainer
+        {/* Build editor / Champion Picker */}
+        <BuildContainer
           show={championPicker.show}
           categoryFilter={championPicker.category}
           searchQuery={championPicker.query}
         />
       </div>
-    </div>
+    </>
   )
 }

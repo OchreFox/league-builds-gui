@@ -13,8 +13,8 @@ import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { css, cx } from '@emotion/css'
 import appsIcon from '@iconify/icons-tabler/apps'
-import chevronUp from '@iconify/icons-tabler/chevron-up'
 import circleX from '@iconify/icons-tabler/circle-x'
+import questionMark from '@iconify/icons-tabler/question-mark'
 import searchIcon from '@iconify/icons-tabler/search'
 import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
@@ -156,7 +156,7 @@ const ChampionPickerCard = () => {
       }}
     >
       <motion.div className="relative flex flex-col overflow-hidden p-4" transition={easeInOutExpo} ref={cardRef}>
-        <ChampionPickerCardBackground champions={selectedChampions} />
+        <ChampionPickerCardBackground />
         {!potatoMode && (
           <motion.div
             className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-cyan-700/30 pointer-events-none"
@@ -204,10 +204,8 @@ const ChampionPickerCard = () => {
             {description}
           </motion.p>
           <Icon
-            className="text-gray-700 bg-white/50 p-1 rounded-full absolute bottom-0 right-0 pointer-events-auto"
-            icon={chevronUp}
-            width="24"
-            height="24"
+            className="text-gray-700 bg-white/50 p-0.5 rounded-full absolute bottom-0 right-0 pointer-events-auto w-6 h-6"
+            icon={questionMark}
             onMouseEnter={handleIconMouseEnter}
           />
         </motion.div>

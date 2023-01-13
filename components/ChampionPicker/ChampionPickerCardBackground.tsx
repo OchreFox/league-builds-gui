@@ -1,4 +1,4 @@
-import { selectChampionPicker } from '@/store/appSlice'
+import { selectChampionPicker, selectSelectedChampions } from '@/store/appSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { css } from '@emotion/css'
 import { AnimatePresence, Variants, motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
@@ -112,7 +112,8 @@ const ChampionImage = ({
   )
 }
 
-const ChampionPickerCardBackground = ({ champions }: { champions: Champion[] }) => {
+const ChampionPickerCardBackground = () => {
+  const selectedChampions = useSelector(selectSelectedChampions)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const ref = useRef<HTMLDivElement>(null)
 
@@ -128,19 +129,17 @@ const ChampionPickerCardBackground = ({ champions }: { champions: Champion[] }) 
     }
   }
 
-  // Render all images left to right with a rhombus clip-path
-
   return (
     <div ref={ref} className={styles.container} onMouseMove={handleMouseMove}>
-      {champions && champions.length > 0
-        ? champions.map(
+      {selectedChampions && selectedChampions.length > 0
+        ? selectedChampions.map(
             (champion, index) =>
               index <= 3 && (
                 <ChampionImage
                   key={index}
                   image={champion.splash ?? ''}
                   index={index}
-                  length={champions.length}
+                  length={selectedChampions.length}
                   mousePosition={mousePosition}
                 />
               )

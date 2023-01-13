@@ -76,19 +76,19 @@ export default function SearchBar() {
   }, [items, query])
 
   return (
-    <div className="w-full flex flex-col">
+    <>
       <label htmlFor="search" className="sr-only">
         Search items
       </label>
       <Combobox
         as="div"
         onChange={setSelectedItem}
-        className={cx('w-full z-10 transition-all ease-in-out-expo duration-200 relative', isFocused ? 'p-3' : 'p-0')}
+        className={cx('ease-in-out-expo relative z-10 w-full transition-all duration-200', isFocused ? 'p-3' : 'p-0')}
       >
         <div className="relative">
           <Icon
             icon={searchIcon}
-            className="pointer-events-none absolute inset-0 flex items-center ml-3 my-auto h-5 w-5 text-gray-400"
+            className="pointer-events-none absolute inset-0 my-auto ml-3 flex h-5 w-5 items-center text-gray-400"
             aria-hidden="true"
           />
           <Combobox.Input
@@ -96,7 +96,7 @@ export default function SearchBar() {
             name="search"
             type="search"
             ref={inputRef}
-            className="block w-full transition-extended-colors rounded-md duration-150 bg-black/50 border border-yellow-900 focus:border-transparent focus:bg-gray-900 focus:text-white py-2 pl-10 pr-3 leading-5 text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-brand-light focus:ring-2 focus:ring-offset-2 sm:text-sm"
+            className="block w-full rounded-md border border-yellow-900 bg-black/50 py-2 pl-10 pr-3 leading-5 text-gray-300 placeholder-gray-400 transition-extended-colors duration-150 focus:border-transparent focus:bg-gray-900 focus:text-white focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 sm:text-sm"
             placeholder="Search items"
             onChange={updateQuery}
             autoComplete="off"
@@ -107,7 +107,7 @@ export default function SearchBar() {
 
         <Combobox.Options
           as={motion.ul}
-          className="absolute -z-1 top-0 left-0 right-0 grid grid-cols-4 overflow-auto bg-black/50 p-1 backdrop-blur-md border border-league-gold text-base drop-shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          className="absolute top-0 left-0 right-0 -z-1 grid grid-cols-2 overflow-auto border border-league-gold bg-black/50 p-1 text-base ring-1 ring-black ring-opacity-5 drop-shadow-2xl backdrop-blur-md focus:outline-none sm:text-sm md:grid-cols-3 lg:grid-cols-4"
           initial="closed"
           animate={isFocused ? 'open' : 'closed'}
           exit="closed"
@@ -120,20 +120,20 @@ export default function SearchBar() {
         >
           <AnimatePresence>
             {query === '' && isFocused && (
-              <div className="flex flex-wrap items-center py-2.5 px-4 mr-2 text-sm text-gray-200">
+              <div className="mr-2 flex flex-wrap items-center py-2.5 px-4 text-sm text-gray-200">
                 <p>Type to search...</p>
               </div>
             )}
             {fuzzyResults?.length === 0 && query !== '' ? (
-              <span className="flex flex-row w-full items-center py-2.5 px-4 mr-2 text-sm text-gray-200">
+              <span className="mr-2 flex w-full flex-row items-center py-2.5 px-4 text-sm text-gray-200">
                 <Icon icon={moodSad} inline={true} className="mr-1" />
                 <p>No results found</p>
               </span>
             ) : (
               fuzzyResults?.map((result) => (
                 <Combobox.Option as={Fragment} key={'result-' + result.obj.id} value={result.obj}>
-                  <button className="relative m-1 flex items-center rounded-md py-2 px-2 text-gray-200 border bg-gray-900 border-gray-700 hover:bg-gray-700 hover:border-gray-500">
-                    <div className="mr-2 border border-black object-cover ring-1 ring-yellow-700 flex h-8 w-8 shrink-0">
+                  <button className="relative m-1 flex items-center rounded-md border border-gray-700 bg-gray-900 py-2 px-2 text-gray-200 hover:border-gray-500 hover:bg-gray-700">
+                    <div className="mr-2 flex h-8 w-8 shrink-0 border border-black object-cover ring-1 ring-yellow-700">
                       <Image
                         loader={CustomLoader}
                         width={50}
@@ -150,6 +150,6 @@ export default function SearchBar() {
           </AnimatePresence>
         </Combobox.Options>
       </Combobox>
-    </div>
+    </>
   )
 }

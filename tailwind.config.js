@@ -14,6 +14,7 @@ module.exports = {
         '-1': '-1',
       },
       screens: {
+        xs: '320px',
         '3xl': '1920px',
       },
       transitionProperty: {
@@ -36,5 +37,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/container-queries')],
 }

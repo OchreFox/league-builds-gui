@@ -345,7 +345,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         {showScrollToBottom && !scrollToBottom && (
           <motion.div
             className={cx(
-              'absolute bottom-4 left-0 right-4 h-16 z-10 pointer-events-none',
+              'pointer-events-none absolute bottom-4 left-0 right-4 z-10 h-16',
               css`
                 background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 1) 100%);
               `

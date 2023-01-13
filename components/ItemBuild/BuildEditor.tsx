@@ -12,7 +12,7 @@ import { PrimaryButton } from 'components/basic/PrimaryButton'
 
 import { BuildSection } from './BuildSection'
 
-const Build = () => {
+const BuildEditor = () => {
   const dispatch = useAppDispatch()
   const { blocks } = useSelector(selectItemBuild)
   const itemGridRef = createRef<HTMLDivElement>()
@@ -44,9 +44,9 @@ const Build = () => {
   )
 
   return (
-    <div className="absolute h-full w-full">
-      <SimpleBar className="h-full overflow-y-auto justify-center" scrollableNodeProps={{ ref: itemGridRef }}>
-        <div className="flex flex-col m-4">
+    <div className="relative h-full w-full 2xl:absolute">
+      <SimpleBar className="h-full justify-center overflow-y-auto" scrollableNodeProps={{ ref: itemGridRef }}>
+        <div className="m-4 flex flex-col">
           <AnimatePresence>
             {blocks.map((block) => (
               <BuildSection key={block.id + '-build-item'} id={block.id} />
@@ -66,4 +66,4 @@ const Build = () => {
   )
 }
 
-export default Build
+export default BuildEditor
