@@ -1,11 +1,12 @@
 import {
+  setItemPickerContainerAnimation,
   setItemPickerContainerColumns,
   setItemPickerContainerGridHeight,
   setItemPickerContainerRows,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { batch } from 'react-redux'
 import { ItemContainerState } from 'types/FilterProps'
 
@@ -15,6 +16,13 @@ import { StandardItem } from './StandardItem'
 export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, itemGridRef }: ItemContainerState) => {
   const dispatch = useAppDispatch()
   const listRef = useRef<HTMLUListElement>(null)
+
+  const setAnimation = useCallback(
+    (value: boolean) => {
+      dispatch(setItemPickerContainerAnimation({ animation: value, rarity: rarity }))
+    },
+    [rarity]
+  )
 
   useEffect(() => {
     if (listRef.current) {
@@ -59,6 +67,8 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
       exit="exit"
       transition={transitionVariant}
       className="item-grid mb-2 grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-7 3xl:grid-cols-9"
+      onAnimationStart={() => setAnimation(true)}
+      onAnimationComplete={() => setAnimation(false)}
     >
       <AnimatePresence>
         {itemsCombined.map((item) => (

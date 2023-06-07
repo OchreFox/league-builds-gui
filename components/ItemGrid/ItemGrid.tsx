@@ -63,33 +63,12 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
   // Scroll to bottom
   const [showScrollToBottom, setShowScrollToBottom] = useState(false)
   const [scrollToBottom, setScrollToBottom] = useState(false)
+  // Scroll to item
+  const [shouldScrollToItem, setShouldScrollToItem] = useState(false)
 
-  // React window measures
-  // const rowHeights = useMemo(() => {
-  //   let heights: Array<number> = []
-  //   Object.values(Rarity).forEach((rarity) => {
-  //     if (rarity === Rarity.Empty) return
-  //     const container = itemPicker.containers[rarity]
-  //     heights.push(container.titleHeight)
-  //     const rowHeight = (container.gridHeight - 8 * (container.rows - 1)) / container.rows
-  //     const rowHeightArray = Array(container.rows).fill(rowHeight)
-  //     heights.push(...rowHeightArray)
-  //   })
-  //   console.log(heights)
-  //   return heights
-  // }, [itemPicker.containers])
-
-  // const itemCount = useMemo(() => {
-  //   let count = 0
-  //   Object.values(Rarity).forEach((rarity) => {
-  //     if (rarity === Rarity.Empty) return
-  //     const container = itemPicker.containers[rarity]
-  //     count += container.rows + 1
-  //   })
-  //   return count
-  // }, [itemPicker.containers])
-
-  // const getItemSize = (index: number) => rowHeights[index]
+  const isAnimating = useMemo(() => {
+    return Object.values(itemPicker.containers).some((container) => container.isAnimating)
+  }, [itemPicker.containers])
 
   // Total height of the item grid
   const totalHeight = useMemo(() => {
@@ -291,6 +270,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
 
   // Listen for changes in selected item and scroll to it
   useEffect(() => {
+    // Wait until all filters are applied
     if (itemPicker.selectedItem) {
       const selectedItem = itemPicker.selectedItem
       const itemRarity = getRarity(selectedItem)
@@ -304,9 +284,19 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         dispatch(setItemFiltersClass(ChampionClass.None))
       }
 
-      scrollIntoItem(selectedItem, itemRefArray, itemGridRef)
+      setShouldScrollToItem(true)
     }
   }, [itemPicker.selectedItem])
+
+  // Scroll to item
+  useEffect(() => {
+    if (shouldScrollToItem && itemPicker.selectedItem) {
+      const selectedItem = itemPicker.selectedItem
+      // Check if the item is visible
+      scrollIntoItem(selectedItem, itemRefArray, itemGridRef)
+      setShouldScrollToItem(false)
+    }
+  }, [shouldScrollToItem])
 
   // Handle scroll to bottom
   const handleScroll = (e: any) => {

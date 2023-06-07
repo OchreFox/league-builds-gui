@@ -23,6 +23,7 @@ export interface ItemsSchema {
   depth: number | null
   parent: number | null
   placeholder: string
+  type: Array<string | null>
 }
 
 export enum Category {

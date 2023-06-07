@@ -2,13 +2,14 @@ import {
   selectItemFilters,
   selectItemPicker,
   setItemFiltersRarity,
+  setItemPickerContainerAnimation,
   setItemPickerContainerHeight,
   setItemPickerContainerTitleHeight,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { ItemSectionState, Rarity } from 'types/FilterProps'
 
@@ -38,6 +39,13 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
       marginBottom: '0px',
     }
   }, [titleRef.current, fallbackTitleRef.current])
+
+  const setAnimation = useCallback(
+    (value: boolean) => {
+      dispatch(setItemPickerContainerAnimation({ animation: value, rarity: rarity }))
+    },
+    [rarity]
+  )
 
   useEffect(() => {
     // Title height
@@ -105,6 +113,8 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
             rarityConstants.decorationColor
           )}
           onClick={() => dispatch(setItemFiltersRarity(rarity))}
+          onAnimationStart={() => setAnimation(true)}
+          onAnimationComplete={() => setAnimation(false)}
         >
           {itemCount}{' '}
           <span className={rarityConstants.textColor}>

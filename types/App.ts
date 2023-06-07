@@ -26,6 +26,7 @@ export interface ItemContainer {
   columns: number
   rows: number
   count: number
+  isAnimating?: boolean
 }
 
 export const emptyContainer: ItemContainer = {
@@ -35,6 +36,7 @@ export const emptyContainer: ItemContainer = {
   columns: 0,
   rows: 0,
   count: 0,
+  isAnimating: false,
 }
 
 export interface ItemPickerState {
@@ -48,12 +50,18 @@ export interface MenuState {
   show: boolean
 }
 
+export interface AnimationQueueItem {
+  blockId: string
+  items: string[]
+}
+
 export interface BuildState {
   deletePopup: string | null
   itemContextMenu: {
     show: boolean
     item: number | null
   }
+  animationQueue: AnimationQueueItem[]
 }
 
 // Main state

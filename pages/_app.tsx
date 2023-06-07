@@ -1,34 +1,53 @@
 import type { AppProps } from 'next/app'
 
-import store from '@/store/store'
-import { MotionConfig } from 'framer-motion'
-import 'pattern.css/dist/pattern.min.css'
 import React, { useCallback, useEffect, useState } from 'react'
+
+import { selectPotatoMode } from 'components/store/potatoModeSlice'
+import { MotionConfig } from 'framer-motion'
 import { Provider, useSelector } from 'react-redux'
-import { ToastContainer, ToastPosition, TypeOptions } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
-import 'styles/globals.css'
+import { ToastContainer, cssTransition } from 'react-toastify'
 import { ReducedMotionType } from 'types/PotatoMode'
 
-import 'components/ItemGrid/ItemGrid.css'
-import { selectPotatoMode } from 'components/store/potatoModeSlice'
+import store from '@/store/store'
 
 // Font imports
-import '@fontsource/epilogue'
-import '@fontsource/epilogue/600.css'
-import '@fontsource/epilogue/700.css'
-import '@fontsource/epilogue/900.css'
+import '@fontsource-variable/epilogue'
+import '@fontsource-variable/inter'
+import '@fontsource-variable/work-sans'
 import '@fontsource/ibm-plex-mono'
-import '@fontsource/ibm-plex-mono/300.css'
 import '@fontsource/ibm-plex-serif'
-import '@fontsource/inter'
-import '@fontsource/inter/300.css'
-import '@fontsource/inter/500.css'
-import '@fontsource/inter/700.css'
-import '@fontsource/work-sans/900.css'
+
+import 'components/ItemGrid/ItemGrid.css'
+import 'pattern.css/dist/pattern.min.css'
+import 'react-toastify/dist/ReactToastify.min.css'
+import 'styles/globals.css'
+
+const slide = cssTransition({
+  enter: 'slideInUp',
+  exit: 'slideOutDown',
+})
+
+function App({ Component, pageProps, router }: AppProps) {
+  return (
+    <>
+      <Component {...pageProps} />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnHover
+        theme="dark"
+        transition={slide}
+      />
+    </>
+  )
+}
 
 // Potato Mode is a feature that reduces the amount of animations and effects
-function MyApp({ children }: { children: React.ReactNode }) {
+function MotionConfigWrapper({ Component, pageProps, router }: AppProps) {
   const potatoMode = useSelector(selectPotatoMode)
   const [motionConfig, setMotionConfig] = useState<ReducedMotionType>()
 
@@ -48,27 +67,19 @@ function MyApp({ children }: { children: React.ReactNode }) {
     }
   }, [potatoMode])
 
-  return <MotionConfig reducedMotion={motionConfig}>{children}</MotionConfig>
+  return (
+    <MotionConfig reducedMotion={motionConfig}>
+      <App Component={Component} pageProps={pageProps} router={router} />
+    </MotionConfig>
+  )
 }
 
-function App({ Component, pageProps }: AppProps) {
+function AppWrapper({ Component, pageProps, router }: AppProps) {
   return (
     <Provider store={store}>
-      <MyApp>
-        <Component {...pageProps} />
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnHover
-          theme="dark"
-        />
-      </MyApp>
+      <MotionConfigWrapper Component={Component} pageProps={pageProps} router={router} />
     </Provider>
   )
 }
 
-export default App
+export default AppWrapper

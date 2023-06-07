@@ -1,10 +1,9 @@
 import { css } from '@emotion/css'
+import { ItemType, TypeFilters } from 'components/ItemFilters/FilterComponents'
 import { Variants } from 'framer-motion'
 import fuzzy from 'fuzzy'
 import { Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
-
-import { ItemType, TypeFilters } from 'components/ItemFilters/FilterComponents'
 
 /**
  * Function to determine if an item includes a category from an array of categories
@@ -152,7 +151,7 @@ export const itemSectionConstants: {
     backgroundColor: 'bg-red-800/50',
     fallbackBackgroundColor: 'bg-red-800',
     decorationColor: 'decoration-red-800',
-    textColor: 'text-red-600',
+    textColor: 'text-red-500',
   },
   [Rarity.Mythic]: {
     backgroundColor: css`
@@ -174,7 +173,7 @@ export const itemSectionConstants: {
     `,
     fallbackBackgroundColor: 'bg-purple-500',
     decorationColor: 'decoration-purple-500',
-    textColor: 'text-purple-500',
+    textColor: 'text-purple-400',
   },
 }
 

@@ -2,6 +2,7 @@ import { setMenuShow } from '@/store/appSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
+import menu2 from '@iconify/icons-tabler/menu-2'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion, useAnimation } from 'framer-motion'
 import packageJson from 'package.json'
@@ -155,30 +156,6 @@ const Header = () => {
           }
         }}
       >
-        <button
-          className={cx(
-            isHovering && 'bg-gray-500/50',
-            'absolute z-10 -ml-4 px-2 py-1 inline-flex items-center group/menu text-gray-500 group-hover/header:font-bold group-hover/header:text-white hover:bg-brand-dark rounded',
-            !potatoMode &&
-              'backdrop-blur backdrop-opacity-0 transition duration-200 group-hover/header:backdrop-opacity-100'
-          )}
-          onClick={() => dispatch(setMenuShow(true))}
-        >
-          <Icon icon="tabler:menu-2" className={cx('', !potatoMode && 'transition duration-200')} width={30} />
-          <AnimatePresence>
-            {isHovering && (
-              <motion.span
-                className="ml-2 bg-transparent"
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={easeOutExpo}
-              >
-                Open Menu
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </button>
         <motion.h1
           variants={titleVariants}
           initial="initial"
@@ -209,9 +186,23 @@ const Header = () => {
         >
           ITEM BUILDS
           {packageJson.version.includes('beta') && (
-            <span className="ml-2 text-xs font-bold text-white bg-yellow-900 rounded-full px-2 py-0.5">BETA</span>
+            <span className="ml-2 rounded-full bg-yellow-900 px-2 py-0.5 text-xs font-bold text-white">BETA</span>
           )}
         </motion.h2>
+        <button
+          className={cx(
+            isHovering && 'bg-gray-500/50',
+            'group/menu absolute -bottom-2 z-10 -ml-2 inline-flex items-center rounded px-2 py-1 text-gray-500 hover:bg-brand-dark group-hover/header:font-bold group-hover/header:text-white',
+            !potatoMode &&
+              'backdrop-blur-md backdrop-opacity-0 transition duration-200 group-hover/header:backdrop-opacity-100'
+          )}
+          onClick={() => dispatch(setMenuShow(true))}
+        >
+          <Icon icon={menu2} className={cx('', !potatoMode && 'transition duration-200')} width={30} />
+          <AnimatePresence>
+            <span className="ml-2 bg-transparent">Open Menu</span>
+          </AnimatePresence>
+        </button>
       </motion.div>
     </div>
   )

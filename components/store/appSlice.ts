@@ -4,7 +4,7 @@ import { Rarity } from 'types/FilterProps'
 
 import { ItemType } from 'components/ItemFilters/FilterComponents'
 
-import { AppState, emptyContainer } from '../../types/App'
+import { AnimationQueueItem, AppState, emptyContainer } from '../../types/App'
 import { Champion, Tag } from '../../types/Champions'
 import { ChampionClass, ItemsSchema } from '../../types/Items'
 import { RootState } from './store'
@@ -48,6 +48,7 @@ const initialState: AppState = {
       show: false,
       item: null,
     },
+    animationQueue: [],
   },
 }
 
@@ -156,6 +157,9 @@ export const appSlice = createSlice({
     setItemPickerContainerCount: (state, action: PayloadAction<{ rarity: Rarity; count: number }>) => {
       state.itemPicker.containers[action.payload.rarity].count = action.payload.count
     },
+    setItemPickerContainerAnimation: (state, action: PayloadAction<{ rarity: Rarity; animation: boolean }>) => {
+      state.itemPicker.containers[action.payload.rarity].isAnimating = action.payload.animation
+    },
     setMenuShow: (state, action: PayloadAction<boolean>) => {
       state.menu.show = action.payload
     },
@@ -167,6 +171,44 @@ export const appSlice = createSlice({
     },
     setBuildItemContextMenuItem: (state, action: PayloadAction<number | null>) => {
       state.build.itemContextMenu.item = action.payload
+    },
+    addBuildAnimationQueue: (
+      state,
+      action: PayloadAction<{
+        blockId: string
+      }>
+    ) => {
+      state.build.animationQueue.push({
+        blockId: action.payload.blockId,
+        items: [],
+      })
+    },
+    removeBuildAnimationQueue: (state, action: PayloadAction<{ blockId: string }>) => {
+      state.build.animationQueue = state.build.animationQueue.filter((item) => item.blockId !== action.payload.blockId)
+    },
+    addBuildAnimationQueueItem: (
+      state,
+      action: PayloadAction<{
+        blockId: string
+        itemId: string
+      }>
+    ) => {
+      const index = state.build.animationQueue.findIndex((item) => item.blockId === action.payload.blockId)
+      state.build.animationQueue[index].items.push(action.payload.itemId)
+    },
+    removeBuildAnimationQueueItem: (
+      state,
+      action: PayloadAction<{
+        blockId: string
+        itemId: string
+      }>
+    ) => {
+      const index = state.build.animationQueue.findIndex((item) => item.blockId === action.payload.blockId)
+      if (index !== -1) {
+        state.build.animationQueue[index].items = state.build.animationQueue[index].items.filter(
+          (item) => item !== action.payload.itemId
+        )
+      }
     },
   },
   extraReducers: (builder) => {
@@ -214,8 +256,13 @@ export const {
   setItemPickerContainerRows,
   setItemPickerContainerColumns,
   setItemPickerContainerCount,
+  setItemPickerContainerAnimation,
   setMenuShow,
   setBuildDeletePopup,
   setBuildItemContextMenuShow,
   setBuildItemContextMenuItem,
+  addBuildAnimationQueue,
+  removeBuildAnimationQueue,
+  addBuildAnimationQueueItem,
+  removeBuildAnimationQueueItem,
 } = appSlice.actions

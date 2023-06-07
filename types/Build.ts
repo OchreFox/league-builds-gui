@@ -27,9 +27,9 @@ export interface BlockState extends Block {
 }
 
 export interface Item {
-  id: string
+  id: string // Randomly generated id, different from the id in Riot's schema
+  itemId?: string // Riot item id (e.g. 1001) stored for export and conversion
   count: number
-  uid?: string
 }
 
 export interface CategoryDropdownProps {

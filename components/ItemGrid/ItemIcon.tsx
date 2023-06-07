@@ -1,15 +1,27 @@
 import Image from 'next/image'
 
-import { selectPotatoMode } from '@/store/potatoModeSlice'
-import { css, cx } from '@emotion/css'
 import React, { useCallback, useMemo, useState } from 'react'
+
+import { css, cx } from '@emotion/css'
 import { useSelector } from 'react-redux'
 import { ItemsSchema } from 'types/Items'
+
+import { selectPotatoMode } from '@/store/potatoModeSlice'
 
 import { blurhashDecode } from 'utils/BlurhashDecode'
 import CustomLoader from 'utils/CustomLoader'
 
-export const ItemIcon = ({ size, item, className }: { size?: number; item: ItemsSchema; className?: string }) => {
+export const ItemIcon = ({
+  size,
+  item,
+  className,
+  usePlaceholder,
+}: {
+  size?: number
+  item: ItemsSchema
+  className?: string
+  usePlaceholder?: boolean
+}) => {
   const potatoMode = useSelector(selectPotatoMode)
   const [loaded, setLoaded] = useState(false)
 
@@ -18,6 +30,9 @@ export const ItemIcon = ({ size, item, className }: { size?: number; item: Items
   }, [])
 
   const placeholder = useMemo(() => {
+    if (!usePlaceholder) {
+      return 'empty'
+    }
     if (size && size <= 40) {
       return 'empty'
     }
@@ -34,7 +49,7 @@ export const ItemIcon = ({ size, item, className }: { size?: number; item: Items
   return (
     <div
       className={cx(
-        'transition border border-black object-cover ring-1 ring-yellow-700 duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125 flex pointer-events-none overflow-hidden',
+        'pointer-events-none flex self-center overflow-hidden border border-black object-cover ring-1 ring-yellow-700 transition duration-100 group-hover:z-30 group-hover:ring-2 group-hover:brightness-125',
         className
       )}
     >

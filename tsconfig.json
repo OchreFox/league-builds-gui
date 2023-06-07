@@ -20,6 +20,6 @@
       "@/hooks/*": ["components/hooks/*"]
     }
   },
-  "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx", "utils/lzma-url.js"],
   "exclude": ["node_modules"]
 }

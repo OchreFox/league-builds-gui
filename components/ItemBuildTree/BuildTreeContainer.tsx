@@ -1,9 +1,9 @@
 import { useItems } from '@/hooks/useItems'
-import { selectItemPicker } from '@/store/appSlice'
+import { selectItemFilters, selectItemPicker, setItemFiltersRarity } from '@/store/appSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, Variants, motion } from 'framer-motion'
 import _ from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -14,14 +14,44 @@ import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 import styles from 'components/ItemFilters/FilterRarity.module.scss'
 
 import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
+import { easeInOutExpo } from 'utils/Transition'
 
 import { itemSectionConstants } from '../ItemGrid/ItemGridComponents'
 import { BuildSuggestions } from './BuildSuggestions'
 import { BuildTreeRoot } from './BuildTreeRoot'
 
+const itemNameVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -10,
+    transition: {
+      ...easeInOutExpo,
+      duration: 0.4,
+    },
+  },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      ...easeInOutExpo,
+      duration: 0.4,
+    },
+  },
+  exit: {
+    opacity: 0,
+    x: 10,
+    transition: {
+      ...easeOutExpo,
+      duration: 0.5,
+    },
+  },
+}
+
 export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeProps) => {
+  const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const { selectedItem } = useSelector(selectItemPicker)
+  const itemFilters = useSelector(selectItemFilters)
   const [selectedItemRarity, setSelectedItemRarity] = useState<Rarity>(Rarity.Empty)
 
   const { items } = useItems()
@@ -37,6 +67,23 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
       }
     },
     [itemTitleQueue]
+  )
+
+  const handleRarityClick = useCallback(
+    (
+      e:
+        | React.MouseEvent<HTMLAnchorElement, MouseEvent>
+        | React.KeyboardEvent<HTMLAnchorElement>
+        | React.TouchEvent<HTMLAnchorElement>
+    ) => {
+      e.preventDefault()
+      if (itemFilters.rarity !== selectedItemRarity) {
+        dispatch(setItemFiltersRarity(selectedItemRarity))
+      } else {
+        dispatch(setItemFiltersRarity(Rarity.Empty))
+      }
+    },
+    [dispatch, itemFilters.rarity, selectedItemRarity]
   )
 
   useEffect(() => {
@@ -107,13 +154,10 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
                         <motion.h3
                           key={title + '-build-path'}
                           className="absolute top-0 left-0 text-lg font-bold text-white"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 10 }}
-                          transition={{
-                            ...easeOutExpo,
-                            duration: 0.5,
-                          }}
+                          variants={itemNameVariants}
+                          initial="hidden"
+                          animate="show"
+                          exit="exit"
                         >
                           {title}
                         </motion.h3>
@@ -125,9 +169,13 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
             </>
           )}
 
-          <h4 className={cx('text-sm', itemSectionConstants[selectedItemRarity].textColor)}>
+          <a
+            href="/"
+            className={cx('text-sm underline', itemSectionConstants[selectedItemRarity].textColor)}
+            onClick={handleRarityClick}
+          >
             {selectedItemRarity} item
-          </h4>
+          </a>
           <BuildSuggestions
             items={items}
             baseItem={selectedItem}

@@ -1,7 +1,8 @@
 import { addListener, createListenerMiddleware } from '@reduxjs/toolkit'
 import type { TypedAddListener, TypedStartListening } from '@reduxjs/toolkit'
 
-import { removeBlock, setBlocks, updateBlock } from './itemBuildSlice'
+import { addBuildAnimationQueue, removeBuildAnimationQueue } from './appSlice'
+import { addBlock, addEmptyBlock, removeBlock, setBlocks, setRiotItemBuild, updateBlock } from './itemBuildSlice'
 import { AppDispatch, RootState } from './store'
 
 export const listenerMiddleware = createListenerMiddleware()
@@ -10,6 +11,30 @@ export type AppStartListening = TypedStartListening<RootState, AppDispatch>
 export const startAppListening = listenerMiddleware.startListening as AppStartListening
 
 export const addAppListener = addListener as TypedAddListener<RootState, AppDispatch>
+
+// Create build animation queue when adding a block to the build
+startAppListening({
+  actionCreator: addBlock,
+  effect: (action, { dispatch }) => {
+    dispatch(addBuildAnimationQueue({ blockId: action.payload.id }))
+  },
+})
+
+startAppListening({
+  actionCreator: addEmptyBlock,
+  effect: (action, { dispatch, getState }) => {
+    const lastBlock = getState().itemBuild.blocks[getState().itemBuild.blocks.length - 1]
+    dispatch(addBuildAnimationQueue({ blockId: lastBlock.id }))
+  },
+})
+
+// Delete build animation queue when removing a block from the build
+startAppListening({
+  actionCreator: removeBlock,
+  effect: (action, { dispatch }) => {
+    dispatch(removeBuildAnimationQueue({ blockId: action.payload }))
+  },
+})
 
 // Move position when updating a block
 // Example: Block 1 is moved to position 3
@@ -48,5 +73,16 @@ startAppListening({
       }
     })
     dispatch(setBlocks(newBlocks))
+  },
+})
+
+// Add animation queues for each block when importing a build
+startAppListening({
+  actionCreator: setRiotItemBuild,
+  effect: (action, { dispatch, getState }) => {
+    let { blocks } = getState().itemBuild
+    blocks.forEach((block) => {
+      dispatch(addBuildAnimationQueue({ blockId: block.id }))
+    })
   },
 })

@@ -1,19 +1,24 @@
-import { useLongPress } from '@/hooks/useLongPress'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
+import React, { Fragment, useEffect, useState } from 'react'
+
 import { css, cx } from '@emotion/css'
 import { Dialog, Transition } from '@headlessui/react'
-import alertTriangle from '@iconify/icons-tabler/alert-triangle'
-import infoCircle from '@iconify/icons-tabler/info-circle'
 import trashX from '@iconify/icons-tabler/trash-x'
 import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
 import { animate, motion, useMotionTemplate, useMotionValue } from 'framer-motion'
-import React, { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { NotificationType } from 'types/Toast'
+
+import { useLongPress } from '@/hooks/useLongPress'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
 
 import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 
 import styles from '/styles/index.module.scss'
+
+import { Tip, Warning } from './ModalComponents'
+import { ToastBody } from './NotificationToast'
 
 export default function ResetAlert({
   open,
@@ -28,14 +33,25 @@ export default function ResetAlert({
   const [isLongPressing, setIsLongPressing] = useState(false)
 
   const gestures = useLongPress(
+    // On long press complete
     () => {
       resetBuild()
       setOpen(false)
       setIsLongPressing(false)
+      toast(
+        <ToastBody
+          title="Build Reset"
+          message="Your build has been reset."
+          type={NotificationType.Success}
+          icon={trashX}
+        />
+      )
     },
+    // On press
     () => {
       setIsLongPressing(true)
     },
+    // On release
     () => {
       setIsLongPressing(false)
     },
@@ -120,7 +136,7 @@ export default function ResetAlert({
                 `
               )}
             >
-              <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block z-10">
+              <div className="absolute top-0 right-0 z-10 hidden pt-4 pr-4 sm:block">
                 <button
                   type="button"
                   className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
@@ -131,47 +147,37 @@ export default function ResetAlert({
                 </button>
               </div>
 
-              <div className="flex flex-col w-full">
+              <div className="flex w-full flex-col">
                 <motion.div
-                  className="flex items-center space-x-2 pb-2 font-body font-semibold text-red-400 text-xl border-b border-yellow-900"
+                  className="flex items-center space-x-2 border-b border-yellow-900 pb-2 font-body text-xl font-semibold text-red-400"
                   initial={{ opacity: 0, x: '50%' }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: '-50%' }}
                   transition={{ ...easeOutExpo, duration: 0.5, delay: 0.1 }}
                 >
-                  <span className="rounded-full bg-red-600 inline-flex items-center justify-center p-1">
-                    <Icon icon={alertTriangle} className="h-5 w-5 text-white" inline={true} />
+                  <span className="inline-flex items-center justify-center rounded-full bg-red-600 p-1">
+                    <Icon icon={trashX} className="h-5 w-5 text-white" inline={true} />
                   </span>
                   <Dialog.Title as="h3">RESET BUILD</Dialog.Title>
                 </motion.div>
               </div>
               <motion.div
-                className="text-center sm:mt-0 sm:text-left flex flex-col justify-center py-4 space-y-4"
+                className="flex flex-col justify-center space-y-4 py-4 text-center sm:mt-0 sm:text-left"
                 initial={{ opacity: 0, y: '20%' }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: '-20%' }}
                 transition={{ ...easeOutExpo, duration: 0.5, delay: 0.2 }}
               >
-                <p className="text-base text-gray-200">
-                  <span className="text-red-400 font-semibold">WARNING: </span>This will delete your current build, all
-                  progress will be lost.
-                </p>
-                <fieldset
-                  className={cx(
-                    'text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5',
-                    css`
-                      filter: drop-shadow(0 0 2rem rgba(165, 243, 252, 0.25))
-                        drop-shadow(0 0 0.25rem rgba(165, 243, 252, 0.3));
-                    `
-                  )}
-                >
-                  <legend className="text-cyan-400 px-2 bg-slate-700 rounded-md inline-flex py-0.5 items-center justify-center border border-cyan-400">
-                    <Icon icon={infoCircle} className="h-5 w-5 mr-1" inline={true} />
-                    <b>TIP</b>
-                  </legend>
+                <Warning>
+                  <p>This action will delete your current build.</p>
+                  <p className="text-yellow-400">
+                    <b>All progress will be lost.</b>
+                  </p>
+                </Warning>
+                <Tip>
                   To safely keep your progress, click on the <b>Export Build</b> button in the settings section of the
                   site.
-                </fieldset>
+                </Tip>
               </motion.div>
               <motion.div
                 className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse"
@@ -183,19 +189,19 @@ export default function ResetAlert({
                 <button
                   type="button"
                   className={cx(
-                    'relative inline-flex w-full items-center justify-center rounded-md border border-transparent bg-brand-dark px-4 py-2 text-base font-medium text-white shadow-sm sm:ml-3 sm:w-auto sm:text-sm overflow-hidden transition duration-300 ease-in-out',
+                    'relative inline-flex w-full items-center justify-center overflow-hidden rounded-md border border-transparent bg-brand-dark px-4 py-2 text-base font-medium text-white shadow-sm transition duration-300 ease-in-out sm:ml-3 sm:w-auto sm:text-sm',
                     isLongPressing && 'outline-none ring-2 ring-red-400 ring-offset-2'
                   )}
                   {...gestures}
                 >
                   <span className="z-10 inline-flex">
-                    <Icon icon={trashX} className="h-5 w-5 text-white mr-1" inline={true} />
-                    Reset Build<p className="text-gray-300 font-light">&nbsp;(hold)</p>
+                    <Icon icon={trashX} className="mr-1 h-5 w-5 text-white" inline={true} />
+                    Reset Build<p className="font-light text-gray-300">&nbsp;(hold)</p>
                   </span>
                   {/* Background color change from left to right when holding the button. */}
                   <motion.div
                     className={cx(
-                      'absolute inset-0 bg-red-900 -my-1',
+                      'absolute inset-0 -my-1 bg-red-900',
                       css`
                         animation: blink-bg 0.5s linear infinite;
                         @keyframes blink-bg {
@@ -216,7 +222,7 @@ export default function ResetAlert({
                 </button>
                 <button
                   type="button"
-                  className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm transition duration-300 ease-in-out"
+                  className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm transition duration-300 ease-in-out hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
                   onClick={() => setOpen(false)}
                 >
                   Cancel

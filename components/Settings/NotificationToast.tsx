@@ -9,11 +9,11 @@ import { NotificationType, ToastProps } from 'types/Toast'
 export const textClass: {
   [key in NotificationType]: string
 } = {
-  [NotificationType.Success]: 'text-green-500',
-  [NotificationType.Error]: 'text-red-500',
-  [NotificationType.Info]: 'text-blue-500',
-  [NotificationType.Warning]: 'text-yellow-500',
-  [NotificationType.Default]: 'text-gray-500',
+  [NotificationType.Success]: 'text-green-300',
+  [NotificationType.Error]: 'text-red-300',
+  [NotificationType.Info]: 'text-blue-300',
+  [NotificationType.Warning]: 'text-yellow-300',
+  [NotificationType.Default]: 'text-gray-300',
 }
 
 export const contextClass = {
@@ -37,9 +37,9 @@ const NotificationToast = ({
       {/* Global notification live region, render this permanently at the end of the document */}
       <div
         aria-live="assertive"
-        className="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start"
+        className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
       >
-        <div className="w-full flex flex-col items-center space-y-4 sm:items-end">
+        <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
           {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
           <Transition
             show={show}
@@ -53,7 +53,7 @@ const NotificationToast = ({
           >
             <div
               className={cx(
-                'max-w-md w-full shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden border',
+                'pointer-events-auto w-full max-w-md overflow-hidden rounded-lg border shadow-lg ring-1 ring-black ring-opacity-5',
                 contextClass[type]
               )}
             >
@@ -66,9 +66,9 @@ const NotificationToast = ({
                     <p className={cx('text-md font-body font-semibold', textClass[type])}>{title}</p>
                     <p className="mt-1 text-sm text-gray-800">{message}</p>
                   </div>
-                  <div className="ml-4 flex-shrink-0 flex">
+                  <div className="ml-4 flex flex-shrink-0">
                     <button
-                      className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       onClick={() => {
                         setShow(false)
                       }}
@@ -106,7 +106,7 @@ export const ToastBody = ({
         </div>
         <div className="ml-3 w-0 flex-1 pt-0.5">
           <p className={cx('text-md font-body font-semibold', textClass[type])}>{title}</p>
-          {message && <p className="mt-1 text-sm text-gray-200 font-sans">{message}</p>}
+          {message && <p className="mt-1 font-sans text-sm text-gray-200">{message}</p>}
         </div>
       </div>
     </div>

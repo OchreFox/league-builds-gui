@@ -1,11 +1,13 @@
 import { useItems } from '@/hooks/useItems'
-import { selectBuild, setBuildDeletePopup } from '@/store/appSlice'
-import { addItemToBlock, removeItemFromBlock, selectItemBuild, updateBlockType } from '@/store/itemBuildSlice'
+import { addBuildAnimationQueueItem, selectBuild, setBuildDeletePopup } from '@/store/appSlice'
+import { addItemToBlock, selectItemBuild, updateBlock, updateBlockType } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import {
   DndContext,
   DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   UniqueIdentifier,
@@ -13,19 +15,15 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  arrayMove,
-  rectSortingStrategy,
-  sortableKeyboardCoordinates,
-  useSortable,
-} from '@dnd-kit/sortable'
+import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { cx } from '@emotion/css'
 import { Dialog, Transition } from '@headlessui/react'
 import dragHandleLine from '@iconify/icons-clarity/drag-handle-line'
+import questionMark from '@iconify/icons-tabler/question-mark'
+import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux'
 import { BlockState } from 'types/Build'
@@ -38,6 +36,7 @@ import { easeInOutExpo } from 'utils/Transition'
 import BuildItem from './BuildItem'
 import { easeOutExpo } from './BuildMakerComponents'
 import { DeleteSectionPopper } from './DeleteSectionPopper'
+import ItemDragOverlay from './ItemDragOverlay'
 
 const buildVariant = {
   hidden: {
@@ -57,6 +56,7 @@ const buildVariant = {
 }
 
 export const BuildSection = ({ id }: { id: string }) => {
+  const { items } = useItems()
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
   const { deletePopup } = useSelector(selectBuild)
@@ -64,14 +64,8 @@ export const BuildSection = ({ id }: { id: string }) => {
   const [block, setBlock] = useState<BlockState>(
     blocks.find((block) => block.id === id) || { id: '', items: [], type: 'item', position: 0 }
   )
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  )
-
+  const previousBlock = useRef<BlockState>(block)
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
   const popperRef = useRef(null)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -97,17 +91,62 @@ export const BuildSection = ({ id }: { id: string }) => {
     ],
   })
 
+  const getItemFromId = useCallback(
+    (itemId: number) => {
+      if (items) {
+        return Object.values(items).find((item) => item.id === itemId) || null
+      }
+      return null
+    },
+    [items]
+  )
+
+  const activeItem = useMemo(() => {
+    return block.items.find((item) => item.id === activeId)
+  }, [activeId, block.items])
+
+  const draggingItem = useMemo(() => {
+    if (activeItem && activeItem.itemId) {
+      return getItemFromId(parseInt(activeItem.itemId, 10))
+    }
+  }, [activeId, items])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
   const closePopup = useCallback(() => {
     dispatch(setBuildDeletePopup(null))
   }, [])
 
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    setActiveId(active.id)
+  }
 
-      console.log(active.id, over?.id)
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const overItem = block.items.find((item) => item.id === over?.id)
+    if (activeItem && overItem) {
+      const newItems = arrayMove(block.items, block.items.indexOf(activeItem), block.items.indexOf(overItem))
+      dispatch(updateBlock({ id: block.id, block: { ...block, items: newItems } }))
+      setBlock({ ...block, items: newItems })
+    }
+    setActiveId(null)
+  }
+
+  const handleNewItemDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      e.stopPropagation()
+      setHover(false)
+      const data = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
+      if (data) {
+        dispatch(addItemToBlock({ blockId: block.id, itemId: data.id }))
+      }
     },
-    [block.items]
+    [block.id, dispatch]
   )
 
   useEffect(() => {
@@ -121,175 +160,186 @@ export const BuildSection = ({ id }: { id: string }) => {
   }, [sectionRef, block.items, hover])
 
   useEffect(() => {
-    const block = blocks.find((block) => block.id === id)
+    const block = blocks.find((x) => x.id === id)
     if (block) {
+      if (previousBlock.current.items !== block.items) {
+        // Get the item that was added
+        const addedItem = block.items.find((item) => !previousBlock.current.items.find((x) => x.id === item.id))
+        if (addedItem) {
+          console.log('added item', addedItem)
+          dispatch(addBuildAnimationQueueItem({ blockId: block.id, itemId: addedItem.id }))
+          previousBlock.current = block
+        }
+      }
       setBlock(block)
     }
   }, [blocks])
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <motion.div
-        variants={buildVariant}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        layout="position"
-        className={cx(
-          'h-full w-full mb-4 ring-2 border border-yellow-900',
-          deletePopup === block.id ? 'ring-2 ring-red-500' : 'ring-transparent',
-          hover ? 'ring-brand-light' : 'ring-transparent'
-        )}
-      >
-        <div className="flex">
-          <button
-            className="group right-0 flex items-center pl-1 border-b-2 border-yellow-900 bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors duration-200 ease-out"
-            ref={deleteButtonRef}
-          >
-            <Icon
-              icon={dragHandleLine}
-              className="mr-1 h-6 w-6 text-gray-500 group-hover:text-white group-active:text-white"
-              inline={true}
-            />
-          </button>
-          <input
-            type="text"
-            name="build-header"
-            className="border-b-2 border-yellow-900 block w-full bg-gray-700/50 focus:bg-gray-500 py-1 pl-4 pr-2 text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
-            placeholder={block?.type}
-            autoComplete="off"
-            value={block?.type}
-            onChange={(e) => dispatch(updateBlockType({ id: block.id, type: e.target.value }))}
-            onDrop={(e) => e.preventDefault()}
-          />
-          <button
-            className="group right-0 flex items-center pl-2 pr-1 border-b-2 border-yellow-900 bg-gray-700 hover:bg-brand-dark transition-colors duration-200 ease-out"
-            onClick={() => dispatch(setBuildDeletePopup(block.id))}
-            ref={deleteButtonRef}
-          >
-            <Icon
-              icon={deletePopup === block.id ? 'tabler:question-mark' : 'tabler:trash'}
-              className="mr-1 h-6 w-6 text-gray-300 group-hover:text-white"
-              inline={true}
-            />
-          </button>
-          <Transition.Root show={deletePopup === block.id} as={Fragment}>
-            <Dialog onClose={closePopup}>
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out-expo duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Dialog.Overlay className="fixed inset-0 bg-black/50 transition-opacity w-full h-full z-20" />
-              </Transition.Child>
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out-expo duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <div className="w-screen max-w-md">
-                  <DeleteSectionPopper
-                    popperRef={popperRef}
-                    id={block.id}
-                    setArrowRef={setArrowRef}
-                    styles={styles}
-                    attributes={attributes}
-                  />
-                </div>
-              </Transition.Child>
-            </Dialog>
-          </Transition.Root>
-        </div>
-        <motion.div
-          className={cx('px-2 py-3 relative', block.items.length !== 0 && 'grid grid-cols-6 gap-2')}
-          ref={sectionRef}
-          onDragOver={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setHover(true)
-          }}
-          onDragLeave={() => setHover(false)}
-          onDrop={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setHover(false)
-            const data = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
-            if (data) {
-              dispatch(addItemToBlock({ blockId: block.id, itemId: data.id }))
-            }
-          }}
+    <motion.div
+      variants={buildVariant}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      layout="position"
+      className={cx(
+        'mb-4 h-full w-full border border-yellow-900 bg-black/25 ring-2',
+        deletePopup === block.id ? 'ring-2 ring-red-500' : 'ring-transparent',
+        hover ? 'ring-brand-light' : 'ring-transparent'
+      )}
+    >
+      <div className="flex">
+        <button
+          className="group right-0 flex items-center border-b-2 border-yellow-900 bg-gray-700/50 pl-1 transition-colors duration-200 ease-out hover:bg-gray-700 active:bg-gray-600"
+          ref={deleteButtonRef}
         >
-          {!potatoMode && !init && (
-            <motion.div
-              className="absolute top-0 left-0 w-full h-full pointer-events-none mix-blend-overlay"
-              initial={{ opacity: 1 }}
-              animate={{
-                opacity: 0,
-                transition: {
-                  duration: 1.5,
-                  delay: 0.6,
-                },
-              }}
-              onAnimationComplete={() => {
-                setInit(true)
-              }}
+          <Icon
+            icon={dragHandleLine}
+            className="mr-1 h-6 w-6 text-gray-500 group-hover:text-white group-active:text-white"
+            inline={true}
+          />
+        </button>
+        <input
+          type="text"
+          name="build-header"
+          className="block w-full border-b-2 border-yellow-900 bg-gray-700/50 py-1 pl-4 pr-2 text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:bg-gray-500 focus:outline-none focus:ring-indigo-500"
+          placeholder={block?.type}
+          autoComplete="off"
+          value={block?.type}
+          onChange={(e) => dispatch(updateBlockType({ id: block.id, type: e.target.value }))}
+          onDrop={(e) => e.preventDefault()}
+        />
+        <button
+          className="group right-0 flex items-center border-b-2 border-yellow-900 bg-gray-700 pl-2 pr-1 transition-colors duration-200 ease-out hover:bg-brand-dark"
+          onClick={() => dispatch(setBuildDeletePopup(block.id))}
+          ref={deleteButtonRef}
+        >
+          <Icon
+            icon={deletePopup === block.id ? questionMark : trashIcon}
+            className="mr-1 h-6 w-6 text-gray-300 group-hover:text-white"
+            inline={true}
+          />
+        </button>
+        <Transition.Root show={deletePopup === block.id} as={Fragment}>
+          <Dialog onClose={closePopup}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out-expo duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
+              <Dialog.Overlay className="fixed inset-0 z-20 h-full w-full bg-black/50 transition-opacity" />
+            </Transition.Child>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out-expo duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="w-screen max-w-md">
+                <DeleteSectionPopper
+                  popperRef={popperRef}
+                  id={block.id}
+                  setArrowRef={setArrowRef}
+                  styles={styles}
+                  attributes={attributes}
+                />
+              </div>
+            </Transition.Child>
+          </Dialog>
+        </Transition.Root>
+      </div>
+      <motion.div
+        className="relative px-2 py-3"
+        ref={sectionRef}
+        onDragOver={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          setHover(true)
+        }}
+        onDragLeave={() => setHover(false)}
+        onDrop={handleNewItemDrop}
+      >
+        {!potatoMode && !init && (
+          <motion.div
+            className="pointer-events-none absolute top-0 left-0 h-full w-full mix-blend-overlay"
+            initial={{ opacity: 1 }}
+            animate={{
+              opacity: 0,
+              transition: {
+                duration: 1.5,
+                delay: 0.6,
+              },
+            }}
+            onAnimationComplete={() => {
+              setInit(true)
+            }}
+          >
+            <video
+              className="absolute top-0 left-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              playsInline
+              src="/effects/summoner-object-magic-action-blue-intro.webm"
+            />
+          </motion.div>
+        )}
+        <motion.div
+          className="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-transparent to-cyan-700/30"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: hover ? 1 : 0 }}
+          transition={easeOutExpo}
+        >
+          {!potatoMode && size.width > 0 && size.height > 0 && (
+            <>
               <video
-                className="absolute top-0 left-0 w-full h-full object-cover"
+                className="absolute top-0 left-0 h-full w-full object-cover"
                 autoPlay
+                loop
                 muted
                 playsInline
-                src="/effects/summoner-object-magic-action-blue-intro.webm"
+                src="/effects/loop-magic-vertical.webm"
               />
-            </motion.div>
+              <RiotMagicParticles width={size.width} height={size.height} />
+            </>
           )}
-          <motion.div
-            className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-cyan-700/30 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: hover ? 1 : 0 }}
-            transition={easeOutExpo}
-          >
-            {!potatoMode && size.width > 0 && size.height > 0 && (
-              <>
-                <video
-                  className="absolute top-0 left-0 w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  src="/effects/loop-magic-vertical.webm"
-                />
-                <RiotMagicParticles width={size.width} height={size.height} />
-              </>
-            )}
-          </motion.div>
-          <SortableContext items={block.items} strategy={rectSortingStrategy}>
-            <AnimatePresence>
-              {block.items.length === 0 ? (
-                <p className={cx('text-center inset-0 transition-colors', hover ? 'text-white' : 'text-gray-400')}>
-                  <em>Drag and drop items here </em>
-                </p>
-              ) : (
-                block.items.map((item, index) => (
-                  <BuildItem
-                    key={item.id + '-build-section-item'}
-                    itemId={parseInt(item.id, 10)}
-                    itemUid={item?.uid || ''}
-                    blockId={block.id}
-                    index={index}
-                  />
-                ))
-              )}
-            </AnimatePresence>
-          </SortableContext>
         </motion.div>
+
+        {block.items.length === 0 ? (
+          <p className={cx('inset-0 text-center transition-colors', hover ? 'text-white' : 'text-gray-400')}>
+            <em>Drag and drop items here </em>
+          </p>
+        ) : (
+          // <SortableContext strategy={rectSortingStrategy} items={block.items}>
+          <div className="grid grid-cols-6 gap-2">
+            <AnimatePresence>
+              {block.items.map((item) => (
+                <BuildItem
+                  key={item.id}
+                  id={item.id}
+                  itemId={item.itemId ? parseInt(item.itemId, 10) : -1}
+                  item={item.itemId ? getItemFromId(parseInt(item.itemId, 10)) : null}
+                  blockId={block.id}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+          // </SortableContext>
+        )}
+        {/* <DragOverlay
+          dropAnimation={{
+            duration: 300,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+          zIndex={100}
+        >
+          {draggingItem ? <ItemDragOverlay item={draggingItem} /> : null}
+        </DragOverlay> */}
       </motion.div>
-    </DndContext>
+    </motion.div>
   )
 }

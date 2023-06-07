@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
+import { cx } from '@emotion/css'
 import { MutableRefObject, createRef, useRef, useState } from 'react'
 import styles from 'styles/index.module.scss'
 import { SortDirection } from 'types/FilterProps'
-import { ItemsSchema } from 'types/Items'
 
 import { ItemBuild } from 'components/ItemBuild/ItemBuild'
 import { BuildTreeContainer } from 'components/ItemBuildTree/BuildTreeContainer'

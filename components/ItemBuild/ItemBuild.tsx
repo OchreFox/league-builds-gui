@@ -1,3 +1,8 @@
+import React, { useEffect } from 'react'
+
+import { batch, useSelector } from 'react-redux'
+import { ChampionsSchema } from 'types/Champions'
+
 import { useChampions } from '@/hooks/useChampions'
 import {
   selectChampionPicker,
@@ -9,9 +14,6 @@ import {
   updateSelectedChampion,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import React, { useEffect } from 'react'
-import { batch, useSelector } from 'react-redux'
-import { ChampionsSchema } from 'types/Champions'
 
 import ChampionPickerCard from 'components/ChampionPicker/ChampionPickerCard'
 import { BuildContainer } from 'components/ItemBuild/BuildContainer'
@@ -41,7 +43,9 @@ export const ItemBuild = () => {
     if (championsData && selectedChampions.length > 0) {
       selectedChampions.forEach((champion) => {
         if (!champion.splash) {
-          fetchChampionSplash(champion)
+          fetchChampionSplash(champion).catch((error) => {
+            console.error(`Error fetching champion splash art for champion ${champion.name}: ${error}`)
+          })
         }
       })
     }

@@ -33,5 +33,9 @@
   ],
   "docwriter.style": "Auto-detect",
   "svg.preview.background": "dark-transparent",
-  "scss.lint.unknownAtRules": "ignore"
+  "scss.lint.unknownAtRules": "ignore",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "league-builds-gui",
+    "projectKey": "OchreFox_league-builds-gui"
+  }
 }

@@ -27,7 +27,7 @@
     box-shadow: 0px 0px 40px 5px rgba(130, 215, 255, 0.1);
     z-index: -3;
     animation-name: move-gradient, fade-out;
-    animation-duration: 1s, 0.4s;
+    animation-duration: 1.5s, 0.4s;
     animation-delay: 0s, 0.4s;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), linear;
     animation-fill-mode: forwards, forwards;
@@ -74,6 +74,10 @@
     animation-iteration-count: 1, infinite, 1;
     animation-fill-mode: forwards, forwards, forwards;
   }
+}
+
+.tileDragging {
+  @apply bg-black drop-shadow-md;
 }
 
 @keyframes move-gradient {

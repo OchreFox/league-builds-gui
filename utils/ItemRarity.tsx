@@ -3,14 +3,17 @@ import { ItemsSchema, RequiredChampion } from '../types/Items'
 
 // Filters to determine the rarity of an item
 export function isBasic(item: ItemsSchema) {
-  return item.tier === 1 && item.inStore
+  return item.type[0] === 'Basic' && item.inStore
 }
+
 export function isEpic(item: ItemsSchema) {
-  return item.tier === 2 && item.inStore
+  return item.type[0] === 'Epic' && item.inStore
 }
+
 export function isLegendary(item: ItemsSchema) {
-  return item.tier === 3 && item.mythic !== true && item.inStore
+  return item.type[0] === 'Legendary' && item.inStore
 }
+
 export function isMythic(item: ItemsSchema) {
   return item.mythic === true && item.requiredChampion === RequiredChampion.Empty && item.inStore
 }

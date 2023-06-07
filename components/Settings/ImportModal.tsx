@@ -1,35 +1,38 @@
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+
+import { css, cx } from '@emotion/css'
+import { Dialog, Transition } from '@headlessui/react'
+import circleCheck from '@iconify/icons-tabler/circle-check'
+import circleX from '@iconify/icons-tabler/circle-x'
+import clipboardText from '@iconify/icons-tabler/clipboard-text'
+import dragDrop from '@iconify/icons-tabler/drag-drop'
+import fileCode from '@iconify/icons-tabler/file-code'
+import folderIcon from '@iconify/icons-tabler/folder'
+import uploadIcon from '@iconify/icons-tabler/upload'
+import xIcon from '@iconify/icons-tabler/x'
+import { Icon } from '@iconify/react'
+import Ajv, { JTDSchemaType } from 'ajv/dist/jtd'
+import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
+import { motion } from 'framer-motion'
+import { FileRejection, useDropzone } from 'react-dropzone'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { batch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { RiotItemBuild } from 'types/Build'
+import { NotificationType } from 'types/Toast'
+
 import { useChampions } from '@/hooks/useChampions'
 import { setSelectedChampions } from '@/store/appSlice'
 import { setRiotItemBuild } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
-import { css, cx } from '@emotion/css'
-import { Dialog, Transition } from '@headlessui/react'
-import circleCheck from '@iconify/icons-tabler/circle-check'
-import circleX from '@iconify/icons-tabler/circle-x'
-import folderIcon from '@iconify/icons-tabler/folder'
-import infoCircle from '@iconify/icons-tabler/info-circle'
-import uploadIcon from '@iconify/icons-tabler/upload'
-import xIcon from '@iconify/icons-tabler/x'
-import { Icon } from '@iconify/react'
-import Ajv, { JTDSchemaType } from 'ajv/dist/jtd'
-import { motion } from 'framer-motion'
-import React, { Fragment, useCallback, useMemo } from 'react'
-import { FileRejection, useDropzone } from 'react-dropzone'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import { RiotItemBuild } from 'types/Build'
-import { ChampionsSchema } from 'types/Champions'
-import { NotificationType } from 'types/Toast'
 
-import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
-
-import styles from '../Layout/StyledContainer.module.scss'
+import styles from './ImportModal.module.scss'
+import { Hint, InlineSeparator, Separator, Tip, Warning } from './ModalComponents'
 import { ToastBody } from './NotificationToast'
 
 const baseStyle =
-  'border-2 border-dashed border-gray-400 text-gray-400 rounded-md p-4 flex flex-col items-center justify-center space-y-2 transition-colors duration-150 ease-in-out'
+  'border-2 border-dashed border-gray-400 text-gray-400 rounded-md p-4 flex flex-col items-center justify-center space-y-2 transition-colors duration-150 ease-in-out bg-black/40'
 
 const itemBuildSchema: JTDSchemaType<RiotItemBuild> = {
   properties: {
@@ -56,7 +59,7 @@ const itemBuildSchema: JTDSchemaType<RiotItemBuild> = {
                 count: { type: 'int32' },
               },
               optionalProperties: {
-                uid: { type: 'string' },
+                itemId: { type: 'string' },
               },
             },
           },
@@ -69,63 +72,51 @@ const itemBuildSchema: JTDSchemaType<RiotItemBuild> = {
   },
 }
 
-const Separator = () => {
-  return (
-    <span
-      className={cx(
-        'italic text-gray-400 text-sm mx-auto py-2 inline-flex items-center justify-center',
-        css`
-          &::before {
-            content: '';
-            display: inline-block;
-            width: 6rem;
-            height: 1px;
-            background-color: rgb(8, 145, 178);
-            margin-right: 0.5rem;
-          }
-          &::after {
-            content: '';
-            display: inline-block;
-            width: 6rem;
-            height: 1px;
-            background-color: rgb(8, 145, 178);
-            margin-left: 0.5rem;
-          }
-        `
-      )}
-    >
-      or
-    </span>
-  )
-}
-
 // Only handle the textarea
 type Inputs = {
   build: string
 }
 
 const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  const { championsData } = useChampions()
   const dispatch = useAppDispatch()
+  const { championsData } = useChampions()
   const potatoMode = useSelector(selectPotatoMode)
-  const { register, handleSubmit, resetField } = useForm<Inputs>()
+  const [itemBuild, setItemBuild] = useState<RiotItemBuild | null>(null)
+  // const itemBuildState = useSelector(selectItemBuild)
+  const { register, watch, handleSubmit, resetField } = useForm<Inputs>()
+
+  const watchBuild = watch('build')
 
   function setBuild(itemBuild: RiotItemBuild) {
     if (championsData) {
-      const selectedChampions = itemBuild.associatedChampions.map((championId: number) => {
-        return Object.values(championsData).find((champion) => champion.id === championId)
-      }) as ChampionsSchema[]
-      dispatch(setSelectedChampions(selectedChampions))
+      const selectedChampions = Object.values(championsData).filter((champion) =>
+        itemBuild.associatedChampions.includes(champion.id)
+      )
+      batch(() => {
+        dispatch(setSelectedChampions(selectedChampions))
+        dispatch(setRiotItemBuild(itemBuild))
+      })
+
+      toast(
+        <ToastBody
+          title="Build imported!"
+          message="The build has been imported successfully."
+          type={NotificationType.Success}
+          icon={circleCheck}
+        />
+      )
+    } else {
+      console.warn('Champions data not loaded yet.')
+      toast(
+        <ToastBody
+          title="Champions data not loaded yet"
+          message="The champions data is not loaded yet. Please try again later."
+          type={NotificationType.Error}
+          icon={circleX}
+        />
+      )
     }
-    dispatch(setRiotItemBuild(itemBuild))
-    toast(
-      <ToastBody
-        title="Build imported!"
-        message="The build has been imported successfully."
-        type={NotificationType.Success}
-        icon={circleCheck}
-      />
-    )
+
     setOpen(false)
   }
 
@@ -134,7 +125,7 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
     const validate = ajv.compile(itemBuildSchema)
     const valid = validate(itemBuild)
     if (valid) {
-      setBuild(itemBuild)
+      setItemBuild(itemBuild)
       resetField('build')
     } else {
       console.warn('Invalid json file.')
@@ -205,6 +196,12 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
     )
   }, [isDragActive, isDragAccept, isDragReject, isFocused])
 
+  useEffect(() => {
+    if (itemBuild && championsData) {
+      setBuild(itemBuild)
+    }
+  }, [itemBuild, championsData])
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed inset-0 z-10 overflow-y-auto" open={open} onClose={onCloseToast}>
@@ -220,7 +217,7 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
           >
             <Dialog.Overlay
               className={cx(
-                'fixed inset-0 bg-black/60 bg-opacity-75 transition-opacity',
+                'fixed inset-0 bg-black/50 bg-opacity-75 transition-opacity',
                 !potatoMode && 'backdrop-blur backdrop-grayscale'
               )}
             />
@@ -240,10 +237,10 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
           >
             <div
               className={cx(
-                'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
-                styles['container-background'],
+                'inline-block transform border-2 border-yellow-700 text-left align-bottom transition-all sm:w-full sm:max-w-lg sm:align-middle',
+                styles.modalContainer,
                 css`
-                  &::before {
+                  &::after {
                     content: '';
                     position: absolute;
                     top: 0;
@@ -253,7 +250,6 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                     background: radial-gradient(rgba(8, 145, 178, 0.75) 0%, rgba(0, 0, 0, 0) 50%);
                     background-size: 200% 200%;
                     background-position: 100% 100%;
-
                     animation: move-gradient 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
                     @keyframes move-gradient {
@@ -270,92 +266,112 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                 `
               )}
             >
-              <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block z-10">
-                <button
-                  type="button"
-                  className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
-                  onClick={onCloseToast}
-                >
-                  <span className="sr-only pointer-events-none">Close</span>
-                  <Icon icon={xIcon} className="h-6 w-6" inline={true} />
-                </button>
-              </div>
-              <div className="flex flex-col w-full">
-                <motion.div
-                  className="flex items-center space-x-2 pb-2 font-body font-semibold text-gray-200 text-xl border-b border-yellow-900"
-                  initial={{ opacity: 0, x: '50%' }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: '-50%' }}
-                  transition={{ ...easeOutExpo, duration: 0.5, delay: 0.1 }}
-                >
-                  <span className="rounded-full bg-cyan-600 inline-flex items-center justify-center p-1">
-                    <Icon icon={uploadIcon} className="h-5 w-5 text-white" inline={true} />
-                  </span>
-                  <h3>IMPORT BUILD</h3>
-                </motion.div>
-              </div>
-              <motion.div
-                className="text-center sm:mt-0 sm:text-left flex flex-col justify-center py-4 space-y-4"
-                initial={{ opacity: 0, y: '20%' }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: '-20%' }}
-                transition={{ ...easeOutExpo, duration: 0.5, delay: 0.2, staggerChildren: 1 }}
-              >
-                <p className="text-base text-gray-200">
-                  <span className="text-red-400 font-semibold">WARNING: </span> Importing a build will{' '}
-                  <u className="decoration-red-400 text-red-400 decoration-2">overwrite</u> your current build.
-                </p>
-                <fieldset
-                  className={cx(
-                    'text-gray-400 text-sm border border-cyan-400 rounded-md px-2 pb-2 pt-0.5',
-                    css`
-                      filter: drop-shadow(0 0 2rem rgba(165, 243, 252, 0.25))
-                        drop-shadow(0 0 0.25rem rgba(165, 243, 252, 0.3));
-                    `
-                  )}
-                >
-                  <legend className="text-cyan-400 px-2 bg-slate-700 rounded-md inline-flex py-0.5 items-center justify-center border border-cyan-400">
-                    <Icon icon={infoCircle} className="h-5 w-5 mr-1" inline={true} />
-                    <b>TIP</b>
-                  </legend>
-                  To safely keep your progress, click on the <b>Export Build</b> button in the settings section of the
-                  site.
-                </fieldset>
-                <div {...getRootProps({ className: inputClassnames })}>
-                  <input {...getInputProps()} />
+              <div className={cx(styles.modalContent, 'px-6 py-6')}>
+                <div className="absolute top-0 right-0 z-10 hidden pt-4 pr-4 sm:block">
                   <button
                     type="button"
-                    className="inline-flex mx-auto items-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm text-white bg-transparent border-cyan-600 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-extended-colors duration-150"
+                    className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
+                    onClick={onCloseToast}
                   >
-                    <Icon className="mr-1 w-5 h-5" icon={folderIcon} inline={true} />
-                    Select a file
+                    <span className="sr-only pointer-events-none">Close</span>
+                    <Icon icon={xIcon} className="h-6 w-6" inline={true} />
                   </button>
-                  <Separator />
-                  <Icon icon={uploadIcon} className="h-10 w-10" />
-                  <p>Drop a file here</p>
                 </div>
-                <Separator />
-
-                {/* Paste your build */}
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2">
-                  <label htmlFor="build" className="text-gray-200 text-sm font-semibold text-center">
-                    Paste your build
-                  </label>
-                  <textarea
-                    id="build-textarea"
-                    className="bg-slate-800 border border-gray-700 rounded-md text-gray-200 text-sm font-mono p-2"
-                    placeholder="Paste your build here"
-                    {...register('build', { required: false })}
-                  />
-                  <button
-                    type="submit"
-                    className="inline-flex mx-auto items-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm text-white bg-transparent border-cyan-600 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-extended-colors duration-150"
+                <div className="flex w-full flex-col">
+                  <motion.div
+                    className="flex items-center space-x-2 border-b border-yellow-900 pb-2 font-body text-xl font-semibold text-gray-200"
+                    initial={{ opacity: 0, x: '50%' }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: '-50%' }}
+                    transition={{ ...easeOutExpo, duration: 0.5, delay: 0.1 }}
                   >
-                    <Icon className="mr-1 w-5 h-5" icon={uploadIcon} inline={true} />
-                    Import from clipboard
-                  </button>
-                </form>
-              </motion.div>
+                    <span className="inline-flex items-center justify-center rounded-full bg-cyan-600 p-1">
+                      <Icon icon={uploadIcon} className="h-5 w-5 text-white" inline={true} />
+                    </span>
+                    <h2>IMPORT BUILD</h2>
+                  </motion.div>
+                </div>
+                <motion.div
+                  className="flex flex-col justify-center space-y-4 py-4 text-center sm:mt-0 sm:text-left"
+                  initial={{ opacity: 0, y: '20%' }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: '-20%' }}
+                  transition={{ ...easeOutExpo, duration: 0.5, delay: 0.2, staggerChildren: 1 }}
+                >
+                  <Warning>
+                    Importing a build will{' '}
+                    <u className="text-yellow-400 decoration-yellow-400 decoration-2">
+                      <b>overwrite</b>
+                    </u>{' '}
+                    your current build.
+                    <br />
+                    <span className=" font-light text-gray-300">
+                      To safely keep your progress, click on the <b>Export Build</b> button in the settings section of
+                      the site.
+                    </span>
+                  </Warning>
+                  {/* <Tip>
+                  To safely keep your progress, click on the <b>Export Build</b> button in the settings section of the
+                  site.
+                </Tip>
+                <Hint>
+                  You can import a build exported from the <b>League of Legends</b> client, or from this site.{' '}
+                  <span className="text-gray-400">
+                    <i>Just make sure it's a JSON file.</i>
+                  </span>
+                </Hint> */}
+                  {/* <hr className="border-yellow-900" /> */}
+                  <div className="flex w-full flex-col justify-between">
+                    <div className="space-y-2 rounded-md bg-cyan-700/25 px-4 pt-2 pb-4">
+                      <h3 className="flex items-center text-lg font-semibold text-cyan-200 underline decoration-gray-500 decoration-2 underline-offset-4">
+                        <Icon icon={fileCode} className="mr-1 h-5 w-5" inline={true} />
+                        Load from JSON file
+                      </h3>
+                      <div {...getRootProps({ className: inputClassnames })}>
+                        <input {...getInputProps()} />
+                        <div className="flex items-center">
+                          <Icon icon={dragDrop} className="mr-1 h-6 w-6" inline={true} />
+                          <p>Drag and drop here</p>
+                        </div>
+                        <InlineSeparator />
+
+                        <button
+                          type="button"
+                          className="mx-auto inline-flex items-center rounded-md border border-cyan-600 bg-transparent px-4 py-2 text-sm font-medium text-white shadow-sm transition-extended-colors duration-150 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                        >
+                          <Icon className="mr-1 h-5 w-5" icon={folderIcon} inline={true} />
+                          Browse...
+                        </button>
+                      </div>
+                    </div>
+                    <Separator />
+                    {/* Paste your build */}
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="flex flex-col space-y-2 rounded-md bg-teal-700/25 px-4 pt-2 pb-4"
+                    >
+                      <h3 className="flex items-center text-lg font-semibold text-teal-200 underline decoration-gray-500 decoration-2 underline-offset-4">
+                        <Icon icon={clipboardText} className="mr-1 h-5 w-5" inline={true} />
+                        Paste a build
+                      </h3>
+                      <textarea
+                        id="build-textarea"
+                        className="font-mono rounded-md border border-gray-700 bg-slate-800 p-2 text-sm text-gray-200 placeholder-gray-500"
+                        placeholder="Paste your build here"
+                        {...register('build', { required: false })}
+                      />
+                      <button
+                        type="submit"
+                        disabled={watchBuild ? watchBuild === '' : true}
+                        className="mx-auto inline-flex items-center rounded-md border border-cyan-600 bg-transparent px-4 py-2 text-sm font-medium text-white shadow-sm transition-extended-colors duration-150 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:opacity-50"
+                      >
+                        <Icon className="mr-1 h-5 w-5" icon={uploadIcon} inline={true} />
+                        Import from clipboard
+                      </button>
+                    </form>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </Transition.Child>
         </div>

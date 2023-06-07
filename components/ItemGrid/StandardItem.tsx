@@ -2,6 +2,7 @@ import { selectItemPicker, setItemPickerDraggedItem, setItemPickerSelectedItem }
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
+import { Portal } from '@headlessui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -201,41 +202,43 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
         >
           {/* Mythic item overlay */}
           <div ref={reference} className={item.mythic ? itemStyles.itemMythicOverlay : ''}>
-            <ItemIcon item={item} />
+            <ItemIcon item={item} usePlaceholder={true} />
           </div>
           <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
         </motion.button>
         <AnimatePresence>
           {showTooltip && (
-            <motion.div
-              ref={floating}
-              style={{
-                position: strategy,
-                top: y ?? 0,
-                left: x ?? 0,
-                width: 'max-content',
-              }}
-              className={itemStyles.itemTooltip}
-              variants={ItemNameTooltipVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{
-                ...easeInOutQuad,
-                duration: 0.1,
-              }}
-            >
-              <motion.span className="pointer-events-none">{item.name}</motion.span>
-              <div
-                ref={arrowTooltipRef}
-                data-tooltip-placement={placement}
-                className={itemStyles.itemTooltipArrow}
+            <Portal>
+              <motion.div
+                ref={floating}
                 style={{
-                  top: arrowY,
-                  left: arrowX,
+                  position: strategy,
+                  top: y ?? 0,
+                  left: x ?? 0,
+                  width: 'max-content',
                 }}
-              />
-            </motion.div>
+                className={itemStyles.itemTooltip}
+                variants={ItemNameTooltipVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{
+                  ...easeInOutQuad,
+                  duration: 0.1,
+                }}
+              >
+                <motion.span className="pointer-events-none">{item.name}</motion.span>
+                <div
+                  ref={arrowTooltipRef}
+                  data-tooltip-placement={placement}
+                  className={itemStyles.itemTooltipArrow}
+                  style={{
+                    top: arrowY,
+                    left: arrowX,
+                  }}
+                />
+              </motion.div>
+            </Portal>
           )}
         </AnimatePresence>
         {showPopper

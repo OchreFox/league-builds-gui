@@ -21,16 +21,22 @@ export function scrollIntoItem(
   itemRefArray: ItemRefArrayType,
   itemGridRef: RefObject<HTMLDivElement>
 ) {
-  const itemIndex = _.findIndex(itemRefArray.current, (x) => x.itemId === item.id)
+  // Replace lodash with native findIndex
+  const itemIndex = itemRefArray.current.findIndex((x) => x.itemId === item.id)
   if (itemIndex > -1) {
     // console.log('Scrolling to item ' + item.name + ' at index ', itemIndex)
     const itemRef = itemRefArray.current[itemIndex].ref.current
     if (itemRef && itemGridRef.current) {
-      // Scroll to item in itemGridRef
-      itemGridRef.current.scrollTo({
-        top: itemRef.offsetTop - 50,
-        behavior: 'smooth',
-      })
+      // Check if item is already visible
+      const itemRect = itemRef.getBoundingClientRect()
+      const itemGridRect = itemGridRef.current.getBoundingClientRect()
+      if (itemRect.top < itemGridRect.top || itemRect.bottom > itemGridRect.bottom) {
+        // Scroll to item in itemGridRef
+        itemGridRef.current.scrollTo({
+          top: itemRef.offsetTop - 50,
+          behavior: 'smooth',
+        })
+      }
     }
   }
 }

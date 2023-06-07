@@ -1,11 +1,10 @@
 import { PayloadAction, createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
 import { AppState } from 'types/App'
-import { v4 as uuidv4 } from 'uuid'
-import { string } from 'yup'
 
-import { Block, BlockState, ItemBuild, RiotItemBuild } from '../../types/Build'
-import { ChampionsSchema, DefaultChampionSchema } from '../../types/Champions'
+import { generateItemId, getNewBlock, getNewItem } from 'utils/ItemBuild'
+
+import { BlockState, ItemBuild, RiotItemBuild } from '../../types/Build'
 import { RootState } from './store'
 
 const hydrate = createAction<AppState>(HYDRATE)
@@ -34,15 +33,11 @@ export const itemBuildSlice = createSlice({
       state.associatedChampions = associatedChampions
       state.blocks = blocks.map((block, index) => {
         return {
-          id: uuidv4(),
+          id: generateItemId(),
           position: index,
           type: block.type,
           items: block.items.map((item) => {
-            return {
-              id: item.id,
-              uid: uuidv4(),
-              count: item.count,
-            }
+            return getNewItem(parseInt(item.id))
           }),
         }
       })
@@ -69,29 +64,25 @@ export const itemBuildSlice = createSlice({
       state.blocks.push(action.payload)
     },
     addEmptyBlock: (state) => {
-      state.blocks.push({
-        id: uuidv4(),
-        position: state.blocks.length,
-        type: `Empty Block ${state.blocks.length + 1}`,
-        items: [],
-      })
+      const newBlock = getNewBlock(state.blocks.length)
+      state.blocks.push(newBlock)
     },
     addItemToBlock: (state, action: PayloadAction<{ blockId: string; itemId: number }>) => {
       const { blockId, itemId } = action.payload
       const block = state.blocks.find((block) => block.id === blockId)
       if (block) {
-        block.items.push({
-          id: itemId.toString(),
-          uid: uuidv4(),
-          count: 1,
-        })
+        const newItem = getNewItem(itemId)
+        block.items.push(newItem)
       }
     },
-    removeItemFromBlock: (state, action: PayloadAction<{ blockId: string; itemId: number }>) => {
-      const { blockId, itemId } = action.payload
-      const block = state.blocks.find((block) => block.id === blockId)
-      if (block) {
-        block.items = block.items.filter((item) => item.id !== itemId.toString())
+    removeItemFromBlock: (state, action: PayloadAction<{ blockId: string; id: string }>) => {
+      const { blockId, id } = action.payload
+      console.log(blockId, id)
+      const blockIndex = state.blocks.findIndex((block) => block.id === blockId)
+      console.log(blockIndex)
+      if (blockIndex !== -1) {
+        console.log(state.blocks[blockIndex].items)
+        state.blocks[blockIndex].items = state.blocks[blockIndex].items.filter((item) => item.id !== id)
       }
     },
     removeBlock: (state, action: PayloadAction<string>) => {

@@ -1,6 +1,7 @@
+import React, { forwardRef } from 'react'
+
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import React, { forwardRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Rarity } from '../../types/FilterProps'
@@ -48,13 +49,12 @@ export const RarityTitleWrapper = (
       exit="exit"
       transition={transition}
       className={cx(
-        'sticky top-0 z-10 -mx-2 mb-2 border-b border-yellow-900 px-2 py-1 font-body font-semibold uppercase text-gray-200 shadow-2xl',
+        'sticky top-0 z-10 -mx-2 mb-2 border-b border-yellow-900 px-2 py-1 font-body font-semibold uppercase tracking-wide text-gray-200 shadow-2xl',
         !potatoMode && 'backdrop-blur',
         getBackgroundColor()
       )}
     >
       {rarity}
-      <span className="font-body font-light text-gray-400"> (TIER {tier})</span>
     </motion.h3>
   )
 }

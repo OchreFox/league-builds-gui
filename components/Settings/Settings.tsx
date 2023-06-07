@@ -1,33 +1,36 @@
 import dynamic from 'next/dynamic'
 
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { css, cx } from '@emotion/css'
 import { arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
 import checkIcon from '@iconify/icons-tabler/check'
 import clipboardText from '@iconify/icons-tabler/clipboard-text'
 import downloadIcon from '@iconify/icons-tabler/download'
-import trashIcon from '@iconify/icons-tabler/trash'
+import trashX from '@iconify/icons-tabler/trash-x'
 import uploadIcon from '@iconify/icons-tabler/upload'
 import { Icon } from '@iconify/react'
+import { ItemNameTooltipVariants } from 'components/ItemGrid/ItemComponents'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { batch, useSelector } from 'react-redux'
 
-import { ItemNameTooltipVariants } from 'components/ItemGrid/ItemComponents'
+import { resetApp } from '@/store/appSlice'
+import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from '@/store/itemBuildSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
+
+import styles from '/styles/index.module.scss'
 import itemStyles from 'components/ItemGrid/StandardItem.module.scss'
 
 import { Block, Item, ItemBuild } from '../../types/Build'
 import { easeInOutExpo, easeInOutQuad } from '../../utils/Transition'
 import Button from '../basic/Button'
-import { resetApp } from '../store/appSlice'
-import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from '../store/itemBuildSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import { useAppDispatch } from '../store/store'
 import PotatoModeSwitch from './PotatoModeSwitch'
-import styles from '/styles/index.module.scss'
 
 const DynamicResetAlert = dynamic(() => import('./ResetAlert'), { ssr: false })
 const DynamicImportModal = dynamic(() => import('./ImportModal'), { ssr: false })
+const DynamicExportModal = dynamic(() => import('./ExportModal'), { ssr: false })
 
 type Inputs = {
   title: string
@@ -40,6 +43,7 @@ const Settings = () => {
 
   const [showResetAlert, setShowResetAlert] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   // const [downloadContent, setDownloadContent] = useState('#')
   // const [downloadTitle, setDownloadTitle] = useState('My Build.json')
 
@@ -96,6 +100,7 @@ const Settings = () => {
     }
   }
 
+  // TODO: Fix this
   const deleteIdFromBlocks = (state: ItemBuild) => {
     // Delete the id property from the state.itemBuild.blocks
     let newBlocks: Block[] = []
@@ -103,8 +108,10 @@ const Settings = () => {
       let { items, type } = blockState
       let newItems: Item[] = []
       for (const item of items) {
-        const { uid, ...rest } = item
-        newItems.push(rest)
+        newItems.push({
+          id: item.itemId ?? '0',
+          count: item.count,
+        })
       }
       newBlocks.push({ type, items: newItems })
     }
@@ -140,28 +147,33 @@ const Settings = () => {
   }, [])
 
   const handleExportBuild = useCallback(() => {
-    if (itemBuild && !isDirty) {
-      let cleanState = deleteIdFromBlocks(itemBuild)
-      const docTitle =
-        itemBuild.title !== '' ? `${itemBuild.title.replace(/[/\\?%*:|"<>]/g, '').trim()}.json` : 'My Build.json'
-      const downloadContent = `data:text/json;charset=utf-8,${encodeURIComponent(
-        JSON.stringify(cleanState.itemBuild, null, 2)
-      )}`
+    setShowExportModal(true)
+    return true
+  }, [])
 
-      const downloadButtonRef = document.createElement('a')
-      downloadButtonRef.href = downloadContent
-      downloadButtonRef.download = docTitle
-      downloadButtonRef.click()
+  // const handleExportBuild = useCallback(() => {
+  //   if (itemBuild && !isDirty) {
+  //     let cleanState = deleteIdFromBlocks(itemBuild)
+  //     const docTitle =
+  //       itemBuild.title !== '' ? `${itemBuild.title.replace(/[/\\?%*:|"<>]/g, '').trim()}.json` : 'My Build.json'
+  //     const downloadContent = `data:text/json;charset=utf-8,${encodeURIComponent(
+  //       JSON.stringify(cleanState.itemBuild, null, 2)
+  //     )}`
 
-      return true
-    } else {
-      setError('title', {
-        type: 'manual',
-        message: 'Cannot export build with unsaved changes',
-      })
-      return false
-    }
-  }, [itemBuild, isDirty, setError])
+  //     const downloadButtonRef = document.createElement('a')
+  //     downloadButtonRef.href = downloadContent
+  //     downloadButtonRef.download = docTitle
+  //     downloadButtonRef.click()
+
+  //     return true
+  //   } else {
+  //     setError('title', {
+  //       type: 'manual',
+  //       message: 'Cannot export build with unsaved changes',
+  //     })
+  //     return false
+  //   }
+  // }, [itemBuild, isDirty, setError])
 
   const openResetAlert = useCallback(() => {
     setShowResetAlert(true)
@@ -337,7 +349,7 @@ const Settings = () => {
             handleClick={handleImportBuild}
           />
           <Button
-            className="text-sm"
+            className="cursor-not-allowed text-sm opacity-50"
             label="Export Build"
             icon={downloadIcon}
             labelReactive="Exported!"
@@ -352,6 +364,7 @@ const Settings = () => {
             outlineColor="border-brand-default"
             rounded="rounded-md"
             handleClick={handleExportBuild}
+            disabled={true}
           />
           <Button
             className="text-sm"
@@ -372,7 +385,7 @@ const Settings = () => {
           <Button
             className="text-sm"
             label="Reset Build"
-            icon={trashIcon}
+            icon={trashX}
             reactive={false}
             outlined={true}
             color="text-white"
@@ -387,6 +400,7 @@ const Settings = () => {
       </div>
       <DynamicResetAlert resetBuild={resetBuild} open={showResetAlert} setOpen={setShowResetAlert} />
       <DynamicImportModal open={showImportModal} setOpen={setShowImportModal} />
+      <DynamicExportModal open={showExportModal} setOpen={setShowExportModal} />
     </>
   )
 }

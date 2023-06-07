@@ -1,5 +1,5 @@
-import { selectItemFilters, setItemFiltersRarity } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
+import React, { useCallback } from 'react'
+
 import { css, cx } from '@emotion/css'
 import circleDashed from '@iconify/icons-tabler/circle-dashed'
 import diamondIcon from '@iconify/icons-tabler/diamond'
@@ -8,9 +8,11 @@ import triangleIcon from '@iconify/icons-tabler/triangle'
 import { Icon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
 import AllClasses from 'public/icons/champion-class/all-classes.svg'
-import React, { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { Rarity } from 'types/FilterProps'
+
+import { selectItemFilters, setItemFiltersRarity } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 
 import { easeOutExpo } from '../ItemBuild/BuildMakerComponents'
 import styles from './FilterRarity.module.scss'
@@ -24,7 +26,7 @@ const borderVariants: Variants = {
   },
 }
 
-const RarityIcon = ({ rarity }: { rarity: Rarity }) => {
+export const RarityIcon = ({ rarity }: { rarity: Rarity }) => {
   switch (rarity) {
     case Rarity.Basic:
       return <Icon icon={circleDashed} className="mr-1 h-4 w-4 fill-gray-500 stroke-gray-300" />
@@ -84,7 +86,7 @@ export default function FilterItemsByRarity() {
             key={rarity + '-rarity'}
             transition={{ duration: 0.1, type: 'tween' }}
             type="button"
-            title="Basic"
+            title={rarity}
             className={cx(
               'group relative inline-flex flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-gray-600 hover:bg-cyan-900',
               itemFilters.rarity === rarity ? styles.filterButtonActive : 'hover:text-white',

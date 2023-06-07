@@ -1,12 +1,17 @@
-import { selectPotatoMode } from '@/store/potatoModeSlice'
+import React, { useCallback, useMemo } from 'react'
+
 import { cx } from '@emotion/css'
+import { RarityIcon } from 'components/ItemFilters/FilterItemsByRarity'
 import { motion } from 'framer-motion'
 // SVG imports
 import goldIcon from 'public/icons/gold.svg?url'
-import React, { useCallback } from 'react'
 import JsxParser from 'react-jsx-parser'
 import { useSelector } from 'react-redux'
 import { ItemsSchema } from 'types/Items'
+
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+
+import { getRarity } from 'utils/ItemRarity'
 
 import {
   Active,
@@ -29,6 +34,7 @@ import {
   Status,
   TrueDamage,
 } from './ItemComponents'
+import { itemSectionConstants } from './ItemGridComponents'
 import { ItemIcon } from './ItemIcon'
 import popperStyles from './ItemPopper.module.scss'
 
@@ -53,10 +59,13 @@ export function ItemPopper({
   setArrowRef: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
   item: ItemsSchema
 }): JSX.Element {
+  const rarity = useMemo(() => getRarity(item), [item])
+
   const renderError = useCallback(
     (props: { error: string }) => <div className="text-red-500">{`${props.error}`}</div>,
     []
   )
+
   return (
     <motion.div
       ref={popperRef}
@@ -79,11 +88,14 @@ export function ItemPopper({
     >
       <div ref={setArrowRef} style={styles.arrow} key={'arrow-' + item.id} />
       {/* Item information */}
-      <div className="flex flex-col w-full" key={'popper-content-' + item.id}>
-        <div className="flex w-full">
-          <ItemIcon item={item} size={35} />
-          <div className="flex justify-between border-b border-yellow-900 pb-1 ml-4 w-full">
-            <motion.h3 className="font-body font-semibold text-gray-200 pointer-events-none">{item.name}</motion.h3>
+      <div className="flex w-full flex-col" key={'popper-content-' + item.id}>
+        <div className="flex items-center">
+          <ItemIcon item={item} size={50} />
+          <div className="ml-4 flex w-full grow flex-row justify-between border-b border-yellow-900 pb-1">
+            <motion.div className="pointer-events-none flex flex-col font-body font-semibold text-gray-200">
+              <span>{item.name}</span>
+              <span className={cx('text-sm', itemSectionConstants[rarity].textColor)}>{rarity}</span>
+            </motion.div>
             <p className="inline-flex items-center font-sans font-bold text-yellow-600">
               <img className="mr-1 h-5 w-5" src={goldIcon} alt="gold" />
               <span className="ml-1">{item.gold?.total}</span>

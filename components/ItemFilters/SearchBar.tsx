@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import { useItems } from '@/hooks/useItems'
-import { setItemPickerSelectedItem } from '@/store/appSlice'
+import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { Combobox } from '@headlessui/react'
@@ -131,19 +131,22 @@ export default function SearchBar() {
               </span>
             ) : (
               fuzzyResults?.map((result) => (
-                <Combobox.Option as={Fragment} key={'result-' + result.obj.id} value={result.obj}>
-                  <button className="relative m-1 flex items-center rounded-md border border-gray-700 bg-gray-900 py-2 px-2 text-gray-200 hover:border-gray-500 hover:bg-gray-700">
-                    <div className="mr-2 flex h-8 w-8 shrink-0 border border-black object-cover ring-1 ring-yellow-700">
-                      <Image
-                        loader={CustomLoader}
-                        width={50}
-                        height={50}
-                        src={result.obj.icon ?? ''}
-                        alt={result.obj.name ?? ''}
-                      />
-                    </div>
-                    <p> {result.obj.name}</p>
-                  </button>
+                <Combobox.Option
+                  as="button"
+                  key={'result-' + result.obj.id}
+                  value={result.obj}
+                  className="relative m-1 flex items-center rounded-md border border-gray-700 bg-gray-900 py-2 px-2 text-gray-200 hover:border-gray-500 hover:bg-gray-700"
+                >
+                  <div className="mr-2 flex h-8 w-8 shrink-0 border border-black object-cover ring-1 ring-yellow-700">
+                    <Image
+                      loader={CustomLoader}
+                      width={50}
+                      height={50}
+                      src={result.obj.icon ?? ''}
+                      alt={result.obj.name ?? ''}
+                    />
+                  </div>
+                  <p>{result.obj.name}</p>
                 </Combobox.Option>
               ))
             )}

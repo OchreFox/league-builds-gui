@@ -1,0 +1,12 @@
+$offset-1: 0.15rem;
+$offset-2: 0.25rem;
+$offset-3: 0.3rem;
+
+.modalContainer {
+  background: rgb(15, 23, 42);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.6) 80%, rgba(8, 50, 70, 0.5) 100%);
+
+  box-shadow: #{$offset-1} #{$offset-1} 1rem calc(#{$offset-1}/ 2) rgba(241, 143, 77, 0.2),
+    #{$offset-2} #{$offset-2} 2rem calc(#{$offset-2}/ 2) rgba(221, 123, 57, 0.2),
+    #{$offset-3} #{$offset-3} 10rem calc(#{$offset-3}/ 2) rgba(204, 41, 55, 0.2);
+}

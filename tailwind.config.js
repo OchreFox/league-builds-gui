@@ -3,10 +3,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      body: ['Epilogue', 'system-ui', 'sans-serif'],
+      body: ['"Epilogue Variable"', 'system-ui', 'sans-serif'],
       serif: ['"IBM Plex Serif"', 'serif'],
-      wide: ['"Work Sans"', 'sans-serif'],
-      sans: ['"Inter"', 'sans-serif'],
+      wide: ['"Work Sans Variable"', 'sans-serif'],
+      sans: ['"Inter Variable"', 'sans-serif'],
       monospace: ['"IBM Plex Mono"', 'monospace'],
     },
     extend: {

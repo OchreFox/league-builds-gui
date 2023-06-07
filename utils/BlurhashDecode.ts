@@ -26,8 +26,7 @@ export function blurHashToDataURL(hash: string | undefined, width: number, heigh
 function parsePixels(pixels: Uint8ClampedArray, width: number, height: number) {
   const pixelsString = [...pixels].map((byte) => String.fromCharCode(byte)).join('')
   const pngString = generatePng(width, height, pixelsString)
-  const dataURL =
-    typeof Buffer !== 'undefined' ? Buffer.from(getPngArray(pngString)).toString('base64') : btoa(pngString)
+  const dataURL = Buffer.from(getPngArray(pngString)).toString('base64')
   return 'data:image/png;base64,' + dataURL
 }
 
@@ -161,7 +160,9 @@ function generatePng(width: number, height: number, rgbaString: string) {
         scanline += String.fromCharCode(rgbaString[y + x] & 0xff)
       }
     } else {
-      scanline += rgbaString.substr(y, width * 4)
+      // Replace the deprecated substr()
+      // scanline += rgbaString.substr(y, width * 4)
+      scanline += rgbaString.slice(y, y + width * 4)
     }
     scanlines += scanline
   }

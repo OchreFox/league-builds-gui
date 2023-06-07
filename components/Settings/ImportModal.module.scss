@@ -1,0 +1,95 @@
+$offset-1: 0.15rem;
+$offset-2: 0.25rem;
+$offset-3: 0.3rem;
+
+$offset-path: 0.75;
+
+.modalContainer {
+  $angle: 0deg;
+  $duration: 20s;
+  $steps: 360;
+  $step-duration: $duration / $steps;
+  $step-angle: 360deg / $steps;
+  $gradient-color: #c89b3c;
+
+  position: relative;
+  box-shadow: #{$offset-1} #{$offset-1} 1rem calc(#{$offset-1}/ 2) rgba(189, 24, 101, 0.2),
+    #{$offset-2} #{$offset-2} 2rem calc(#{$offset-2}/ 2) rgba(1, 204, 255, 0.2),
+    #{$offset-3} #{$offset-3} 10rem calc(#{$offset-3}/ 2) rgba(24, 182, 255, 0.2);
+
+  &::before {
+    border-radius: inherit;
+    content: '';
+    inset: -0.25rem;
+    position: absolute;
+    z-index: -1;
+
+    box-sizing: content-box;
+    border-width: 2px;
+    border-style: solid;
+    animation: rotate-gradient $duration linear infinite;
+
+    @supports (background: paint(something)) {
+      border-image: conic-gradient(
+          from var(--angle),
+          transparent 0deg,
+          $gradient-color 100deg,
+          transparent 100deg,
+          transparent 180deg,
+          $gradient-color 280deg,
+          transparent 280deg
+        )
+        1;
+
+      @keyframes rotate-gradient {
+        to {
+          --angle: 360deg;
+        }
+      }
+    }
+
+    @supports not (background: paint(something)) {
+      @keyframes rotate-gradient {
+        @for $i from 1 through $steps {
+          $percentage: $i * 100% / $steps;
+          #{$percentage} {
+            border-image: conic-gradient(
+                from $angle,
+                transparent 0deg,
+                $gradient-color 100deg,
+                transparent 100deg,
+                transparent 180deg,
+                $gradient-color 280deg,
+                transparent 280deg
+              )
+              1;
+            $angle: $angle + $step-angle;
+          }
+        }
+      }
+    }
+
+    // Clip the background to create a border effect around the modal (like a polaroid)
+    // clip-path: polygon(
+    //   0% 0%,
+    //   0% 100%,
+    //   #{$offset-path + '%'} 100%,
+    //   #{$offset-path + '%'} #{$offset-path + '%'},
+    //   #{calc(100 - $offset-path) + '%'} #{$offset-path + '%'},
+    //   #{calc(100 - $offset-path) + '%'} #{calc(100 - $offset-path) + '%'},
+    //   #{$offset-path + '%'} #{calc(100 - $offset-path) + '%'},
+    //   #{$offset-path + '%'} 100%,
+    //   100% 100%,
+    //   100% 0%
+    // );
+  }
+}
+
+.modalContent {
+  background: rgb(15, 23, 42);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.8) 80%, rgba(8, 50, 70, 0.8) 100%);
+}
+
+.modalWarning {
+  filter: drop-shadow(0 0 2rem rgba(252, 190, 165, 0.25)) drop-shadow(0 0 0.25rem rgba(200, 252, 165, 0.3));
+}
