@@ -1,8 +1,9 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+
 import { cx } from '@emotion/css'
 import alertCircle from '@iconify/icons-tabler/alert-circle'
 import { Icon, IconifyIcon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ButtonError, ButtonLabel, ButtonLabelReactive, setButtonTimer } from './ButtonComponents'
 
@@ -12,7 +13,9 @@ export interface BaseButtonProps {
   labelReactive?: string
   iconReactive?: string | IconifyIcon
   dropReactive?: string
-  handleClick?: (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => boolean
+  handleClick?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>
+  ) => boolean | Promise<boolean>
   handleDrop?: (e: React.DragEvent<HTMLButtonElement>) => void
 
   // Handle rest of React.HTMLAttributes<HTMLElement>
@@ -99,11 +102,11 @@ const Button = ({
       whileHover="hover"
       whileFocus="focus"
       className={cx(
-        'relative overflow-hidden transition-extended-colors duration-150 ease-out py-2 w-full h-full justify-center font-medium focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 border-2 drop-shadow-xl hover:drop-shadow-sm',
+        'relative h-full w-full justify-center overflow-hidden border-2 py-2 font-medium drop-shadow-xl transition-extended-colors duration-150 ease-out hover:drop-shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
         bgColor,
         bgHover,
         buttonError ? bgClickError : bgClick,
-        rounded !== 'rounded-none' && (rounded === 'rounded-full' ? 'px-6 rounded-full' : 'px-4 rounded-md'),
+        rounded !== 'rounded-none' && (rounded === 'rounded-full' ? 'rounded-full px-6' : 'rounded-md px-4'),
         dropReactive && dragOver && `drop-shadow-lg ${dropReactive} ${colorReactive}`,
         outlined ? `border-2 ${outlineColor}` : 'border-transparent',
         className
