@@ -1,23 +1,23 @@
 import Image from 'next/image'
 
-import { useItems } from '@/hooks/useItems'
-import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+
 import { cx } from '@emotion/css'
 import { Combobox } from '@headlessui/react'
 import moodSad from '@iconify/icons-tabler/mood-sad'
 import searchIcon from '@iconify/icons-tabler/search'
 import { Icon } from '@iconify/react'
+import { isInStore } from 'components/ItemGrid/ItemGridComponents'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { ItemsSchema } from 'types/Items'
 
-import { isInStore } from 'components/ItemGrid/ItemGridComponents'
+import { useItems } from '@/hooks/useItems'
+import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 
+import { CustomLoader } from 'utils/CustomLoader'
 import { easeOutExpo } from 'utils/Transition'
-
-import { CustomLoader } from '../../utils/CustomLoader'
 
 const optionsVariants: Variants = {
   open: {

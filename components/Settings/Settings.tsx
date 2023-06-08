@@ -124,11 +124,11 @@ const Settings = () => {
   }
 
   const handleCopyButton = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+    async (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
       e.preventDefault()
       if (!isDirty) {
         let cleanState = deleteIdFromBlocks(itemBuild)
-        navigator.clipboard.writeText(JSON.stringify(cleanState.itemBuild))
+        await navigator.clipboard.writeText(JSON.stringify(cleanState.itemBuild))
         return true
       } else {
         setError('title', {

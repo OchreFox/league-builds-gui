@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 
 import React from 'react'
 
-const build = () => {
+const Build = () => {
   // Get the query string
   const router = useRouter()
   const query = router.query
@@ -15,4 +15,4 @@ const build = () => {
   )
 }
 
-export default build
+export default Build

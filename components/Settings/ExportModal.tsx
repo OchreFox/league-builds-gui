@@ -36,12 +36,12 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
     setOpen(false)
   }, [])
 
-  const onCopyLink = useCallback(() => {
+  const onCopyLink = useCallback(async () => {
     console.log(itemBuild)
     const encoder = makeJsonEncoder()
     const compressedBuild = encoder.encode(itemBuild)
     const buildLink = `${window.location.origin}/build/${compressedBuild}`
-    navigator.clipboard.writeText(buildLink)
+    await navigator.clipboard.writeText(buildLink)
     setBuildLink(buildLink)
     setShowLink(true)
     return true
