@@ -77,11 +77,8 @@ export const itemBuildSlice = createSlice({
     },
     removeItemFromBlock: (state, action: PayloadAction<{ blockId: string; id: string }>) => {
       const { blockId, id } = action.payload
-      console.log(blockId, id)
       const blockIndex = state.blocks.findIndex((block) => block.id === blockId)
-      console.log(blockIndex)
       if (blockIndex !== -1) {
-        console.log(state.blocks[blockIndex].items)
         state.blocks[blockIndex].items = state.blocks[blockIndex].items.filter((item) => item.id !== id)
       }
     },

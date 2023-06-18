@@ -1,8 +1,5 @@
-import { useItems } from '@/hooks/useItems'
-import { addBuildAnimationQueueItem, selectBuild, setBuildDeletePopup } from '@/store/appSlice'
-import { addItemToBlock, selectItemBuild, updateBlock, updateBlockType } from '@/store/itemBuildSlice'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
-import { useAppDispatch } from '@/store/store'
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import {
   DndContext,
   DragEndEvent,
@@ -22,14 +19,18 @@ import dragHandleLine from '@iconify/icons-clarity/drag-handle-line'
 import questionMark from '@iconify/icons-tabler/question-mark'
 import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
+import RiotMagicParticles from 'components/ChampionPicker/RiotMagicParticles'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux'
 import { BlockState } from 'types/Build'
 import { ItemsSchema } from 'types/Items'
 
-import RiotMagicParticles from 'components/ChampionPicker/RiotMagicParticles'
+import { useItems } from '@/hooks/useItems'
+import { addBuildAnimationQueueItem, selectBuild, setBuildDeletePopup } from '@/store/appSlice'
+import { addItemToBlock, selectItemBuild, updateBlock, updateBlockType } from '@/store/itemBuildSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 
 import { easeInOutExpo } from 'utils/Transition'
 
@@ -177,6 +178,8 @@ export const BuildSection = ({ id }: { id: string }) => {
 
   return (
     <motion.div
+      key={block.id}
+      id={`build_section_${block.id}`}
       variants={buildVariant}
       initial="hidden"
       animate="visible"
@@ -188,10 +191,10 @@ export const BuildSection = ({ id }: { id: string }) => {
         hover ? 'ring-brand-light' : 'ring-transparent'
       )}
     >
-      <div className="flex">
+      <div className="flex" id={`build_section_${block.id}_header`}>
         <button
+          id={`build_section_${block.id}_drag_handle`}
           className="group right-0 flex items-center border-b-2 border-yellow-900 bg-gray-700/50 pl-1 transition-colors duration-200 ease-out hover:bg-gray-700 active:bg-gray-600"
-          ref={deleteButtonRef}
         >
           <Icon
             icon={dragHandleLine}
@@ -200,6 +203,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           />
         </button>
         <input
+          id={`build_section_${block.id}_input`}
           type="text"
           name="build-header"
           className="block w-full border-b-2 border-yellow-900 bg-gray-700/50 py-1 pl-4 pr-2 text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:bg-gray-500 focus:outline-none focus:ring-indigo-500"
@@ -210,6 +214,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           onDrop={(e) => e.preventDefault()}
         />
         <button
+          id={`build_section_${block.id}_delete`}
           className="group right-0 flex items-center border-b-2 border-yellow-900 bg-gray-700 pl-2 pr-1 transition-colors duration-200 ease-out hover:bg-brand-dark"
           onClick={() => dispatch(setBuildDeletePopup(block.id))}
           ref={deleteButtonRef}

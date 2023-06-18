@@ -1,14 +1,13 @@
+import React from 'react'
+
 import { css, cx } from '@emotion/css'
-import styled from '@emotion/styled'
-import { Placement } from '@floating-ui/react-dom-interactions'
 import { Icon } from '@iconify/react'
-import { Variants, motion } from 'framer-motion'
+import { Variants } from 'framer-motion'
 import abilityPowerIcon from 'public/icons/ability-power.svg?url'
 import attackDamageIcon from 'public/icons/attack-damage.svg?url'
 import healthRegenIcon from 'public/icons/health-regeneration.svg?url'
 import manaRegenIcon from 'public/icons/mana-regeneration.svg?url'
 import trueDamageIcon from 'public/icons/true-damage.svg?url'
-import React from 'react'
 
 import { statProperties } from './StatProperties'
 
@@ -20,7 +19,7 @@ export const ItemNameTooltipVariants: Variants = {
 }
 
 export const MainText = ({ children }: any) => {
-  return <div className="mt-2 font-sans text-sm text-gray-300 list-inside">{children}</div>
+  return <div className="mt-2 list-inside font-sans text-sm text-gray-300">{children}</div>
 }
 export const Stats = ({ children }: any) => {
   return (

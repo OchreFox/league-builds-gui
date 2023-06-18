@@ -36,7 +36,7 @@ export interface ClassFilter {
 export interface TypeFilter {
   name: string
   categories: Category[]
-  icon: string
+  icon: any
 }
 
 export type ItemGridProps = {

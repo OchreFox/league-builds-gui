@@ -1,8 +1,9 @@
+import React, { Fragment, useCallback, useMemo } from 'react'
+
 import { css, cx } from '@emotion/css'
 import { Menu, Transition } from '@headlessui/react'
 import { InlineIcon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import React, { Fragment, useCallback, useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 
 import { resetItemFiltersTypes, selectItemFilters, setItemFilterType, toggleItemFiltersType } from '../store/appSlice'
@@ -132,7 +133,7 @@ export default function FilterItemsByType() {
                           )}
                           onClick={() => handleClick(itemType)}
                         >
-                          <img alt={item.name} className={getImageClassnames(itemType)} src={'icons/' + item.icon} />
+                          <img alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
                           <span className="ml-2">{item.name}</span>
                         </div>
                       </Menu.Item>
@@ -168,7 +169,7 @@ export default function FilterItemsByType() {
                   handleClick(itemType)
                 }}
               >
-                <img alt={item.name} className={getImageClassnames(itemType)} src={'icons/' + item.icon} />
+                <img alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
                 <span className="z-10 m-0 hidden md:ml-2 md:inline-block">{item.name}</span>
               </motion.button>
             </React.Fragment>

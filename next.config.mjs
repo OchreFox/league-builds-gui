@@ -1,24 +1,35 @@
-/** @type {import('next').NextConfig} */
+import million from 'million/compiler'
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   webpack: (config) => {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'))
+
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
       {
         ...fileLoaderRule,
         test: /\.svg$/i,
         resourceQuery: /url/, // *.svg?url
+        loader: 'svg-url-loader',
+        options: {
+          limit: 10000,
+        },
       },
       // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
-        issuer: /\.[jt]sx?$/,
+        issuer: { not: /\.(css|scss|sass)$/ },
         resourceQuery: { not: /url/ }, // exclude if *.svg?url
-        use: ['@svgr/webpack'],
+        loader: '@svgr/webpack',
+        options: {
+          dimensions: false,
+          titleProp: true,
+        },
       }
     )
+
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i
 
@@ -28,4 +39,7 @@ module.exports = {
     loader: 'custom',
     loaderFile: './utils/CustomLoader.ts',
   },
+  reactStrictMode: true,
 }
+
+export default million.next(nextConfig)

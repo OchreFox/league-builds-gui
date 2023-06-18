@@ -1,3 +1,9 @@
+import React, { useCallback, useEffect, useRef } from 'react'
+
+import { AnimatePresence, motion } from 'framer-motion'
+import { batch } from 'react-redux'
+import { ItemContainerState } from 'types/FilterProps'
+
 import {
   setItemPickerContainerAnimation,
   setItemPickerContainerColumns,
@@ -5,10 +11,6 @@ import {
   setItemPickerContainerRows,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import { AnimatePresence, motion } from 'framer-motion'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { batch } from 'react-redux'
-import { ItemContainerState } from 'types/FilterProps'
 
 import { gridContainerVariants, transitionVariant } from './ItemGridComponents'
 import { StandardItem } from './StandardItem'

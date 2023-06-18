@@ -1,7 +1,8 @@
+import React from 'react'
+
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { AnimateLayoutChanges, defaultAnimateLayoutChanges, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import React from 'react'
 import { Item } from 'types/Build'
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) => defaultAnimateLayoutChanges({ ...args, wasDragging: true })
@@ -28,12 +29,16 @@ const DroppableContainer = ({
     },
     animateLayoutChanges,
   })
-  //   const isOverContainer = over
-  //     ? (id === over.id && active?.data.current?.type !== 'container') || items.includes(over.id)
-  //     : false
+
+  // For CSS hover effects
+  const isOverContainer = over
+    ? (id === over.id && active?.data.current?.type !== 'container') ||
+      items.map((item) => item.id).includes(over.id as string)
+    : false
 
   return (
     <div
+      id={`droppable_container_${id}`}
       ref={disabled ? undefined : setNodeRef}
       style={{
         ...style,

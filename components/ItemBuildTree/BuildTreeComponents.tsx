@@ -1,6 +1,7 @@
+import { RefObject } from 'react'
+
 import { css, cx } from '@emotion/css'
 import _ from 'lodash'
-import { RefObject } from 'react'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
@@ -24,7 +25,6 @@ export function scrollIntoItem(
   // Replace lodash with native findIndex
   const itemIndex = itemRefArray.current.findIndex((x) => x.itemId === item.id)
   if (itemIndex > -1) {
-    // console.log('Scrolling to item ' + item.name + ' at index ', itemIndex)
     const itemRef = itemRefArray.current[itemIndex].ref.current
     if (itemRef && itemGridRef.current) {
       // Check if item is already visible

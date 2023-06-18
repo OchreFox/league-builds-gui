@@ -1,9 +1,10 @@
+import React from 'react'
+
 import { cx } from '@emotion/css'
 import arrowNarrowDown from '@iconify/icons-tabler/arrow-narrow-down'
 import arrowNarrowUp from '@iconify/icons-tabler/arrow-narrow-up'
 import { Icon } from '@iconify/react'
 import GoldIcon from 'public/icons/gold.svg'
-import React from 'react'
 import { SortDirection } from 'types/FilterProps'
 
 const SortByGold = ({
@@ -16,7 +17,7 @@ const SortByGold = ({
   return (
     <div
       className={cx(
-        'flex px-2 py-1 h-8 items-center justify-center rounded-md  bg-cyan-900 text-white transition-colors duration-200 ease-out motion-reduce:transition-none',
+        'flex h-8 items-center justify-center rounded-md bg-cyan-900 px-2  py-1 text-white transition-colors duration-200 ease-out motion-reduce:transition-none',
         direction === SortDirection.Asc ? 'hover:bg-brand-default' : 'hover:bg-brand-dark'
       )}
       onClick={() =>
