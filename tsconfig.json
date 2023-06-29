@@ -1,4 +1,9 @@
 {
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "compilerOptions": {
     "baseUrl": ".",
     "target": "ES2015",
@@ -17,7 +22,8 @@
     "incremental": true,
     "paths": {
       "@/store/*": ["components/store/*"],
-      "@/hooks/*": ["components/hooks/*"]
+      "@/hooks/*": ["components/hooks/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx", "utils/lzma-url.js"],

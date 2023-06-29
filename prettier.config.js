@@ -10,8 +10,8 @@ module.exports = {
     '^(react/(.*)$)|^(react$)', // Imports by "react"
     '<THIRD_PARTY_MODULES>',
     'next-seo.config',
-    // @ local imports (only for @/store/, @/hooks/)
-    '^@/(store|hooks)/(.*)$',
+    // @ local imports
+    '^@/(store|hooks|types|utils|components|styles)/(.*)$',
     // Components that do not end with .module.scss or .scss
     '^@/components/(?!.*module.scss$|.*s?css$)(.*)$',
     '^utils/(.*)$',

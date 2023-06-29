@@ -1,24 +1,27 @@
+import Image from 'next/image'
+import Link from 'next/link'
+
+import React, { useCallback, useEffect, useState } from 'react'
+
+import { cx } from '@emotion/css'
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+import _ from 'lodash'
+import poroSleeping from 'public/icons/poro_sleeping.webp'
+import { useSelector } from 'react-redux'
+
+import { easeOutExpo } from '@/components/ItemBuild/BuildMakerComponents'
+import { BuildSuggestions } from '@/components/ItemBuildTree/BuildSuggestions'
+import { BuildTreeRoot } from '@/components/ItemBuildTree/BuildTreeRoot'
+import styles from '@/components/ItemFilters/FilterRarity.module.scss'
+import { itemSectionConstants } from '@/components/ItemGrid/ItemGridComponents'
 import { useItems } from '@/hooks/useItems'
 import { selectItemFilters, selectItemPicker, setItemFiltersRarity } from '@/store/appSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
-import { cx } from '@emotion/css'
-import { AnimatePresence, Variants, motion } from 'framer-motion'
-import _ from 'lodash'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { ItemBuildTreeProps, Rarity } from 'types/FilterProps'
-import { ItemsSchema } from 'types/Items'
-
-import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
-import styles from 'components/ItemFilters/FilterRarity.module.scss'
-
-import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
-import { easeInOutExpo } from 'utils/Transition'
-
-import { itemSectionConstants } from '../ItemGrid/ItemGridComponents'
-import { BuildSuggestions } from './BuildSuggestions'
-import { BuildTreeRoot } from './BuildTreeRoot'
+import { ItemBuildTreeProps, Rarity } from '@/types/FilterProps'
+import { ItemsSchema } from '@/types/Items'
+import { getRarity } from '@/utils/ItemRarity'
+import { easeInOutExpo } from '@/utils/Transition'
 
 const itemNameVariants: Variants = {
   hidden: {
@@ -119,7 +122,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
             <h3 className="shrink-0 border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200">ITEM</h3>
             <button
               className={cx(
-                'group relative inline-flex flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-white hover:bg-cyan-900 hover:text-white',
+                'group relative inline-flex flex-row items-center justify-center bg-transparent px-2 py-1 text-sm font-medium text-white hover:bg-cyan-900 hover:text-white',
                 styles.filterButtonActive,
                 styles.all
               )}
@@ -132,7 +135,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
             </button>
             <button
               disabled
-              className="group relative inline-flex cursor-help flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-gray-600"
+              className="group relative inline-flex cursor-help flex-row items-center justify-center bg-transparent px-2 py-1 text-sm font-medium text-gray-600"
               title="Coming soon!"
             >
               Description
@@ -153,7 +156,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
                       return (
                         <motion.h3
                           key={title + '-build-path'}
-                          className="absolute top-0 left-0 text-lg font-bold text-white"
+                          className="absolute left-0 top-0 text-lg font-bold text-white"
                           variants={itemNameVariants}
                           initial="hidden"
                           animate="show"
@@ -169,13 +172,13 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
             </>
           )}
 
-          <a
-            href="/"
+          <Link
+            href="#"
             className={cx('text-sm underline', itemSectionConstants[selectedItemRarity].textColor)}
             onClick={handleRarityClick}
           >
             {selectedItemRarity} item
-          </a>
+          </Link>
           <BuildSuggestions
             items={items}
             baseItem={selectedItem}
@@ -198,7 +201,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
   } else {
     return (
       <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
-        <img src="icons/poro_sleeping.webp" alt="Poro sleeping" className="mx-auto h-16 w-auto opacity-75 md:h-32" />
+        <Image src={poroSleeping} alt="Poro sleeping" className="mx-auto h-16 w-auto opacity-75 md:h-32" />
         <p className="italic text-gray-500">Select an item to see its build path tree</p>
       </div>
     )

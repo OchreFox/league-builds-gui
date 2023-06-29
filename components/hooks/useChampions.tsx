@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 
-import { ChampionsSchema } from '../../types/Champions'
-import JSONFetcher from '../../utils/JSONFetcher'
+import { ChampionsSchema } from '@/types/Champions'
+import JSONFetcher from '@/utils/JSONFetcher'
 
 export const useChampions = () => {
   const { data, error } = useSWR<Array<ChampionsSchema>>(

@@ -1,8 +1,10 @@
 import dynamic from 'next/dynamic'
 
 import React from 'react'
-import 'simplebar/dist/simplebar.min.css'
+
 import { Tag } from 'types/Champions'
+
+import 'simplebar-react/dist/simplebar.min.css'
 
 import BuildEditor from './BuildEditor'
 

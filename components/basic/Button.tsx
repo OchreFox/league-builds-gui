@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { cx } from '@emotion/css'
-import alertCircle from '@iconify/icons-tabler/alert-circle'
-import { Icon, IconifyIcon } from '@iconify/react'
+import { IconifyIcon } from '@iconify/react'
 import { Variants, motion } from 'framer-motion'
 
-import { ButtonError, ButtonLabel, ButtonLabelReactive, setButtonTimer } from './ButtonComponents'
+import { ButtonError, ButtonLabel, ButtonLabelReactive, setButtonTimer } from '@/components/basic/ButtonComponents'
 
 export interface BaseButtonProps {
   label?: string
@@ -17,6 +16,7 @@ export interface BaseButtonProps {
     e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>
   ) => boolean | Promise<boolean>
   handleDrop?: (e: React.DragEvent<HTMLButtonElement>) => void
+  children?: React.ReactNode
 
   // Handle rest of React.HTMLAttributes<HTMLElement>
   [rest: string]: any
@@ -35,38 +35,49 @@ export interface ButtonProps extends BaseButtonProps {
   bgClick: string
   bgClickError?: string
   layoutId?: string
+  focusRing?: boolean
   rounded: 'rounded-full' | 'rounded-md' | 'rounded-none'
   className?: string
+  rootClassName?: string
+  buttonRef?: React.RefObject<HTMLButtonElement>
 }
 
-const Button = ({
-  label,
-  icon,
-  bgColor,
-  color,
-  outlined = false,
-  bold = false,
-  outlineColor,
-  reactive,
-  labelReactive,
-  iconReactive,
-  bgClick,
-  bgClickError = 'focus:bg-brand-dark',
-  bgHover = 'hover:bg-cyan-900',
-  colorReactive,
-  colorError = 'text-white',
-  layoutId,
-  rounded,
-  dropReactive,
-  handleClick,
-  handleDrop,
-  className,
-  ...rest
-}: ButtonProps) => {
-  const buttonRef = useRef<HTMLButtonElement>(null)
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function ButtonComponent(
+  {
+    label,
+    icon,
+    bgColor,
+    color,
+    outlined = false,
+    bold = false,
+    outlineColor,
+    reactive,
+    labelReactive,
+    iconReactive,
+    bgClick,
+    bgClickError = 'focus:bg-brand-dark',
+    bgHover = 'hover:bg-cyan-900',
+    colorReactive,
+    colorError = 'text-white',
+    focusRing = true,
+    layoutId,
+    rounded,
+    dropReactive,
+    handleClick,
+    handleDrop,
+    rootClassName,
+    className,
+    children,
+    ...rest
+  },
+  ref
+) {
+  const innerRef = useRef<HTMLButtonElement>(null)
   const [buttonClick, setButtonClick] = useState(false)
   const [buttonError, setButtonError] = useState(false)
   const [dragOver, setDragOver] = useState(false)
+
+  useImperativeHandle(ref, () => innerRef.current as HTMLButtonElement)
 
   const onClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
@@ -85,84 +96,105 @@ const Button = ({
     [handleClick, reactive]
   )
 
-  useEffect(() => {
-    setButtonTimer(buttonClick, setButtonClick, buttonRef)
-  }, [buttonClick])
+  const handleDragOver = useCallback(
+    (e: React.DragEvent<HTMLButtonElement>) => {
+      if (dropReactive) {
+        e.preventDefault()
+        setDragOver(true)
+      }
+    },
+    [dropReactive]
+  )
+
+  const handleDragLeave = useCallback(
+    (e: React.DragEvent<HTMLButtonElement>) => {
+      if (dropReactive) {
+        setDragOver(false)
+      }
+    },
+    [dropReactive]
+  )
+
+  const onBlur = useCallback((e: React.FocusEvent<HTMLButtonElement, Element>) => {
+    setButtonClick(false)
+  }, [])
+
+  const onDrop = useCallback(
+    (e: React.DragEvent<HTMLButtonElement>) => {
+      setDragOver(false)
+      handleDrop?.(e)
+      innerRef.current?.focus()
+      setButtonClick(true)
+    },
+    [innerRef, handleDrop]
+  )
 
   useEffect(() => {
-    setButtonTimer(buttonError, setButtonError, buttonRef)
-  }, [buttonError])
+    setButtonTimer(buttonClick, setButtonClick, innerRef)
+  }, [buttonClick, innerRef])
+
+  useEffect(() => {
+    setButtonTimer(buttonError, setButtonError, innerRef)
+  }, [buttonError, innerRef])
 
   return (
     <motion.button
       layout="position"
       layoutId={layoutId}
-      ref={buttonRef}
+      ref={innerRef}
       initial="initial"
       whileHover="hover"
       whileFocus="focus"
       className={cx(
-        'relative h-full w-full justify-center overflow-hidden border-2 py-2 font-medium drop-shadow-xl transition-extended-colors duration-150 ease-out hover:drop-shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
+        'relative h-full w-full items-center justify-center overflow-hidden border-2 font-medium drop-shadow-xl transition-extended-colors duration-150 ease-out hover:drop-shadow-sm',
         bgColor,
         bgHover,
+        focusRing && 'focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2',
         buttonError ? bgClickError : bgClick,
         rounded !== 'rounded-none' && (rounded === 'rounded-full' ? 'rounded-full px-6' : 'rounded-md px-4'),
         dropReactive && dragOver && `drop-shadow-lg ${dropReactive} ${colorReactive}`,
         outlined ? `border-2 ${outlineColor}` : 'border-transparent',
-        className
+        rootClassName
       )}
       onClick={onClick}
-      onBlur={() => {
-        setButtonClick(false)
-      }}
-      onDragOver={(e) => {
-        if (dropReactive) {
-          e.preventDefault()
-          setDragOver(true)
-        }
-      }}
-      onDragLeave={() => {
-        if (dropReactive) {
-          setDragOver(false)
-        }
-      }}
-      onDrop={(e) => {
-        setDragOver(false)
-        handleDrop && handleDrop(e)
-        buttonRef.current?.focus()
-        setButtonClick(true)
-      }}
+      onBlur={onBlur}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={onDrop}
       {...rest}
     >
-      <ButtonLabel
-        label={label}
-        icon={icon}
-        color={color}
-        bold={bold}
-        buttonClick={buttonClick}
-        buttonError={buttonError}
-        reactive={reactive}
-      />
-      {reactive && (
-        <ButtonLabelReactive
-          show={buttonClick}
-          colorReactive={colorReactive}
-          labelReactive={labelReactive}
-          iconReactive={iconReactive}
+      {children}
+      <div className={cx('py-2', className)}>
+        <ButtonLabel
+          label={label}
+          icon={icon}
+          color={color}
           bold={bold}
+          buttonClick={buttonClick}
+          buttonError={buttonError}
+          reactive={reactive}
         />
-      )}
-      {reactive && buttonError && (
-        <ButtonError
-          show={buttonError}
-          bgClick={bgClick}
-          bgClickError={bgClickError}
-          colorError={colorError}
-          bold={bold}
-        />
-      )}
+        {reactive && (
+          <ButtonLabelReactive
+            show={buttonClick}
+            colorReactive={colorReactive}
+            labelReactive={labelReactive}
+            iconReactive={iconReactive}
+            bold={bold}
+          />
+        )}
+        {reactive && buttonError && (
+          <ButtonError
+            show={buttonError}
+            bgClick={bgClick}
+            bgClickError={bgClickError}
+            colorError={colorError}
+            bold={bold}
+          />
+        )}
+      </div>
     </motion.button>
   )
-}
+})
 
 export default Button

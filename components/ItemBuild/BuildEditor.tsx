@@ -22,6 +22,7 @@ import {
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import appsIcon from '@iconify/icons-tabler/apps'
 import checkIcon from '@iconify/icons-tabler/check'
+import plusIcon from '@iconify/icons-tabler/plus'
 import { PrimaryButton } from 'components/basic/PrimaryButton'
 import { AnimatePresence } from 'framer-motion'
 import { batch, useSelector } from 'react-redux'
@@ -29,14 +30,13 @@ import SimpleBar from 'simplebar-react'
 import { BlockState, Item } from 'types/Build'
 import { ItemsSchema } from 'types/Items'
 
+import { BuildSection } from '@/components/ItemBuild/BuildSection'
+import DroppableContainer from '@/components/ItemBuild/DroppableContainer'
 import { addBuildAnimationQueueItem } from '@/store/appSlice'
 import { addBlock, addEmptyBlock, selectItemBuild, setBlocks, updateBlock } from '@/store/itemBuildSlice'
 import { useAppDispatch } from '@/store/store'
 
 import { getNewBlock } from 'utils/ItemBuild'
-
-import { BuildSection } from './BuildSection'
-import DroppableContainer from './DroppableContainer'
 
 export const TRASH_ID = 'void'
 
@@ -273,7 +273,7 @@ const BuildEditor = () => {
               ))}
               <PrimaryButton
                 label="Add Section"
-                icon={appsIcon}
+                icon={plusIcon}
                 labelReactive="Added"
                 iconReactive={checkIcon}
                 handleClick={handleClick}

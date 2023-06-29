@@ -2,10 +2,9 @@ import { PayloadAction, createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
 import { AppState } from 'types/App'
 
-import { generateItemId, getNewBlock, getNewItem } from 'utils/ItemBuild'
-
-import { BlockState, ItemBuild, RiotItemBuild } from '../../types/Build'
-import { RootState } from './store'
+import { RootState } from '@/store/store'
+import { BlockState, ItemBuild, RiotItemBuild } from '@/types/Build'
+import { generateItemId, getNewBlock, getNewItem } from '@/utils/ItemBuild'
 
 const hydrate = createAction<AppState>(HYDRATE)
 

@@ -8,17 +8,14 @@ import { Icon } from '@iconify/react'
 import { animate, motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { NotificationType } from 'types/Toast'
 
+import { easeOutExpo } from '@/components/ItemBuild/BuildMakerComponents'
+import { Tip, Warning } from '@/components/Settings/ModalComponents'
+import { ToastBody } from '@/components/Settings/NotificationToast'
 import { useLongPress } from '@/hooks/useLongPress'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
-
-import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
-
-import styles from '/styles/index.module.scss'
-
-import { Tip, Warning } from './ModalComponents'
-import { ToastBody } from './NotificationToast'
+import styles from '@/styles/index.module.scss'
+import { NotificationType } from '@/types/Toast'
 
 export default function ResetAlert({
   open,
@@ -73,7 +70,7 @@ export default function ResetAlert({
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed inset-0 z-10 overflow-y-auto" open={open} onClose={setOpen}>
-        <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out-expo duration-300"
@@ -106,7 +103,7 @@ export default function ResetAlert({
           >
             <div
               className={cx(
-                'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
+                'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
                 styles['container-background'],
                 css`
                   &::before {
@@ -136,7 +133,7 @@ export default function ResetAlert({
                 `
               )}
             >
-              <div className="absolute top-0 right-0 z-10 hidden pt-4 pr-4 sm:block">
+              <div className="absolute right-0 top-0 z-10 hidden pr-4 pt-4 sm:block">
                 <button
                   type="button"
                   className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"

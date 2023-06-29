@@ -1,24 +1,26 @@
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
-import { cx } from '@emotion/css'
 import { MutableRefObject, createRef, useRef, useState } from 'react'
+
+import { cx } from '@emotion/css'
+
+import { ItemBuild } from '@/components/ItemBuild/ItemBuild'
+import { BuildTreeContainer } from '@/components/ItemBuildTree/BuildTreeContainer'
+import FilterItemsByClass from '@/components/ItemFilters/FilterItemsByClass'
+import FilterItemsByRarity from '@/components/ItemFilters/FilterItemsByRarity'
+import FilterItemsByType from '@/components/ItemFilters/FilterItemsByType'
+import SearchBar from '@/components/ItemFilters/SearchBar'
+import SortByGold from '@/components/ItemFilters/SortByGold'
+import ItemGrid from '@/components/ItemGrid/ItemGrid'
+import Footer from '@/components/Layout/Footer'
+import Header from '@/components/Layout/Header/Header'
+import Settings from '@/components/Settings/Settings'
+import { SortDirection } from '@/types/FilterProps'
+
 import styles from 'styles/index.module.scss'
-import { SortDirection } from 'types/FilterProps'
 
-import { ItemBuild } from 'components/ItemBuild/ItemBuild'
-import { BuildTreeContainer } from 'components/ItemBuildTree/BuildTreeContainer'
-import FilterItemsByClass from 'components/ItemFilters/FilterItemsByClass'
-import FilterItemsByRarity from 'components/ItemFilters/FilterItemsByRarity'
-import FilterItemsByType from 'components/ItemFilters/FilterItemsByType'
-import SearchBar from 'components/ItemFilters/SearchBar'
-import SortByGold from 'components/ItemFilters/SortByGold'
-import ItemGrid from 'components/ItemGrid/ItemGrid'
-import Footer from 'components/Layout/Footer'
-import Header from 'components/Layout/Header/Header'
-import Settings from 'components/Settings/Settings'
-
-const DynamicSliderOverlay = dynamic(() => import('components/Layout/SliderOverlay'), {
+const DynamicSliderOverlay = dynamic(() => import('@/components/Layout/SliderOverlay'), {
   ssr: false,
 })
 
@@ -49,7 +51,7 @@ function Home() {
           <Settings />
         </nav>
         {/* Editor */}
-        <main className="mt-4 mb-8 flex h-full min-h-full w-full grow flex-col space-y-4 px-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
+        <div className="mb-8 mt-4 flex h-full min-h-full w-full grow flex-col space-y-4 px-4 2xl:grid 2xl:grid-cols-3 2xl:grid-rows-1 2xl:gap-4 2xl:space-y-0">
           {/* Item picker */}
           <div
             className={`${styles['smooth-shadow']} ${styles['container-background']} col-span-2 flex h-full min-h-full flex-col border-2 border-yellow-900 px-4 py-3 md:grid md:grid-cols-9 md:grid-rows-1 md:gap-2`}
@@ -60,13 +62,13 @@ function Home() {
                 <SearchBar />
               </div>
               <div className="flex w-full flex-row items-center space-x-2 md:flex-col md:items-stretch md:space-x-0">
-                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 md:mb-2 md:border-r-0 md:border-b md:p-0">
+                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 md:mb-2 md:border-b md:border-r-0 md:p-0">
                   CHAMPION CLASS
                 </h3>
                 <FilterItemsByClass />
               </div>
               <div className="flex h-full w-full flex-row items-center space-x-2 md:flex-col md:items-stretch md:space-x-0">
-                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 md:mb-2 md:border-r-0 md:border-b md:p-0">
+                <h3 className="border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200 md:mb-2 md:border-b md:border-r-0 md:p-0">
                   ITEM TYPE
                 </h3>
                 <FilterItemsByType />
@@ -100,7 +102,7 @@ function Home() {
           >
             <ItemBuild />
           </div>
-        </main>
+        </div>
         {/* Footer */}
         <Footer />
       </div>

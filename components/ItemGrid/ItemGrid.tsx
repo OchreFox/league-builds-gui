@@ -1,3 +1,13 @@
+import React, { Fragment, createRef, useEffect, useMemo, useRef, useState } from 'react'
+
+import { css, cx } from '@emotion/css'
+import { scrollIntoItem } from 'components/ItemBuildTree/BuildTreeComponents'
+import { AnimatePresence, motion } from 'framer-motion'
+import { batch, useSelector } from 'react-redux'
+import SimpleBar from 'simplebar-react'
+import { ItemGridProps, Rarity, SortDirection } from 'types/FilterProps'
+import { Category, ChampionClass, ItemsSchema } from 'types/Items'
+
 import { useItems } from '@/hooks/useItems'
 import {
   selectItemFilters,
@@ -7,21 +17,10 @@ import {
   setItemPickerContainerCount,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import { css, cx } from '@emotion/css'
-import { AnimatePresence, motion } from 'framer-motion'
-import fuzzysort from 'fuzzysort'
-import React, { Fragment, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { batch, useSelector } from 'react-redux'
-import { VariableSizeList as List } from 'react-window'
-import SimpleBar from 'simplebar-react'
-import 'simplebar/dist/simplebar.min.css'
-import { ItemGridProps, Rarity, SortDirection } from 'types/FilterProps'
-import { Category, ChampionClass, ItemsSchema } from 'types/Items'
-
-import { scrollIntoItem } from 'components/ItemBuildTree/BuildTreeComponents'
 
 import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
-import { easeInOutExpo } from 'utils/Transition'
+
+import 'simplebar-react/dist/simplebar.min.css'
 
 import {
   getActiveCategories,
@@ -30,7 +29,6 @@ import {
   isFromChampionClass,
   isInStore,
   markItemsAsVisible,
-  overlayVariants,
   sortItems,
   titleVariants,
   transitionVariant,
@@ -348,7 +346,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         )}
       </AnimatePresence>
       <SimpleBar
-        className="mt-4 mb-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
+        className="mb-4 mt-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
         scrollableNodeProps={{ ref: itemGridRef }}
       >
         {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (

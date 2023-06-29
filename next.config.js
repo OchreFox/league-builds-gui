@@ -1,5 +1,3 @@
-import million from 'million/compiler'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
@@ -35,11 +33,6 @@ const nextConfig = {
 
     return config
   },
-  images: {
-    loader: 'custom',
-    loaderFile: './utils/CustomLoader.ts',
-  },
-  reactStrictMode: true,
 }
 
-export default million.next(nextConfig)
+module.exports = nextConfig

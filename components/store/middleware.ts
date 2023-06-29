@@ -1,9 +1,9 @@
 import { addListener, createListenerMiddleware } from '@reduxjs/toolkit'
 import type { TypedAddListener, TypedStartListening } from '@reduxjs/toolkit'
 
-import { addBuildAnimationQueue, removeBuildAnimationQueue } from './appSlice'
-import { addBlock, addEmptyBlock, removeBlock, setBlocks, setRiotItemBuild, updateBlock } from './itemBuildSlice'
-import { AppDispatch, RootState } from './store'
+import { addBuildAnimationQueue, removeBuildAnimationQueue } from '@/store/appSlice'
+import { addBlock, addEmptyBlock, removeBlock, setBlocks, setRiotItemBuild, updateBlock } from '@/store/itemBuildSlice'
+import { AppDispatch, RootState } from '@/store/store'
 
 export const listenerMiddleware = createListenerMiddleware()
 export type AppStartListening = TypedStartListening<RootState, AppDispatch>

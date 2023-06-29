@@ -2,8 +2,8 @@ import { createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
 import { AppState } from 'types/App'
 
-import { PotatoModeState } from '../../types/PotatoMode'
-import { RootState } from './store'
+import { RootState } from '@/store/store'
+import { PotatoModeState } from '@/types/PotatoMode'
 
 const hydrate = createAction<AppState>(HYDRATE)
 

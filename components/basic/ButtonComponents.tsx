@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { cx } from '@emotion/css'
 import alertCircle from '@iconify/icons-tabler/alert-circle'
 import { Icon, IconifyIcon } from '@iconify/react'
@@ -6,7 +8,7 @@ import { motion } from 'framer-motion'
 export const setButtonTimer = (
   buttonState: boolean,
   setButtonState: React.Dispatch<React.SetStateAction<boolean>>,
-  ref: React.MutableRefObject<HTMLButtonElement | null>
+  ref: React.RefObject<HTMLButtonElement>
 ) => {
   const setTimer = () => {
     return setTimeout(() => {

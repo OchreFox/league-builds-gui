@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app'
+import localFont from 'next/font/local'
 
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -22,6 +23,62 @@ import 'pattern.css/dist/pattern.min.css'
 import 'react-toastify/dist/ReactToastify.min.css'
 import 'styles/globals.css'
 
+const beaufort = localFont({
+  src: [
+    {
+      path: '../assets/fonts/BeaufortforLOL-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-Italic.woff2',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-BoldItalic.woff2',
+      weight: '700',
+      style: 'italic',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-Heavy.woff2',
+      weight: '900',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-HeavyItalic.woff2',
+      weight: '900',
+      style: 'italic',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-Light.woff2',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-LightItalic.woff2',
+      weight: '300',
+      style: 'italic',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/BeaufortforLOL-MediumItalic.woff2',
+      weight: '500',
+      style: 'italic',
+    },
+  ],
+  variable: '--font-beaufort',
+})
+
 const slide = cssTransition({
   enter: 'slideInUp',
   exit: 'slideOutDown',
@@ -29,7 +86,7 @@ const slide = cssTransition({
 
 function App({ Component, pageProps, router }: AppProps) {
   return (
-    <>
+    <main className={beaufort.variable}>
       <Component {...pageProps} />
       <ToastContainer
         position="bottom-center"
@@ -42,7 +99,7 @@ function App({ Component, pageProps, router }: AppProps) {
         theme="dark"
         transition={slide}
       />
-    </>
+    </main>
   )
 }
 

@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
@@ -8,6 +9,7 @@ module.exports = {
       wide: ['"Work Sans Variable"', 'sans-serif'],
       sans: ['"Inter Variable"', 'sans-serif'],
       monospace: ['"IBM Plex Mono"', 'monospace'],
+      league: ['var(--font-beaufort)', 'serif'],
     },
     extend: {
       zIndex: {
@@ -28,7 +30,19 @@ module.exports = {
           dark: '#cc2936',
         },
         league: {
-          gold: '#c7a96e',
+          gold: '#C8AA6E',
+          goldLight: '#F0E6D2',
+          goldYellow: '#C89B3C',
+          goldDark: '#785A28',
+          goldDarker: '#463714',
+          goldDarkest: '#32281E',
+          blue: '#0397AB',
+          blueLight: '#CDFAFA',
+          blueLighter: '#0AC8B9',
+          blueDark: '#005A82',
+          cyan: '#0A323C',
+          navy: '#091428',
+          navyDark: '#0A1428',
         },
       },
       transitionTimingFunction: {

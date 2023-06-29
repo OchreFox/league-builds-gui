@@ -1,4 +1,6 @@
-import React, { Fragment, useCallback, useMemo } from 'react'
+import Image from 'next/image'
+
+import React, { Fragment, useCallback } from 'react'
 
 import { css, cx } from '@emotion/css'
 import { Menu, Transition } from '@headlessui/react'
@@ -6,10 +8,10 @@ import { InlineIcon } from '@iconify/react'
 import { motion } from 'framer-motion'
 import { batch, useSelector } from 'react-redux'
 
-import { resetItemFiltersTypes, selectItemFilters, setItemFilterType, toggleItemFiltersType } from '../store/appSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import { useAppDispatch } from '../store/store'
-import { ItemType, TypeFilters } from './FilterComponents'
+import { ItemType, TypeFilters } from '@/components/ItemFilters/FilterComponents'
+import { resetItemFiltersTypes, selectItemFilters, setItemFilterType, toggleItemFiltersType } from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 
 export default function FilterItemsByType() {
   const dispatch = useAppDispatch()
@@ -133,7 +135,7 @@ export default function FilterItemsByType() {
                           )}
                           onClick={() => handleClick(itemType)}
                         >
-                          <img alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
+                          <Image alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
                           <span className="ml-2">{item.name}</span>
                         </div>
                       </Menu.Item>

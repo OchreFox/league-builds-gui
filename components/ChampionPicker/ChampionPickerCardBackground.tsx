@@ -1,14 +1,14 @@
-import { selectChampionPicker, selectSelectedChampions } from '@/store/appSlice'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
-import { css } from '@emotion/css'
-import { AnimatePresence, Variants, motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
+
+import { css } from '@emotion/css'
+import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
+import { AnimatePresence, Variants, motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
 import { useSelector } from 'react-redux'
 import { Champion } from 'types/Champions'
 
-import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
-
-import styles from './ChampionPickerCardBackground.module.scss'
+import styles from '@/components/ChampionPicker/ChampionPickerCardBackground.module.scss'
+import { selectChampionPicker, selectSelectedChampions } from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
 
 const ChampionImage = ({
   image,
@@ -42,7 +42,7 @@ const ChampionImage = ({
       blur.set(5)
       x.set(0)
     }
-  }, [isHovered, mousePosition.x, x])
+  }, [blur, isHovered, mousePosition.x, x])
 
   const getClipPath = () => {
     if (length === 1) {
@@ -84,7 +84,7 @@ const ChampionImage = ({
   return (
     <motion.div
       key={image}
-      className="w-full h-full"
+      className="h-full w-full"
       variants={wrapperVariants}
       initial="initial"
       whileHover="hover"
@@ -136,7 +136,7 @@ const ChampionPickerCardBackground = () => {
             (champion, index) =>
               index <= 3 && (
                 <ChampionImage
-                  key={index}
+                  key={champion.id}
                   image={champion.splash ?? ''}
                   index={index}
                   length={selectedChampions.length}

@@ -1,22 +1,25 @@
-import { selectItemPicker, setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
+'use client'
+
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+
 import { cx } from '@emotion/css'
 import { arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
 import { Portal } from '@headlessui/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux'
 import { StandardItemState } from 'types/FilterProps'
 
-import { easeInOutQuad } from 'utils/Transition'
+import { ItemNameTooltipVariants } from '@/components/ItemGrid/ItemComponents'
+import { transitionVariant } from '@/components/ItemGrid/ItemGridComponents'
+import { ItemIcon } from '@/components/ItemGrid/ItemIcon'
+import { ItemPopper } from '@/components/ItemGrid/ItemPopper'
+import itemStyles from '@/components/ItemGrid/StandardItem.module.scss'
+import { selectItemPicker, setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 
-import { ItemNameTooltipVariants } from './ItemComponents'
-import { transitionVariant } from './ItemGridComponents'
-import { ItemIcon } from './ItemIcon'
-import { ItemPopper } from './ItemPopper'
-import itemStyles from './StandardItem.module.scss'
+import { easeInOutQuad } from 'utils/Transition'
 
 export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemState) => {
   const dispatch = useAppDispatch()

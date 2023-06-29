@@ -1,0 +1,29 @@
+$length: 2rem;
+
+@function x-coord($padding, $angle) {
+  @return $padding * cos($angle);
+}
+
+@function y-coord($padding, $angle) {
+  @return $padding * sin($angle);
+}
+
+@mixin get-clip-path($padding) {
+  clip-path: polygon(
+    #{$length} $padding,
+    calc(100% - #{$length} - #{$padding}) $padding,
+    calc(100% - #{$padding}) 50%,
+    calc(100% - #{$length} - #{$padding}) calc(100% - #{$padding}),
+    #{$length} calc(100% - #{$padding}),
+    $padding 50%
+  );
+}
+
+.chevron {
+  @include get-clip-path(2px);
+  overflow: hidden;
+}
+
+.button {
+  position: absolute;
+}

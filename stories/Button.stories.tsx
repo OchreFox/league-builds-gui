@@ -1,12 +1,13 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 
-import Button from '../components/basic/Button'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+
+import ButtonWrapper from '../components/basic/Button'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
   title: 'Basic/Button',
-  component: Button,
+  component: ButtonWrapper,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     label: {
@@ -51,9 +52,9 @@ export default {
   args: {
     layoutId: 'add-block',
   },
-} as ComponentMeta<typeof Button>
+} as ComponentMeta<typeof ButtonWrapper>
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />
+const Template: ComponentStory<typeof ButtonWrapper> = (args) => <ButtonWrapper {...args} />
 
 export const Primary = Template.bind({})
 Primary.args = {

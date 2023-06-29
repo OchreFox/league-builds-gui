@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import React from 'react'
 
 import { css, cx } from '@emotion/css'
@@ -9,7 +11,7 @@ import healthRegenIcon from 'public/icons/health-regeneration.svg?url'
 import manaRegenIcon from 'public/icons/mana-regeneration.svg?url'
 import trueDamageIcon from 'public/icons/true-damage.svg?url'
 
-import { statProperties } from './StatProperties'
+import { statProperties } from '@/components/ItemGrid/StatProperties'
 
 // Item Name Tooltip
 export const ItemNameTooltipVariants: Variants = {
@@ -41,7 +43,7 @@ export const Stats = ({ children }: any) => {
   )
 }
 export const StatIcon = ({ src, alt }: { src: any; alt: string }) => {
-  return <img className="mr-1 inline-flex h-3 w-3" src={src} alt={alt} width={12} height={12} />
+  return <Image className="mr-1 inline-flex h-3 w-3" src={src} alt={alt} width={12} height={12} />
 }
 export const Stat = ({ children = [], name }: any) => {
   const stat =

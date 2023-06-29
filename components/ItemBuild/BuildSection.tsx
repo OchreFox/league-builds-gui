@@ -19,25 +19,23 @@ import dragHandleLine from '@iconify/icons-clarity/drag-handle-line'
 import questionMark from '@iconify/icons-tabler/question-mark'
 import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
-import RiotMagicParticles from 'components/ChampionPicker/RiotMagicParticles'
 import { AnimatePresence, motion } from 'framer-motion'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux'
-import { BlockState } from 'types/Build'
-import { ItemsSchema } from 'types/Items'
 
+import RiotMagicParticles from '@/components/ChampionPicker/RiotMagicParticles'
+import BuildItem from '@/components/ItemBuild/BuildItem'
+import { easeOutExpo } from '@/components/ItemBuild/BuildMakerComponents'
+import { DeleteSectionPopper } from '@/components/ItemBuild/DeleteSectionPopper'
+import ItemDragOverlay from '@/components/ItemBuild/ItemDragOverlay'
 import { useItems } from '@/hooks/useItems'
 import { addBuildAnimationQueueItem, selectBuild, setBuildDeletePopup } from '@/store/appSlice'
 import { addItemToBlock, selectItemBuild, updateBlock, updateBlockType } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
-
-import { easeInOutExpo } from 'utils/Transition'
-
-import BuildItem from './BuildItem'
-import { easeOutExpo } from './BuildMakerComponents'
-import { DeleteSectionPopper } from './DeleteSectionPopper'
-import ItemDragOverlay from './ItemDragOverlay'
+import { BlockState } from '@/types/Build'
+import { ItemsSchema } from '@/types/Items'
+import { easeInOutExpo } from '@/utils/Transition'
 
 const buildVariant = {
   hidden: {
@@ -110,7 +108,7 @@ export const BuildSection = ({ id }: { id: string }) => {
     if (activeItem && activeItem.itemId) {
       return getItemFromId(parseInt(activeItem.itemId, 10))
     }
-  }, [activeId, items])
+  }, [activeItem, getItemFromId])
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -206,7 +204,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           id={`build_section_${block.id}_input`}
           type="text"
           name="build-header"
-          className="block w-full border-b-2 border-yellow-900 bg-gray-700/50 py-1 pl-4 pr-2 text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:bg-gray-500 focus:outline-none focus:ring-indigo-500"
+          className="block w-full border-b-2 border-yellow-900 bg-gray-700/50 py-1 pl-4 pr-2 font-league text-lg font-bold text-white placeholder-gray-300 placeholder:font-normal focus:border-indigo-500 focus:bg-gray-500 focus:outline-none focus:ring-indigo-500"
           placeholder={block?.type}
           autoComplete="off"
           value={block?.type}
@@ -271,7 +269,7 @@ export const BuildSection = ({ id }: { id: string }) => {
       >
         {!potatoMode && !init && (
           <motion.div
-            className="pointer-events-none absolute top-0 left-0 h-full w-full mix-blend-overlay"
+            className="pointer-events-none absolute left-0 top-0 h-full w-full mix-blend-overlay"
             initial={{ opacity: 1 }}
             animate={{
               opacity: 0,
@@ -285,7 +283,7 @@ export const BuildSection = ({ id }: { id: string }) => {
             }}
           >
             <video
-              className="absolute top-0 left-0 h-full w-full object-cover"
+              className="absolute left-0 top-0 h-full w-full object-cover"
               autoPlay
               muted
               playsInline
@@ -294,7 +292,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           </motion.div>
         )}
         <motion.div
-          className="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-transparent to-cyan-700/30"
+          className="pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b from-transparent to-cyan-700/30"
           initial={{ opacity: 0 }}
           animate={{ opacity: hover ? 1 : 0 }}
           transition={easeOutExpo}
@@ -302,7 +300,7 @@ export const BuildSection = ({ id }: { id: string }) => {
           {!potatoMode && size.width > 0 && size.height > 0 && (
             <>
               <video
-                className="absolute top-0 left-0 h-full w-full object-cover"
+                className="absolute left-0 top-0 h-full w-full object-cover"
                 autoPlay
                 loop
                 muted

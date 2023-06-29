@@ -10,7 +10,7 @@ import linkIcon from '@iconify/icons-tabler/link'
 import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
 import { makeJsonEncoder } from '@urlpack/json'
-import Button from 'components/basic/Button'
+import ButtonWrapper from 'components/basic/Button'
 import { AnimatePresence, motion } from 'framer-motion'
 import { batch, useSelector } from 'react-redux'
 
@@ -64,7 +64,7 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed inset-0 z-10 overflow-y-auto" open={open} onClose={onCloseToast}>
-        <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out-expo duration-300"
@@ -95,7 +95,7 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
           >
             <div
               className={cx(
-                'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pt-5 pb-4 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
+                'inline-block transform overflow-hidden border-2 border-yellow-700 px-4 pb-4 pt-5 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle',
                 styles.modalContainer,
                 css`
                   &::before {
@@ -125,7 +125,7 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                 `
               )}
             >
-              <div className="absolute top-0 right-0 z-10 hidden pt-4 pr-4 sm:block">
+              <div className="absolute right-0 top-0 z-10 hidden pr-4 pt-4 sm:block">
                 <button
                   type="button"
                   className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
@@ -210,7 +210,7 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                         exit={{ opacity: 0, x: '-50%' }}
                         transition={easeOutExpo}
                       >
-                        <Button
+                        <ButtonWrapper
                           className="inline-flex justify-center px-4 py-4 text-sm"
                           label="Copy link"
                           icon={clipboardText}

@@ -1,13 +1,12 @@
 import { PayloadAction, createAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
-import { Rarity } from 'types/FilterProps'
 
-import { ItemType } from 'components/ItemFilters/FilterComponents'
-
-import { AnimationQueueItem, AppState, emptyContainer } from '../../types/App'
-import { Champion, Tag } from '../../types/Champions'
-import { ChampionClass, ItemsSchema } from '../../types/Items'
-import { RootState } from './store'
+import { ItemType } from '@/components/ItemFilters/FilterComponents'
+import { RootState } from '@/store/store'
+import { AppState, emptyContainer } from '@/types/App'
+import { Champion, Tag } from '@/types/Champions'
+import { Rarity } from '@/types/FilterProps'
+import { ChampionClass, ItemsSchema } from '@/types/Items'
 
 const hydrate = createAction<AppState>(HYDRATE)
 

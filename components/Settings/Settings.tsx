@@ -1,32 +1,29 @@
 import dynamic from 'next/dynamic'
 
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom-interactions'
 import checkIcon from '@iconify/icons-tabler/check'
 import clipboardText from '@iconify/icons-tabler/clipboard-text'
 import downloadIcon from '@iconify/icons-tabler/download'
 import trashX from '@iconify/icons-tabler/trash-x'
 import uploadIcon from '@iconify/icons-tabler/upload'
-import { Icon } from '@iconify/react'
-import { ItemNameTooltipVariants } from 'components/ItemGrid/ItemComponents'
 import { AnimatePresence, motion } from 'framer-motion'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { batch, useSelector } from 'react-redux'
 
+import { ItemNameTooltipVariants } from '@/components/ItemGrid/ItemComponents'
+import itemStyles from '@/components/ItemGrid/StandardItem.module.scss'
+import PotatoModeSwitch from '@/components/Settings/PotatoModeSwitch'
+import ButtonWrapper from '@/components/basic/Button'
 import { resetApp } from '@/store/appSlice'
 import { resetItemBuild, selectItemBuild, setAssociatedMaps, setTitle } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
-
-import styles from '/styles/index.module.scss'
-import itemStyles from 'components/ItemGrid/StandardItem.module.scss'
-
-import { Block, Item, ItemBuild } from '../../types/Build'
-import { easeInOutExpo, easeInOutQuad } from '../../utils/Transition'
-import Button from '../basic/Button'
-import PotatoModeSwitch from './PotatoModeSwitch'
+import styles from '@/styles/index.module.scss'
+import { Block, Item, ItemBuild } from '@/types/Build'
+import { easeInOutExpo, easeInOutQuad } from '@/utils/Transition'
 
 const DynamicResetAlert = dynamic(() => import('./ResetAlert'), { ssr: false })
 const DynamicImportModal = dynamic(() => import('./ImportModal'), { ssr: false })
@@ -218,7 +215,7 @@ const Settings = () => {
           <input
             type="text"
             className={cx(
-              'mt-1 flex w-full rounded-md bg-gray-700 py-1 px-2 text-white shadow-sm focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:text-sm',
+              'mt-1 flex w-full rounded-md bg-gray-700 px-2 py-1 text-white shadow-sm focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:text-sm',
               !potatoMode && 'transition duration-150',
               isDirty ? 'bg-gray-800 ring-2 ring-cyan-500 focus:ring-cyan-500' : 'focus:ring-brand-light'
             )}
@@ -234,7 +231,7 @@ const Settings = () => {
             type="submit"
             disabled={!isDirty}
             className={cx(
-              'mt-2 inline-flex items-center justify-center rounded-md border border-transparent px-2 py-1 text-xs font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 xs:mt-1 xs:ml-2',
+              'mt-2 inline-flex items-center justify-center rounded-md border border-transparent px-2 py-1 text-xs font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2 xs:ml-2 xs:mt-1',
               !potatoMode && 'transition duration-150',
               isDirty
                 ? 'bg-brand-light text-white hover:bg-brand-dark'
@@ -332,7 +329,7 @@ const Settings = () => {
         <PotatoModeSwitch />
         {/*  Build Import/Export */}
         <div className="grid w-full grid-rows-4 gap-2 xs:grid-cols-2 xs:grid-rows-2 sm:col-span-2 sm:row-span-2 md:col-span-1">
-          <Button
+          <ButtonWrapper
             className="text-sm"
             label="Import Build"
             icon={uploadIcon}
@@ -348,7 +345,7 @@ const Settings = () => {
             rounded="rounded-md"
             handleClick={handleImportBuild}
           />
-          <Button
+          <ButtonWrapper
             className="cursor-not-allowed text-sm opacity-50"
             label="Export Build"
             icon={downloadIcon}
@@ -366,7 +363,7 @@ const Settings = () => {
             handleClick={handleExportBuild}
             disabled={true}
           />
-          <Button
+          <ButtonWrapper
             className="text-sm"
             label="Copy Build"
             icon={clipboardText}
@@ -382,7 +379,7 @@ const Settings = () => {
             rounded="rounded-md"
             handleClick={handleCopyButton}
           />
-          <Button
+          <ButtonWrapper
             className="text-sm"
             label="Reset Build"
             icon={trashX}

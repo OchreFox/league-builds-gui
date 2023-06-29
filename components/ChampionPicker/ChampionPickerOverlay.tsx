@@ -1,17 +1,20 @@
+import React, { useEffect, useState } from 'react'
+
 import { css, cx } from '@emotion/css'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import fuzzysort from 'fuzzysort'
-import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import SimpleBar from 'simplebar-react'
-import 'simplebar/dist/simplebar.min.css'
 
-import LoadingSpinner from 'components/basic/LoadingSpinner'
+import ChampionTile from '@/components/ChampionPicker/ChampionTile'
+import LoadingSpinner from '@/components/basic/LoadingSpinner'
+import { useChampions } from '@/hooks/useChampions'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { ChampionsSchema, Tag } from '@/types/Champions'
 
-import { ChampionsSchema, Tag } from '../../types/Champions'
-import { useChampions } from '../hooks/useChampions'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import ChampionTile from './ChampionTile'
+import 'simplebar-react/dist/simplebar.min.css'
+
+import HorizontalWeavingSeparator from '../ui/HorizontalWeavingSeparator'
 
 const ChampionPickerOverlay = ({
   show,
@@ -66,14 +69,14 @@ const ChampionPickerOverlay = ({
         setFilteredChampions(filtered)
       }
     }
-  }, [championsData, filters])
+  }, [categoryFilter, championsData, filters, searchQuery])
 
   // Detect when show changes to true for the first time
   useEffect(() => {
     if (show && !renderOverlay) {
       setRenderOverlay(true)
     }
-  }, [show])
+  }, [renderOverlay, show])
 
   return (
     <AnimatePresence>
@@ -100,14 +103,14 @@ const ChampionPickerOverlay = ({
           {!renderChampions && <LoadingSpinner />}
           <SimpleBar
             className={cx(
-              'h-full overflow-y-auto',
+              'h-full w-full overflow-y-auto',
               css`
                 box-shadow: inset 0px 0px 25px 0px #000000;
                 position: relative;
               `
             )}
           >
-            <ul className="m-4 grid grid-cols-6 h-full gap-2">
+            <ul className="m-4 grid h-full grid-cols-6 gap-2">
               <LayoutGroup>
                 <AnimatePresence>
                   {renderChampions &&

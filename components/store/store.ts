@@ -1,12 +1,12 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 
-import { ItemBuild } from '../../types/Build'
-import { PotatoModeState } from '../../types/PotatoMode'
-import { appSlice } from './appSlice'
-import { itemBuildSlice } from './itemBuildSlice'
-import { listenerMiddleware } from './middleware'
-import { potatoModeSlice } from './potatoModeSlice'
+import { appSlice } from '@/store/appSlice'
+import { itemBuildSlice } from '@/store/itemBuildSlice'
+import { listenerMiddleware } from '@/store/middleware'
+import { potatoModeSlice } from '@/store/potatoModeSlice'
+import { ItemBuild } from '@/types/Build'
+import { PotatoModeState } from '@/types/PotatoMode'
 
 export interface GlobalState {
   itemBuild: ItemBuild
