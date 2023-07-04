@@ -9029,10 +9029,10 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-million@^2.4.6-beta.2:
-  version "2.4.6-beta.2"
-  resolved "https://registry.yarnpkg.com/million/-/million-2.4.6-beta.2.tgz#05558d90984670b96d963936413b0379ec4cf336"
-  integrity sha512-UTUIfDZLBx1WG+nsBjeJGPPH0rR4b3yGPe4iZ2GOGpwUbrp0UjxRZeEQSFsaYctn9PPTId2Huowb9kQ5BQcj/A==
+million@^2.4.6:
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/million/-/million-2.4.9.tgz#30eed83edcaf592f2cdcbe3dfd305af6a7cb4c75"
+  integrity sha512-5R2NgaGhSI6ASP0oVEZZvCF+xoYBnfKBFVCOtO3hedbhNXKIe3A/++1WV7ddr62yA4fbg1xfR1Lhs4Srn90aGw==
   dependencies:
     "@babel/core" "^7.21.0"
     "@babel/plugin-syntax-jsx" "^7.21.4"
