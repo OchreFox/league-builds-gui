@@ -54,7 +54,7 @@
     "lodash": "^4.17.21",
     "million": "^2.4.6-beta.2",
     "nanoid": "^4.0.2",
-    "next": "^13.4.4",
+    "next": "^13.5.0",
     "next-redux-wrapper": "^8.1.0",
     "pattern.css": "^1.0.0",
     "pixi.js": "7.2.4",
