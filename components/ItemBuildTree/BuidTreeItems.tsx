@@ -1,10 +1,11 @@
-import { cx } from '@emotion/css'
 import { RefObject } from 'react'
+
+import { cx } from '@emotion/css'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
-import { dynamicListItemStyles, dynamicUnorderedListStyles } from './BuildTreeComponents'
-import { BuildTreeItem } from './BuildTreeItem'
+import { dynamicListItemStyles, dynamicUnorderedListStyles } from '@/components/ItemBuildTree/BuildTreeComponents'
+import { BuildTreeItem } from '@/components/ItemBuildTree/BuildTreeItem'
 
 // Recursive component to render item build tree as a nested list of items with depth
 export const BuildTreeItems = ({
@@ -46,7 +47,7 @@ export const BuildTreeItems = ({
         }
         return (
           <li
-            key={item.id + '-' + index + 'build-tree'}
+            key={item.id + '-build-tree'}
             className={cx(
               'relative flex flex-row items-center justify-center space-x-6 drop-shadow before:bg-yellow-700 after:bg-yellow-700',
               dynamicListItemStyles({

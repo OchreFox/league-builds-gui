@@ -1,15 +1,16 @@
 import Image from 'next/image'
 
-import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
-import { cx } from '@emotion/css'
 import React, { RefObject } from 'react'
+
+import { cx } from '@emotion/css'
+import { Variants, motion } from 'framer-motion'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
-import { CustomLoader } from 'utils/CustomLoader'
+import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 
-import { scrollIntoItem } from './BuildTreeComponents'
+import { CustomLoader } from 'utils/CustomLoader'
 
 const SuggestedItem = ({
   item,
@@ -17,18 +18,22 @@ const SuggestedItem = ({
   triggerSelection,
   itemRefArray,
   itemGridRef,
+  variants,
 }: {
   item: ItemsSchema
   index: number
   triggerSelection: number | null | undefined
   itemRefArray: ItemRefArrayType
   itemGridRef: RefObject<HTMLDivElement>
+  variants: Variants
 }) => {
   const dispatch = useAppDispatch()
 
   return (
-    <div
-      key={index}
+    <motion.div
+      layout="position"
+      variants={variants}
+      key={'suggested-item-' + item.id}
       className={cx(
         'group -m-1 flex cursor-pointer flex-col items-center bg-gray-900 p-2 text-center',
         triggerSelection === item.id && 'border-2 border-dashed border-yellow-500/75'
@@ -37,13 +42,13 @@ const SuggestedItem = ({
         dispatch(setItemPickerSelectedItem(item))
       }}
       draggable={true}
-      onDragStart={(e) => {
+      onDragEnter={(e: React.DragEvent<HTMLDivElement>) => {
         dispatch(setItemPickerDraggedItem(item.id))
         e.dataTransfer.setData('text/plain', JSON.stringify(item))
         e.currentTarget.style.opacity = '0.4'
         e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
       }}
-      onDragEnd={(e) => {
+      onDragLeave={(e: React.DragEvent<HTMLDivElement>) => {
         dispatch(setItemPickerDraggedItem(null))
         e.currentTarget.style.opacity = '1'
         e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0)'
@@ -60,7 +65,7 @@ const SuggestedItem = ({
         />
       </div>
       <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
-    </div>
+    </motion.div>
   )
 }
 

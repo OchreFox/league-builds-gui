@@ -1,5 +1,5 @@
-import { Rarity } from '../types/FilterProps'
-import { ItemsSchema, RequiredChampion } from '../types/Items'
+import { Rarity } from '@/types/FilterProps'
+import { ItemsSchema, RequiredChampion } from '@/types/Items'
 
 // Filters to determine the rarity of an item
 export function isBasic(item: ItemsSchema) {

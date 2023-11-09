@@ -8,8 +8,8 @@
   position: relative;
   box-sizing: content-box;
 
+  // Gradient border
   &::before {
-    // Create a gradient border
     content: '';
     position: absolute;
     top: 1px;
@@ -30,6 +30,8 @@
     z-index: -3;
     animation: move-gradient 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+
+  // Bloom
   &::after {
     position: absolute;
     content: '';

@@ -1,3 +1,18 @@
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+
+import { cx } from '@emotion/css'
+import { motion } from 'framer-motion'
+import { batch, useSelector } from 'react-redux'
+import { ItemSectionState, Rarity } from 'types/FilterProps'
+
+import { ItemContainer } from '@/components/ItemGrid/ItemContainer'
+import {
+  getPluralFromItems,
+  itemSectionConstants,
+  titleVariants,
+  transitionVariant,
+} from '@/components/ItemGrid/ItemGridComponents'
+import { RarityTitle } from '@/components/ItemGrid/RarityTitle'
 import {
   selectItemFilters,
   selectItemPicker,
@@ -7,15 +22,6 @@ import {
   setItemPickerContainerTitleHeight,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import { cx } from '@emotion/css'
-import { motion } from 'framer-motion'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { batch, useSelector } from 'react-redux'
-import { ItemSectionState, Rarity } from 'types/FilterProps'
-
-import { ItemContainer } from './ItemContainer'
-import { getPluralFromItems, itemSectionConstants, titleVariants, transitionVariant } from './ItemGridComponents'
-import { RarityTitle } from './RarityTitle'
 
 const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSectionState) => {
   const dispatch = useAppDispatch()

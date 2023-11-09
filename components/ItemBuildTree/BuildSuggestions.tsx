@@ -1,15 +1,33 @@
-import { selectItemFilters, setItemFiltersClass } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
-import { cx } from '@emotion/css'
-import _ from 'lodash'
 import { RefObject } from 'react'
+
+import { cx } from '@emotion/css'
+import { getPluralFromItems, isFromChampionClass } from 'components/ItemGrid/ItemGridComponents'
+import { Variants, motion } from 'framer-motion'
+import _ from 'lodash'
 import { useSelector } from 'react-redux'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ChampionClass, ItemsSchema } from 'types/Items'
 
-import { getPluralFromItems, isFromChampionClass } from 'components/ItemGrid/ItemGridComponents'
+import SuggestedItem from '@/components/ItemBuildTree/SuggestedItem'
+import { selectItemFilters, setItemFiltersClass } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
+import { easeInOutExpo } from '@/utils/Transition'
 
-import SuggestedItem from './SuggestedItem'
+const itemVariants: Variants = {
+  initial: {
+    opacity: 0,
+    x: -10,
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      ...easeInOutExpo,
+      duration: 0.3,
+      staggerChildren: 0.03,
+    },
+  },
+}
 
 export const BuildSuggestions = ({
   items,
@@ -66,7 +84,7 @@ export const BuildSuggestions = ({
           <span>more {getPluralFromItems(delta)} hidden by champion class filters</span>
         </p>
       )}
-      <div className="grid grid-cols-5 gap-2">
+      <motion.div className="grid grid-cols-5 gap-2" initial="initial" animate="animate" variants={itemVariants}>
         {filteredItemBuilds.map((item, index) => {
           if (!item) {
             return null
@@ -79,10 +97,11 @@ export const BuildSuggestions = ({
               triggerSelection={triggerSelection}
               itemRefArray={itemRefArray}
               itemGridRef={itemGridRef}
+              variants={itemVariants}
             />
           )
         })}
-      </div>
+      </motion.div>
     </>
   )
 }

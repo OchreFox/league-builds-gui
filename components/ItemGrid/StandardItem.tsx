@@ -85,7 +85,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
         }
       }
     },
-    [itemRefArray, item.id]
+    [itemRefArrayIndex, itemRefArray]
   )
 
   const itemDragStart = useCallback(
@@ -96,15 +96,18 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
       e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
       setButtonClick(true)
     },
-    [item]
+    [dispatch, item]
   )
 
-  const itemDragEnd = useCallback((e: React.DragEvent<HTMLLIElement>) => {
-    dispatch(setItemPickerDraggedItem(null))
-    e.currentTarget.style.opacity = '1'
-    e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0)'
-    setButtonClick(false)
-  }, [])
+  const itemDragEnd = useCallback(
+    (e: React.DragEvent<HTMLLIElement>) => {
+      dispatch(setItemPickerDraggedItem(null))
+      e.currentTarget.style.opacity = '1'
+      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0)'
+      setButtonClick(false)
+    },
+    [dispatch]
+  )
 
   const toggleSelectedItem = useCallback(() => {
     // Toggle selectedItem
@@ -113,7 +116,7 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
     } else {
       dispatch(setItemPickerSelectedItem(item))
     }
-  }, [isSelected, item])
+  }, [dispatch, isSelected, item])
 
   useLayoutEffect(() => {
     // Call reference with the virtual element inside an effect or event handler.

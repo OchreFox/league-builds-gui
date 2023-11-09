@@ -140,7 +140,7 @@ export const BuildSection = ({ id }: { id: string }) => {
       e.preventDefault()
       e.stopPropagation()
       setHover(false)
-      const data = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
+      const data: ItemsSchema = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
       if (data) {
         dispatch(addItemToBlock({ blockId: block.id, itemId: data.id }))
       }

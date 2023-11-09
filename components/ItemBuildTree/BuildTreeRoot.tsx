@@ -1,10 +1,11 @@
+import { JSX, RefObject } from 'react'
+
 import { css } from '@emotion/css'
-import { RefObject } from 'react'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
-import { BuildTreeItems } from './BuidTreeItems'
-import { getItemBuildTree } from './BuildTreeComponents'
+import { BuildTreeItems } from '@/components/ItemBuildTree/BuidTreeItems'
+import { getItemBuildTree } from '@/components/ItemBuildTree/BuildTreeComponents'
 
 export const BuildTreeRoot = ({
   items,

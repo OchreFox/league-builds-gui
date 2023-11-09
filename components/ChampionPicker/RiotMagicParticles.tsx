@@ -1,7 +1,8 @@
 import React from 'react'
+
 import { Container, Stage } from 'react-pixi-fiber'
 
-import RiotMagicEmitter from './RiotMagicEmitter'
+import RiotMagicEmitter from '@/components/ChampionPicker/RiotMagicEmitter'
 
 const riotMagicEmitterConfig = {
   alpha: {
@@ -61,7 +62,7 @@ const riotMagicEmitterConfig = {
 const RiotMagicParticles = ({ width = 150, height = 150 }: { width: number; height: number }) => {
   return (
     <Stage
-      className="absolute top-0 left-0 pointer-events-none"
+      className="pointer-events-none absolute left-0 top-0"
       options={{
         backgroundColor: 0x000000,
         backgroundAlpha: 0,

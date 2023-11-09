@@ -37,14 +37,14 @@ export const ItemIcon = ({
       return 'empty'
     }
     return 'blur'
-  }, [size])
+  }, [size, usePlaceholder])
 
   const getPlaceholder = useMemo(() => {
     if (placeholder === 'blur') {
       return blurhashDecode(item.placeholder)
     }
     return ''
-  }, [item.placeholder])
+  }, [item.placeholder, placeholder])
 
   return (
     <div

@@ -58,16 +58,26 @@ const HorizontalButton = ({
             offset={0}
             initial={{ stopColor: '#C89B3C' }}
             animate={{ stopColor: hover ? '#F0E6D2' : '#C89B3C' }}
+            transition={{
+              duration: 0.3,
+            }}
           />
           <motion.stop offset={1} stopColor="#785A28" />
         </motion.linearGradient>
         <linearGradient id="d" x1="291.33" y1={0} x2="291.33" y2={29} gradientUnits="userSpaceOnUse">
-          <stop offset={0} stopColor="#C8AA6E" />
-          <stop offset={1} stopColor="#9f7a32" />
+          <motion.stop
+            offset={0}
+            initial={{ stopColor: '##C8AA6E' }}
+            animate={{ stopColor: hover ? '#F0E6D2' : '#C8AA6E' }}
+            transition={{
+              duration: 0.3,
+            }}
+          />
+          <motion.stop offset={1} stopColor="#9f7a32" />
         </linearGradient>
         <linearGradient id="e" x1="291.33" y1={33} x2="291.33" y2={62} gradientUnits="userSpaceOnUse">
-          <stop offset={0} stopColor="#9f7a32" />
-          <stop offset=".99" stopColor="#785A28" />
+          <motion.stop offset={0} stopColor="#9f7a32" />
+          <motion.stop offset=".99" stopColor="#785A28" />
         </linearGradient>
       </defs>
       <polygon

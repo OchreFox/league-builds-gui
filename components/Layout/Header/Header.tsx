@@ -1,15 +1,16 @@
-import { setMenuShow } from '@/store/appSlice'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
-import { useAppDispatch } from '@/store/store'
+import React, { useEffect, useState } from 'react'
+
 import { cx } from '@emotion/css'
 import menu2 from '@iconify/icons-tabler/menu-2'
 import { Icon } from '@iconify/react'
+import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 import { AnimatePresence, motion, useAnimation } from 'framer-motion'
 import packageJson from 'package.json'
-import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
+import { setMenuShow } from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 
 import { easeInOutExpo } from 'utils/Transition'
 
@@ -128,7 +129,7 @@ const Header = () => {
     // Initial animations
     titleControls.start(titleVariants.animate)
     subtitleControls.start(subtitleVariants.animate)
-  }, [])
+  }, [subtitleControls, titleControls])
 
   return (
     <div className="flex flex-row">
@@ -138,7 +139,7 @@ const Header = () => {
         initial="hidden"
         animate="visible"
         whileHover="whileHover"
-        className="pattern-diagonal-lines-sm group/header relative mt-2 mr-4 flex w-full flex-col overflow-visible text-pink-800/50"
+        className="pattern-diagonal-lines-sm group/header relative mr-4 mt-2 flex w-full flex-col overflow-visible text-pink-800/50"
         onHoverStart={() => {
           setIsHovering(true)
           if (!isAnimationPlaying && !potatoMode) {

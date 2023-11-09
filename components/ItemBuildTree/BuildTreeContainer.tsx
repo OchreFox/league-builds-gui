@@ -50,6 +50,22 @@ const itemNameVariants: Variants = {
   },
 }
 
+const navVariants: Variants = {
+  initial: {
+    opacity: 0,
+    x: -10,
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      ...easeInOutExpo,
+      duration: 0.5,
+      staggerChildren: 0.05,
+    },
+  },
+}
+
 export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeProps) => {
   const dispatch = useAppDispatch()
   const potatoMode = useSelector(selectPotatoMode)
@@ -99,7 +115,7 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
     } else {
       setTriggerSelection(null)
     }
-  }, [selectedItem])
+  }, [itemTitleQueue, pushItemTitleQueue, selectedItem])
 
   useEffect(() => {
     if (!potatoMode && itemTitleQueue.length > 1) {
@@ -118,33 +134,45 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
     return (
       items && (
         <>
-          <div className="mb-2 flex items-center space-x-4 border-b border-yellow-900 py-1">
-            <h3 className="shrink-0 border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200">ITEM</h3>
-            <button
+          <motion.nav
+            className="mb-2 flex items-center space-x-4 border-b border-yellow-900 py-1"
+            variants={navVariants}
+            initial="initial"
+            animate="animate"
+          >
+            <motion.h3
+              className="shrink-0 border-r border-yellow-900 pr-2 font-body font-semibold text-gray-200"
+              variants={navVariants}
+            >
+              ITEM
+            </motion.h3>
+            <motion.button
               className={cx(
                 'group relative inline-flex flex-row items-center justify-center bg-transparent px-2 py-1 text-sm font-medium text-white hover:bg-cyan-900 hover:text-white',
                 styles.filterButtonActive,
                 styles.all
               )}
+              variants={navVariants}
             >
               Build Path
               <motion.div
                 layoutId="item-details-border"
                 className="absolute inset-x-0 bottom-0 h-0.5 w-full bg-brand-default"
               />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               disabled
               className="group relative inline-flex cursor-help flex-row items-center justify-center bg-transparent px-2 py-1 text-sm font-medium text-gray-600"
               title="Coming soon!"
+              variants={navVariants}
             >
               Description
               <motion.div
                 layoutId="item-details-border"
                 className="absolute inset-x-0 bottom-0 h-0.5 w-full bg-brand-default"
               />
-            </button>
-          </div>
+            </motion.button>
+          </motion.nav>
           {potatoMode ? (
             <h3 className="text-lg font-bold text-white">{selectedItem.name}</h3>
           ) : (

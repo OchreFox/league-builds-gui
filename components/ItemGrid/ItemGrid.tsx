@@ -8,6 +8,18 @@ import SimpleBar from 'simplebar-react'
 import { ItemGridProps, Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
 
+import {
+  getActiveCategories,
+  includesCategory,
+  includesCategoryAll,
+  isFromChampionClass,
+  isInStore,
+  markItemsAsVisible,
+  sortItems,
+  titleVariants,
+  transitionVariant,
+} from '@/components/ItemGrid/ItemGridComponents'
+import ItemSection from '@/components/ItemGrid/ItemSection'
 import { useItems } from '@/hooks/useItems'
 import {
   selectItemFilters,
@@ -21,19 +33,6 @@ import { useAppDispatch } from '@/store/store'
 import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
 
 import 'simplebar-react/dist/simplebar.min.css'
-
-import {
-  getActiveCategories,
-  includesCategory,
-  includesCategoryAll,
-  isFromChampionClass,
-  isInStore,
-  markItemsAsVisible,
-  sortItems,
-  titleVariants,
-  transitionVariant,
-} from './ItemGridComponents'
-import ItemSection from './ItemSection'
 
 export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef }: ItemGridProps) {
   const dispatch = useAppDispatch()
