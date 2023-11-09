@@ -4,8 +4,8 @@ import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 import { useSelector } from 'react-redux'
 
-import { Rarity } from '../../types/FilterProps'
-import { selectPotatoMode } from '../store/potatoModeSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { Rarity } from '@/types/FilterProps'
 
 export const RarityTitleWrapper = (
   {

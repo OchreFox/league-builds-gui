@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 
 import { css, cx } from '@emotion/css'
 import { Dialog, Transition } from '@headlessui/react'
@@ -6,25 +6,20 @@ import checkIcon from '@iconify/icons-tabler/check'
 import clipboardText from '@iconify/icons-tabler/clipboard-text'
 import downloadIcon from '@iconify/icons-tabler/download'
 import folderIcon from '@iconify/icons-tabler/folder'
-import linkIcon from '@iconify/icons-tabler/link'
 import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
 import { makeJsonEncoder } from '@urlpack/json'
 import ButtonWrapper from 'components/basic/Button'
-import { AnimatePresence, motion } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
-
-import { setSelectedChampions } from '@/store/appSlice'
-import { selectItemBuild, setRiotItemBuild } from '@/store/itemBuildSlice'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
-import { useAppDispatch } from '@/store/store'
-
-import { easeOutExpo } from 'utils/Transition'
+import { motion } from 'framer-motion'
+import { useSelector } from 'react-redux'
 
 // import { compressUrlSafe } from 'utils/lzma-url'
-import styles from './ExportModal.module.scss'
-import { Hint, Separator } from './ModalComponents'
-import { ToastBody } from './NotificationToast'
+import styles from '@/components/Settings/ExportModal.module.scss'
+import { Hint } from '@/components/Settings/ModalComponents'
+import { selectItemBuild } from '@/store/itemBuildSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+
+import { easeOutExpo } from 'utils/Transition'
 
 const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const potatoMode = useSelector(selectPotatoMode)
@@ -34,7 +29,7 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
 
   const onCloseToast = useCallback(() => {
     setOpen(false)
-  }, [])
+  }, [setOpen])
 
   const onCopyLink = useCallback(async () => {
     const encoder = makeJsonEncoder()
@@ -44,7 +39,7 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
     setBuildLink(buildLink)
     setShowLink(true)
     return true
-  }, [])
+  }, [itemBuild])
 
   // Clear link copied state when modal is closed
   useEffect(() => {
@@ -178,10 +173,10 @@ const ExportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                   {/* <Separator />
                   <button
                     type="button"
-                    className="mx-auto inline-flex items-center rounded-md border border-green-600 bg-transparent px-4 py-2 text-sm font-medium text-white shadow-sm transition-extended-colors duration-150 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="inline-flex items-center px-4 py-2 mx-auto text-sm font-medium text-white duration-150 bg-transparent border border-green-600 rounded-md shadow-sm transition-extended-colors hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     onClick={onCopyLink}
                   >
-                    <Icon className="mr-1 h-5 w-5" icon={linkIcon} inline={true} />
+                    <Icon className="w-5 h-5 mr-1" icon={linkIcon} inline={true} />
                     Generate link
                   </button> */}
                   {showLink && (

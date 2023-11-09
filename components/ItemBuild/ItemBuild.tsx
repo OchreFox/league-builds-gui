@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 
+import { BuildContainer } from 'components/ItemBuild/BuildContainer'
+import LinearProgress from 'components/basic/LinearProgress'
 import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
@@ -15,10 +17,7 @@ import {
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 
-import ChampionPickerCard from 'components/ChampionPicker/ChampionPickerCard'
-import { BuildContainer } from 'components/ItemBuild/BuildContainer'
-import LinearProgress from 'components/basic/LinearProgress'
-
+import ChampionPickerCard from '../ChampionPicker/ChampionPickerCard.1'
 import { getChampionSplash } from './BuildMakerComponents'
 
 export const ItemBuild = () => {

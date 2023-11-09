@@ -3,8 +3,6 @@ import Head from 'next/head'
 
 import { MutableRefObject, createRef, useRef, useState } from 'react'
 
-import { cx } from '@emotion/css'
-
 import { ItemBuild } from '@/components/ItemBuild/ItemBuild'
 import { BuildTreeContainer } from '@/components/ItemBuildTree/BuildTreeContainer'
 import FilterItemsByClass from '@/components/ItemFilters/FilterItemsByClass'
@@ -25,7 +23,7 @@ const DynamicSliderOverlay = dynamic(() => import('@/components/Layout/SliderOve
 })
 
 function Home() {
-  const [goldOrderDirection, setNumericSortOrder] = useState(SortDirection.Asc)
+  const [goldOrderDirection, setGoldOrderDirection] = useState(SortDirection.Asc)
   // Array of itemRefs
   const itemRefArray = useRef<
     Array<{
@@ -87,7 +85,7 @@ function Home() {
                   ITEM RARITY
                 </h3>
                 <FilterItemsByRarity />
-                <SortByGold direction={goldOrderDirection} setDirection={setNumericSortOrder} />
+                <SortByGold direction={goldOrderDirection} setDirection={setGoldOrderDirection} />
               </div>
               <ItemGrid goldOrderDirection={goldOrderDirection} itemRefArray={itemRefArray} itemGridRef={itemGridRef} />
             </section>

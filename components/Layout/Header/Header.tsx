@@ -3,18 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { cx } from '@emotion/css'
 import menu2 from '@iconify/icons-tabler/menu-2'
 import { Icon } from '@iconify/react'
-import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 import { AnimatePresence, motion, useAnimation } from 'framer-motion'
 import packageJson from 'package.json'
 import { useSelector } from 'react-redux'
 
+import styles from '@/components/Layout/Header/Header.module.scss'
 import { setMenuShow } from '@/store/appSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 
 import { easeInOutExpo } from 'utils/Transition'
-
-import styles from './Header.module.scss'
 
 const bgTitleVariants = {
   visible: {

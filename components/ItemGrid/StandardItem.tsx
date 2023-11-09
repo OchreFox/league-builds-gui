@@ -174,92 +174,90 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
       onDragStart={itemDragStart}
       onDragEnd={itemDragEnd}
     >
-      <>
-        <motion.button
-          layout
-          transition={transitionVariant}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          key={item.id}
-          className={cx(
-            itemStyles.itemButton,
-            showPopper && itemStyles.itemButtonHovered,
-            isSelected && itemStyles.itemButtonSelected
-          )}
-          ref={buttonRef}
-          onMouseEnter={() => {
-            setMouseEnter(true)
-          }}
-          onMouseLeave={() => {
-            setMouseEnter(false)
-          }}
-          onClick={toggleSelectedItem}
-          onMouseDown={() => {
-            setButtonClick(true)
-          }}
-          onMouseUp={() => {
-            setButtonClick(false)
-          }}
-          draggable={true}
-          onDragOver={(e) => {
-            e.preventDefault()
-          }}
-        >
-          {/* Mythic item overlay */}
-          <div ref={reference} className={item.mythic ? itemStyles.itemMythicOverlay : ''}>
-            <ItemIcon item={item} usePlaceholder={true} />
-          </div>
-          <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
-        </motion.button>
-        <AnimatePresence>
-          {showTooltip && (
-            <Portal>
-              <motion.div
-                ref={floating}
+      <motion.button
+        layout
+        transition={transitionVariant}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        key={item.id}
+        className={cx(
+          itemStyles.itemButton,
+          showPopper && itemStyles.itemButtonHovered,
+          isSelected && itemStyles.itemButtonSelected
+        )}
+        ref={buttonRef}
+        onMouseEnter={() => {
+          setMouseEnter(true)
+        }}
+        onMouseLeave={() => {
+          setMouseEnter(false)
+        }}
+        onClick={toggleSelectedItem}
+        onMouseDown={() => {
+          setButtonClick(true)
+        }}
+        onMouseUp={() => {
+          setButtonClick(false)
+        }}
+        draggable={true}
+        onDragOver={(e) => {
+          e.preventDefault()
+        }}
+      >
+        {/* Mythic item overlay */}
+        <div ref={reference} className={item.mythic ? itemStyles.itemMythicOverlay : ''}>
+          <ItemIcon item={item} usePlaceholder={true} />
+        </div>
+        <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+      </motion.button>
+      <AnimatePresence>
+        {showTooltip && (
+          <Portal>
+            <motion.div
+              ref={floating}
+              style={{
+                position: strategy,
+                top: y ?? 0,
+                left: x ?? 0,
+                width: 'max-content',
+              }}
+              className={itemStyles.itemTooltip}
+              variants={ItemNameTooltipVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{
+                ...easeInOutQuad,
+                duration: 0.1,
+              }}
+            >
+              <motion.span className="pointer-events-none">{item.name}</motion.span>
+              <div
+                ref={arrowTooltipRef}
+                data-tooltip-placement={placement}
+                className={itemStyles.itemTooltipArrow}
                 style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  left: x ?? 0,
-                  width: 'max-content',
+                  top: arrowY,
+                  left: arrowX,
                 }}
-                className={itemStyles.itemTooltip}
-                variants={ItemNameTooltipVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                transition={{
-                  ...easeInOutQuad,
-                  duration: 0.1,
-                }}
-              >
-                <motion.span className="pointer-events-none">{item.name}</motion.span>
-                <div
-                  ref={arrowTooltipRef}
-                  data-tooltip-placement={placement}
-                  className={itemStyles.itemTooltipArrow}
-                  style={{
-                    top: arrowY,
-                    left: arrowX,
-                  }}
-                />
-              </motion.div>
-            </Portal>
-          )}
-        </AnimatePresence>
-        {showPopper
-          ? createPortal(
-              <ItemPopper
-                popperRef={popperRef}
-                styles={styles}
-                attributes={attributes}
-                setArrowRef={setArrowRef}
-                item={item}
-              />,
-              document.querySelector('#item-container') as HTMLElement
-            )
-          : null}
-      </>
+              />
+            </motion.div>
+          </Portal>
+        )}
+      </AnimatePresence>
+      {showPopper
+        ? createPortal(
+            <ItemPopper
+              popperRef={popperRef}
+              styles={styles}
+              attributes={attributes}
+              setArrowRef={setArrowRef}
+              item={item}
+            />,
+            document.querySelector('#item-container') as HTMLElement
+          )
+        : null}
     </li>
   )
 }

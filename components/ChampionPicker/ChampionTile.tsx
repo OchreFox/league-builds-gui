@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { css, cx } from '@emotion/css'
-import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { Variants, motion } from 'framer-motion'
 import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 

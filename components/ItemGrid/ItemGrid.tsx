@@ -1,4 +1,4 @@
-import React, { Fragment, createRef, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Fragment, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { css, cx } from '@emotion/css'
 import { scrollIntoItem } from 'components/ItemBuildTree/BuildTreeComponents'
@@ -87,7 +87,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
   /**
    * Initializes items: takes an object of all the items, sorts them by type, and then sets the state of each type of item.
    */
-  function initializeItems() {
+  const initializeItems = useCallback(() => {
     // Only run the function if the items are present
     if (!items) return
 
@@ -159,78 +159,93 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         ref: createRef(),
       })
     }
-  }
+  }, [items, goldOrderDirection, itemRefArray, dispatch])
 
   /**
    * Updates the items state when the filters change.
    */
-  function reduceItems(categories: Array<Category[]>, championClass: ChampionClass) {
-    if (!items) {
-      console.error('No items array provided to reduceItems')
-      return
-    }
-    let basicVisibleItems: Array<ItemsSchema> = []
-    let epicVisibleItems: Array<ItemsSchema> = []
-    let legendaryVisibleItems: Array<ItemsSchema> = []
-    let mythicVisibleItems: Array<ItemsSchema> = []
+  const reduceItems = useCallback(
+    (categories: Array<Category[]>, championClass: ChampionClass) => {
+      if (!items) {
+        console.error('No items array provided to reduceItems')
+        return
+      }
+      let basicVisibleItems: Array<ItemsSchema> = []
+      let epicVisibleItems: Array<ItemsSchema> = []
+      let legendaryVisibleItems: Array<ItemsSchema> = []
+      let mythicVisibleItems: Array<ItemsSchema> = []
 
-    let basicVisibleItemsCount = 0
-    let epicVisibleItemsCount = 0
-    let legendaryVisibleItemsCount = 0
-    let mythicVisibleItemsCount = 0
+      let basicVisibleItemsCount = 0
+      let epicVisibleItemsCount = 0
+      let legendaryVisibleItemsCount = 0
+      let mythicVisibleItemsCount = 0
 
-    // If no filters are selected, return all items
-    const hasCategoryAll = includesCategoryAll(categories)
-    if (hasCategoryAll && championClass === ChampionClass.None && goldOrderDirection === SortDirection.Asc) {
-      basicVisibleItems = initialBasicItems
-      epicVisibleItems = initialEpicItems
-      legendaryVisibleItems = initialLegendaryItems
-      mythicVisibleItems = initialMythicItems
+      // If no filters are selected, return all items
+      const hasCategoryAll = includesCategoryAll(categories)
+      if (hasCategoryAll && championClass === ChampionClass.None && goldOrderDirection === SortDirection.Asc) {
+        basicVisibleItems = initialBasicItems
+        epicVisibleItems = initialEpicItems
+        legendaryVisibleItems = initialLegendaryItems
+        mythicVisibleItems = initialMythicItems
 
-      basicVisibleItemsCount = initialBasicItems.length
-      epicVisibleItemsCount = initialEpicItems.length
-      legendaryVisibleItemsCount = initialLegendaryItems.length
-      mythicVisibleItemsCount = initialMythicItems.length
-    } else {
-      // Create an array of filter methods to filter the items
-      let filterMethods: Array<Function> = [
-        (item: ItemsSchema) => includesCategory(item, categories),
-        (item: ItemsSchema) => isFromChampionClass(item, championClass),
-        (item: ItemsSchema) => isInStore(item),
-      ]
+        basicVisibleItemsCount = initialBasicItems.length
+        epicVisibleItemsCount = initialEpicItems.length
+        legendaryVisibleItemsCount = initialLegendaryItems.length
+        mythicVisibleItemsCount = initialMythicItems.length
+      } else {
+        // Create an array of filter methods to filter the items
+        let filterMethods: Array<Function> = [
+          (item: ItemsSchema) => includesCategory(item, categories),
+          (item: ItemsSchema) => isFromChampionClass(item, championClass),
+          (item: ItemsSchema) => isInStore(item),
+        ]
 
-      let filteredItems = Object.values(items).filter((item) => {
-        // If any filter method returns false, the item is filtered out
-        return filterMethods.every((method) => method(item))
+        let filteredItems = Object.values(items).filter((item) => {
+          // If any filter method returns false, the item is filtered out
+          return filterMethods.every((method) => method(item))
+        })
+        let basicResults = markItemsAsVisible(basicItems, filteredItems, goldOrderDirection)
+        let epicResults = markItemsAsVisible(epicItems, filteredItems, goldOrderDirection)
+        let legendaryResults = markItemsAsVisible(legendaryItems, filteredItems, goldOrderDirection)
+        let mythicResults = markItemsAsVisible(mythicItems, filteredItems, goldOrderDirection)
+
+        basicVisibleItems = basicResults.visibleItems
+        epicVisibleItems = epicResults.visibleItems
+        legendaryVisibleItems = legendaryResults.visibleItems
+        mythicVisibleItems = mythicResults.visibleItems
+
+        basicVisibleItemsCount = basicResults.count
+        epicVisibleItemsCount = epicResults.count
+        legendaryVisibleItemsCount = legendaryResults.count
+        mythicVisibleItemsCount = mythicResults.count
+      }
+
+      setBasicItems(basicVisibleItems)
+      setEpicItems(epicVisibleItems)
+      setLegendaryItems(legendaryVisibleItems)
+      setMythicItems(mythicVisibleItems)
+
+      batch(() => {
+        dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: basicVisibleItemsCount }))
+        dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: epicVisibleItemsCount }))
+        dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: legendaryVisibleItemsCount }))
+        dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: mythicVisibleItemsCount }))
       })
-      let basicResults = markItemsAsVisible(basicItems, filteredItems, goldOrderDirection)
-      let epicResults = markItemsAsVisible(epicItems, filteredItems, goldOrderDirection)
-      let legendaryResults = markItemsAsVisible(legendaryItems, filteredItems, goldOrderDirection)
-      let mythicResults = markItemsAsVisible(mythicItems, filteredItems, goldOrderDirection)
-
-      basicVisibleItems = basicResults.visibleItems
-      epicVisibleItems = epicResults.visibleItems
-      legendaryVisibleItems = legendaryResults.visibleItems
-      mythicVisibleItems = mythicResults.visibleItems
-
-      basicVisibleItemsCount = basicResults.count
-      epicVisibleItemsCount = epicResults.count
-      legendaryVisibleItemsCount = legendaryResults.count
-      mythicVisibleItemsCount = mythicResults.count
-    }
-
-    setBasicItems(basicVisibleItems)
-    setEpicItems(epicVisibleItems)
-    setLegendaryItems(legendaryVisibleItems)
-    setMythicItems(mythicVisibleItems)
-
-    batch(() => {
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: basicVisibleItemsCount }))
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: epicVisibleItemsCount }))
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: legendaryVisibleItemsCount }))
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: mythicVisibleItemsCount }))
-    })
-  }
+    },
+    [
+      items,
+      goldOrderDirection,
+      initialBasicItems,
+      initialEpicItems,
+      initialLegendaryItems,
+      initialMythicItems,
+      basicItems,
+      epicItems,
+      legendaryItems,
+      mythicItems,
+      dispatch,
+    ]
+  )
 
   useEffect(() => {
     // Data initialization
@@ -256,7 +271,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         previousValues.current.itemFilters = itemFilters
       }
     }
-  }, [items, goldOrderDirection, itemFilters])
+  }, [items, goldOrderDirection, itemFilters, dataInitialized, initializeItems, reduceItems])
 
   // Listen for changes in itemPicker
   useEffect(() => {
@@ -319,12 +334,13 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
 
   // Add scroll event listener to item grid
   useEffect(() => {
+    console.log('Adding scroll event listener to item grid')
     itemGridRef.current?.addEventListener('scroll', handleScroll)
 
     return () => {
       itemGridRef.current?.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [itemGridRef])
 
   return (
     <>

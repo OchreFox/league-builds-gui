@@ -17,7 +17,7 @@ import { selectPotatoMode } from '@/store/potatoModeSlice'
 import styles from '@/styles/index.module.scss'
 import { NotificationType } from '@/types/Toast'
 
-export default function ResetAlert({
+export const ResetAlert = ({
   open,
   setOpen,
   resetBuild,
@@ -25,7 +25,7 @@ export default function ResetAlert({
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   resetBuild: () => void
-}) {
+}) => {
   const potatoMode = useSelector(selectPotatoMode)
   const [isLongPressing, setIsLongPressing] = useState(false)
 
@@ -65,7 +65,7 @@ export default function ResetAlert({
       // Reset the animation
       animate(x, -100, { duration: 0.2 })
     }
-  }, [isLongPressing])
+  }, [isLongPressing, x])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -232,3 +232,5 @@ export default function ResetAlert({
     </Transition.Root>
   )
 }
+
+export default ResetAlert

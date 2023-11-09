@@ -1,15 +1,16 @@
+import { Fragment, useCallback } from 'react'
+
 import { cx } from '@emotion/css'
 import Giscus from '@giscus/react'
 import { Dialog, Transition } from '@headlessui/react'
 import xIcon from '@iconify/icons-tabler/x'
 import { Icon } from '@iconify/react'
-import { Fragment, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
-import { selectMenu, setMenuShow } from '../store/appSlice'
-import { selectPotatoMode } from '../store/potatoModeSlice'
-import { useAppDispatch } from '../store/store'
-import styles from './StyledContainer.module.scss'
+import styles from '@/components/Layout/StyledContainer.module.scss'
+import { selectMenu, setMenuShow } from '@/store/appSlice'
+import { selectPotatoMode } from '@/store/potatoModeSlice'
+import { useAppDispatch } from '@/store/store'
 
 export default function SliderOverlay() {
   const dispatch = useAppDispatch()
@@ -23,7 +24,7 @@ export default function SliderOverlay() {
 
   return (
     <Transition.Root show={menu.show} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-hidden z-10" onClose={hideMenu}>
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-hidden" onClose={hideMenu}>
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
             as={Fragment}
@@ -49,7 +50,7 @@ export default function SliderOverlay() {
               <div className="pointer-events-auto w-screen max-w-md">
                 <div
                   className={cx(
-                    'flex h-full flex-col overflow-y-auto py-6 shadow-xl border-r-2 border-yellow-900',
+                    'flex h-full flex-col overflow-y-auto border-r-2 border-yellow-900 py-6 shadow-xl',
                     !potatoMode && 'backdrop-blur-md',
                     styles['smooth-shadow'],
                     styles['container-background']
@@ -57,7 +58,7 @@ export default function SliderOverlay() {
                 >
                   <div className="px-4 sm:px-6">
                     <div className="flex items-start justify-between">
-                      <Dialog.Title className="font-body text-2xl font-bold select-none pointer-events-none text-white mb-4">
+                      <Dialog.Title className="pointer-events-none mb-4 select-none font-body text-2xl font-bold text-white">
                         Share your feedback!
                       </Dialog.Title>
                       <div className="ml-3 flex items-center">
