@@ -137,7 +137,13 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
               )}
             />
           ) : (
-            <Image width={60} height={60} src="/icons/champion-square.svg" alt={champion.name} unoptimized />
+            <Image
+              loader={CustomLoader}
+              width={60}
+              height={60}
+              src="data/league-builds/icons/champion-square.svg"
+              alt={champion.name}
+            />
           )}
         </div>
         <p

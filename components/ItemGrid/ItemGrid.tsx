@@ -388,7 +388,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
               animate="center"
               exit="exit"
               transition={transitionVariant}
-              src="icons/poro_question.webp"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/poro_question.webp"
               alt="Poro question mark"
               className="mx-auto h-32 w-32 brightness-200"
             />

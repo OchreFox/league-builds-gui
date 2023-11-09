@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { cx } from '@emotion/css'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 import _ from 'lodash'
-import poroSleeping from 'public/icons/poro_sleeping.webp'
 import { useSelector } from 'react-redux'
 
 import { easeOutExpo } from '@/components/ItemBuild/BuildMakerComponents'
@@ -20,6 +19,7 @@ import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { ItemBuildTreeProps, Rarity } from '@/types/FilterProps'
 import { ItemsSchema } from '@/types/Items'
+import CustomLoader from '@/utils/CustomLoader'
 import { getRarity } from '@/utils/ItemRarity'
 import { easeInOutExpo } from '@/utils/Transition'
 
@@ -230,12 +230,12 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
     return (
       <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
         <Image
-          src={poroSleeping}
+          loader={CustomLoader}
+          src="data/league-builds/icons/poro_sleeping.webp"
           alt="Poro sleeping"
           width={128}
           height={128}
           className="mx-auto h-16 w-auto opacity-75 md:h-32"
-          unoptimized
         />
         <p className="italic text-gray-500">Select an item to see its build path tree</p>
       </div>

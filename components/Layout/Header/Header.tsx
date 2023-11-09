@@ -167,7 +167,7 @@ const Header = () => {
         >
           {!potatoMode && (
             <video
-              src="/effects/vfx-vertical-magic-loop.webm"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/effects/vfx-vertical-magic-loop.webm"
               loop
               autoPlay
               muted

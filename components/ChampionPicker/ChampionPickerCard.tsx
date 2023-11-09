@@ -165,7 +165,7 @@ const ChampionPickerCard = () => {
               loop
               muted
               playsInline
-              src="/effects/loop-magic-vertical.webm"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/effects/loop-magic-vertical.webm"
             />
             {size.width > 0 && size.height > 0 && <RiotMagicParticles width={size.width} height={size.height} />}
           </motion.div>

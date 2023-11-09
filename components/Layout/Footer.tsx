@@ -8,6 +8,7 @@ import Logo from 'public/ochrefox-logo-white.svg'
 import { useSelector } from 'react-redux'
 
 import { selectPotatoMode } from '@/store/potatoModeSlice'
+import CustomLoader from '@/utils/CustomLoader'
 
 const FooterSection = ({
   title,
@@ -42,7 +43,14 @@ export default function Footer() {
         href="https://ochrefox.net"
         className="flex shrink-0 items-center justify-center md:justify-start"
       >
-        <Image className="mx-2 rounded-full" src={logoIcon} alt="OchreFox" width={30} height={30} unoptimized />
+        <Image
+          loader={CustomLoader}
+          className="mx-2 rounded-full"
+          src="data/league-builds/img/icon.png"
+          alt="OchreFox"
+          width={30}
+          height={30}
+        />
         <Logo alt="Logo" className="mr-2 mt-1 h-full w-24" />
       </a>
 

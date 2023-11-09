@@ -29,7 +29,7 @@ export const ChampionSelectorSearch = ({
         'absolute bottom-0 -ml-4 flex h-full w-full select-none items-center justify-center overflow-hidden text-center font-sans text-xl font-medium text-gray-200',
         css`
           background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 1) 100%),
-            url('/background-default.webp');
+            url('https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/img/background-default.webp');
           background-size: cover;
         `
       )}

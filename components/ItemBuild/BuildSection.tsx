@@ -287,7 +287,7 @@ export const BuildSection = ({ id }: { id: string }) => {
               autoPlay
               muted
               playsInline
-              src="/effects/summoner-object-magic-action-blue-intro.webm"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/effects/summoner-object-magic-action-blue-intro.webm"
             />
           </motion.div>
         )}
@@ -305,7 +305,7 @@ export const BuildSection = ({ id }: { id: string }) => {
                 loop
                 muted
                 playsInline
-                src="/effects/loop-magic-vertical.webm"
+                src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/effects/loop-magic-vertical.webm"
               />
               <RiotMagicParticles width={size.width} height={size.height} />
             </>

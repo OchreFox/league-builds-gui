@@ -72,7 +72,9 @@ const RiotMagicParticles = ({ width = 150, height = 150 }: { width: number; heig
     >
       <Container>
         <RiotMagicEmitter
-          images={['/effects/particle.png']}
+          images={[
+            'https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/effects/particle.png',
+          ]}
           config={{
             ...riotMagicEmitterConfig,
             pos: {

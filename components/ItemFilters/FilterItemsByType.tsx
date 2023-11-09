@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 import React, { Fragment, useCallback } from 'react'
 
 import { css, cx } from '@emotion/css'
@@ -131,14 +129,7 @@ export default function FilterItemsByType() {
                           )}
                           onClick={() => handleClick(itemType)}
                         >
-                          <Image
-                            alt={item.name}
-                            className={getImageClassnames(itemType)}
-                            src={item.icon}
-                            width={16}
-                            height={16}
-                            unoptimized
-                          />
+                          <img alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
                           <span className="ml-2">{item.name}</span>
                         </button>
                       </Menu.Item>
@@ -174,14 +165,7 @@ export default function FilterItemsByType() {
                   handleClick(itemType)
                 }}
               >
-                <Image
-                  alt={item.name}
-                  className={getImageClassnames(itemType)}
-                  src={item.icon}
-                  width={16}
-                  height={16}
-                  unoptimized
-                />
+                <img alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
                 <span className="z-10 m-0 hidden md:ml-2 md:inline-block">{item.name}</span>
               </motion.button>
             </React.Fragment>

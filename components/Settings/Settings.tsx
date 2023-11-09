@@ -279,7 +279,7 @@ const Settings = () => {
         <div className="flex items-center space-x-4">
           <button type="button" onClick={() => toggleMap(11)} className="relative h-8 w-8 select-none">
             <motion.img
-              src="icons/sr-selected.webp"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/sr-selected.webp"
               alt="sr-selected"
               className="absolute h-8 w-8"
               initial={{ opacity: 0 }}
@@ -289,7 +289,7 @@ const Settings = () => {
               transition={easeInOutExpo}
             />
             <motion.img
-              src="icons/sr-inactive.webp"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/sr-inactive.webp"
               alt="sr-inactive"
               className="absolute h-8 w-8"
               initial={{ opacity: 1 }}
@@ -299,11 +299,15 @@ const Settings = () => {
               }}
               transition={easeInOutExpo}
             />
-            <Image src="icons/sr-hover.webp" alt="sr-hover" className="h-8 w-8" width={32} height={32} unoptimized />
+            <img
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/sr-hover.webp"
+              alt="sr-hover"
+              className="h-8 w-8"
+            />
           </button>
           <button type="button" onClick={() => toggleMap(12)} className="relative h-8 w-8 select-none">
             <motion.img
-              src="icons/aram-selected.webp"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/aram-selected.webp"
               alt="sr-selected"
               className="absolute h-8 w-8"
               initial={{ opacity: 0 }}
@@ -313,7 +317,7 @@ const Settings = () => {
               transition={easeInOutExpo}
             />
             <motion.img
-              src="icons/aram-inactive.webp"
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/aram-inactive.webp"
               alt="sr-inactive"
               className="absolute h-8 w-8"
               initial={{ opacity: 1 }}
@@ -323,7 +327,13 @@ const Settings = () => {
               }}
               transition={easeInOutExpo}
             />
-            <Image src="icons/aram-hover.webp" alt="sr-hover" className="h-8 w-8" width={32} height={32} unoptimized />
+            <img
+              src="https://cdn.jsdelivr.net/gh/OchreFox/league-custom-ddragon@main/data/league-builds/icons/aram-hover.webp"
+              alt="sr-hover"
+              className="h-8 w-8"
+              width={32}
+              height={32}
+            />
           </button>
           <p className="ml-3 text-sm font-medium text-gray-200">Associated Maps</p>
         </div>
