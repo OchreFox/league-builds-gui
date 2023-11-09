@@ -43,7 +43,7 @@ export const Stats = ({ children }: any) => {
   )
 }
 export const StatIcon = ({ src, alt }: { src: any; alt: string }) => {
-  return <Image className="mr-1 inline-flex h-3 w-3" src={src} alt={alt} width={12} height={12} />
+  return <Image className="mr-1 inline-flex h-3 w-3" src={src} alt={alt} width={12} height={12} unoptimized />
 }
 export const Stat = ({ children = [], name }: any) => {
   const stat =

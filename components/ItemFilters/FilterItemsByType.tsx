@@ -139,7 +139,14 @@ export default function FilterItemsByType() {
                             }
                           }}
                         >
-                          <Image alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
+                          <Image
+                            alt={item.name}
+                            className={getImageClassnames(itemType)}
+                            src={item.icon}
+                            width={16}
+                            height={16}
+                            unoptimized
+                          />
                           <span className="ml-2">{item.name}</span>
                         </div>
                       </Menu.Item>
@@ -175,7 +182,14 @@ export default function FilterItemsByType() {
                   handleClick(itemType)
                 }}
               >
-                <img alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
+                <Image
+                  alt={item.name}
+                  className={getImageClassnames(itemType)}
+                  src={item.icon}
+                  width={16}
+                  height={16}
+                  unoptimized
+                />
                 <span className="z-10 m-0 hidden md:ml-2 md:inline-block">{item.name}</span>
               </motion.button>
             </React.Fragment>

@@ -229,7 +229,14 @@ export const BuildTreeContainer = ({ itemRefArray, itemGridRef }: ItemBuildTreeP
   } else {
     return (
       <div className="flex h-full w-full animate-pulse flex-col items-center justify-center text-center">
-        <Image src={poroSleeping} alt="Poro sleeping" className="mx-auto h-16 w-auto opacity-75 md:h-32" />
+        <Image
+          src={poroSleeping}
+          alt="Poro sleeping"
+          width={128}
+          height={128}
+          className="mx-auto h-16 w-auto opacity-75 md:h-32"
+          unoptimized
+        />
         <p className="italic text-gray-500">Select an item to see its build path tree</p>
       </div>
     )

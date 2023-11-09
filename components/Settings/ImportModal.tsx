@@ -22,7 +22,7 @@ import { RiotItemBuild } from 'types/Build'
 import { NotificationType } from 'types/Toast'
 
 import styles from '@/components/Settings/ImportModal.module.scss'
-import { Hint, InlineSeparator, Separator, Tip, Warning } from '@/components/Settings/ModalComponents'
+import { InlineSeparator, Separator, Warning } from '@/components/Settings/ModalComponents'
 import { ToastBody } from '@/components/Settings/NotificationToast'
 import { useChampions } from '@/hooks/useChampions'
 import { setSelectedChampions } from '@/store/appSlice'

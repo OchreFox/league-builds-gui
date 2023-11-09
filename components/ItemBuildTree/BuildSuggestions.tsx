@@ -69,20 +69,19 @@ export const BuildSuggestions = ({
   return (
     <>
       <p className={cx('mt-4 text-sm text-gray-400', delta === 0 && 'mb-4')}>
-        Builds into
+        Builds into{' '}
         <b className="text-gray-200">
-          {' '}
           {filteredItemBuilds.length} {getPluralFromItems(filteredItemBuilds)}
         </b>
       </p>
       {delta > 0 && (
-        <p
+        <button
           className="mb-4 cursor-pointer text-xs italic text-cyan-400 hover:underline"
           onClick={() => dispatch(setItemFiltersClass(ChampionClass.None))}
         >
           <b className="text-cyan-200"> {delta} </b>
           <span>more {getPluralFromItems(delta)} hidden by champion class filters</span>
-        </p>
+        </button>
       )}
       <motion.div className="grid grid-cols-5 gap-2" initial="initial" animate="animate" variants={itemVariants}>
         {filteredItemBuilds.map((item, index) => {

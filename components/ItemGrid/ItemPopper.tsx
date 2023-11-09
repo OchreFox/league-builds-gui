@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 import React, { useCallback, useMemo } from 'react'
 
 import { cx } from '@emotion/css'
@@ -8,8 +6,6 @@ import { motion } from 'framer-motion'
 import GoldIcon from 'public/icons/gold.svg'
 import JsxParser from 'react-jsx-parser'
 import { ItemsSchema } from 'types/Items'
-
-import { getRarity } from 'utils/ItemRarity'
 
 import {
   Active,
@@ -31,18 +27,14 @@ import {
   Stats,
   Status,
   TrueDamage,
-} from './ItemComponents'
-import { itemSectionConstants } from './ItemGridComponents'
-import { ItemIcon } from './ItemIcon'
-import popperStyles from './ItemPopper.module.scss'
+} from '@/components/ItemGrid/ItemComponents'
+import { itemSectionConstants } from '@/components/ItemGrid/ItemGridComponents'
+import { ItemIcon } from '@/components/ItemGrid/ItemIcon'
+import popperStyles from '@/components/ItemGrid/ItemPopper.module.scss'
 
-export function ItemPopper({
-  popperRef,
-  styles,
-  attributes,
-  setArrowRef,
-  item,
-}: {
+import { getRarity } from 'utils/ItemRarity'
+
+type ItemPopperProps = {
   popperRef: React.MutableRefObject<null>
   styles: {
     [key: string]: React.CSSProperties
@@ -56,7 +48,9 @@ export function ItemPopper({
   }
   setArrowRef: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
   item: ItemsSchema
-}): JSX.Element {
+}
+
+export const ItemPopper = ({ popperRef, styles, attributes, setArrowRef, item }: ItemPopperProps) => {
   const rarity = useMemo(() => getRarity(item), [item])
 
   const renderError = useCallback(
@@ -138,3 +132,5 @@ export function ItemPopper({
     </motion.div>
   )
 }
+
+export default ItemPopper

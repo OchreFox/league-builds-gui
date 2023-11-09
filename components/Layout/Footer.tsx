@@ -42,7 +42,7 @@ export default function Footer() {
         href="https://ochrefox.net"
         className="flex shrink-0 items-center justify-center md:justify-start"
       >
-        <Image className="mx-2 rounded-full" src={logoIcon} alt="OchreFox" width={30} height={30} />
+        <Image className="mx-2 rounded-full" src={logoIcon} alt="OchreFox" width={30} height={30} unoptimized />
         <Logo alt="Logo" className="mr-2 mt-1 h-full w-24" />
       </a>
 

@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -298,7 +299,7 @@ const Settings = () => {
               }}
               transition={easeInOutExpo}
             />
-            <img src="icons/sr-hover.webp" alt="sr-hover" className="h-8 w-8" />
+            <Image src="icons/sr-hover.webp" alt="sr-hover" className="h-8 w-8" width={32} height={32} unoptimized />
           </button>
           <button type="button" onClick={() => toggleMap(12)} className="relative h-8 w-8 select-none">
             <motion.img
@@ -322,7 +323,7 @@ const Settings = () => {
               }}
               transition={easeInOutExpo}
             />
-            <img src="icons/aram-hover.webp" alt="sr-hover" className="h-8 w-8" />
+            <Image src="icons/aram-hover.webp" alt="sr-hover" className="h-8 w-8" width={32} height={32} unoptimized />
           </button>
           <p className="ml-3 text-sm font-medium text-gray-200">Associated Maps</p>
         </div>
