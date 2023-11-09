@@ -1,16 +1,17 @@
 import Image from 'next/image'
 
-import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
-import { css, cx } from '@emotion/css'
 import { RefObject } from 'react'
+
+import { css, cx } from '@emotion/css'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
 
-import CustomLoader from 'utils/CustomLoader'
+import { BuildTreeItems } from '@/components/ItemBuildTree/BuidTreeItems'
+import { getItemBuildTree } from '@/components/ItemBuildTree/BuildTreeComponents'
+import { setItemPickerDraggedItem, setItemPickerSelectedItem } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 
-import { BuildTreeItems } from './BuidTreeItems'
-import { getItemBuildTree, scrollIntoItem } from './BuildTreeComponents'
+import CustomLoader from 'utils/CustomLoader'
 
 export const BuildTreeItem = ({
   item,
@@ -53,7 +54,7 @@ export const BuildTreeItem = ({
       >
         <button
           className={cx(
-            'relative before:transition-colors before:duration-200 before:ease-in-out before:bg-transparent before:hover:bg-white/25',
+            'relative before:bg-transparent before:transition-colors before:duration-200 before:ease-in-out before:hover:bg-white/25',
             css`
               &:hover {
                 &:before {

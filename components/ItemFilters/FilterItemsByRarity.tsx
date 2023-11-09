@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import circleDashed from '@iconify/icons-tabler/circle-dashed'
 import diamondIcon from '@iconify/icons-tabler/diamond'
 import squareRotated from '@iconify/icons-tabler/square-rotated'
@@ -11,11 +11,9 @@ import AllClasses from 'public/icons/champion-class/all-classes.svg'
 import { useSelector } from 'react-redux'
 import { Rarity } from 'types/FilterProps'
 
+import styles from '@/components/ItemFilters/FilterRarity.module.scss'
 import { selectItemFilters, setItemFiltersRarity } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-
-import { easeOutExpo } from '../ItemBuild/BuildMakerComponents'
-import styles from './FilterRarity.module.scss'
 
 const borderVariants: Variants = {
   hidden: {
@@ -47,6 +45,7 @@ export default function FilterItemsByRarity() {
 
   const setRarity = useCallback(
     (rarity: Rarity) => {
+      console.log('setRarity', rarity)
       dispatch(setItemFiltersRarity(rarity))
     },
     [dispatch]
@@ -85,15 +84,13 @@ export default function FilterItemsByRarity() {
           <motion.button
             key={rarity + '-rarity'}
             transition={{ duration: 0.1, type: 'tween' }}
-            type="button"
             title={rarity}
             className={cx(
-              'group relative inline-flex flex-row items-center justify-center bg-transparent py-1 px-2 text-sm font-medium text-gray-600 hover:bg-cyan-900',
+              'group relative inline-flex flex-row items-center justify-center bg-transparent px-2 py-1 text-sm font-medium text-gray-600 hover:bg-cyan-900',
               itemFilters.rarity === rarity ? styles.filterButtonActive : 'hover:text-white',
               rarity === Rarity.Empty && styles.all
             )}
             onClick={toggleRarity(rarity)}
-            tabIndex={-1}
           >
             {itemFilters.rarity === rarity ? (
               <motion.div

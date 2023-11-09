@@ -32,7 +32,7 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
 
   const containerRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
-  const fallbackTitleRef = useRef<HTMLParagraphElement>(null)
+  const fallbackTitleRef = useRef<HTMLButtonElement>(null)
 
   const titleStyle = useMemo(() => {
     if (titleRef.current) {
@@ -106,7 +106,7 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
           />
         </>
       ) : (
-        <motion.p
+        <motion.button
           ref={fallbackTitleRef}
           variants={titleVariants}
           initial="enter"
@@ -127,7 +127,7 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
             <b>{rarity}</b>
           </span>{' '}
           {getPluralFromItems(itemCount)} hidden.
-        </motion.p>
+        </motion.button>
       )}
     </div>
   )

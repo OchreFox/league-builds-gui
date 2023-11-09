@@ -15,7 +15,8 @@ const SortByGold = ({
   setDirection: React.Dispatch<React.SetStateAction<SortDirection>>
 }) => {
   return (
-    <div
+    <button
+      type="button"
       className={cx(
         'flex h-8 items-center justify-center rounded-md bg-cyan-900 px-2  py-1 text-white transition-colors duration-200 ease-out motion-reduce:transition-none',
         direction === SortDirection.Asc ? 'hover:bg-brand-default' : 'hover:bg-brand-dark'
@@ -32,7 +33,7 @@ const SortByGold = ({
       ) : (
         <Icon icon={arrowNarrowDown} width="24px" className="-mr-1" />
       )}
-    </div>
+    </button>
   )
 }
 

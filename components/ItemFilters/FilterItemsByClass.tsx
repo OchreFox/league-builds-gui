@@ -1,12 +1,13 @@
-import { selectItemFilters, setItemFiltersClass } from '@/store/appSlice'
-import { useAppDispatch } from '@/store/store'
+import React from 'react'
+
 import { css, cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { ChampionClass } from 'types/Items'
 
-import { ClassFilters } from './FilterComponents'
+import { ClassFilters } from '@/components/ItemFilters/FilterComponents'
+import { selectItemFilters, setItemFiltersClass } from '@/store/appSlice'
+import { useAppDispatch } from '@/store/store'
 
 export default function FilterItemsByClass() {
   const dispatch = useAppDispatch()
@@ -27,7 +28,7 @@ export default function FilterItemsByClass() {
           title="Filter items by class"
           id="filterItems"
           name="filterItems"
-          className="block w-full rounded-md border-gray-300 py-1 px-2 focus:border-indigo-500 focus:ring-indigo-500"
+          className="block w-full rounded-md border-gray-300 px-2 py-1 focus:border-indigo-500 focus:ring-indigo-500"
           defaultValue={itemFilters.class}
           onChange={(e) => {
             dispatch(setItemFiltersClass(e.target.value as ChampionClass))
@@ -53,7 +54,7 @@ export default function FilterItemsByClass() {
                   type="button"
                   title={item.name}
                   className={cx(
-                    'group relative inline-flex flex-col items-center justify-center py-2 px-1 text-sm font-medium',
+                    'group relative inline-flex flex-col items-center justify-center px-1 py-2 text-sm font-medium',
                     itemFilters.class === championClass &&
                       css`
                         &::before {

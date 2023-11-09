@@ -6,12 +6,12 @@ import infoCircle from '@iconify/icons-tabler/info-circle'
 import questionCircle from '@iconify/icons-tabler/question-circle'
 import { Icon } from '@iconify/react'
 
-import styles from './ImportModal.module.scss'
+// import styles from '@/components/Settings/ImportModal.module.scss'
 
 export const Warning = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="relative mb-4 flex flex-col overflow-hidden rounded-md bg-rose-900 py-2 px-4">
-      <h3 className="absolute top-0 left-0 right-0 z-0 flex bg-brand-dark py-2 px-4 font-body text-xl font-bold text-white">
+    <div className="relative mb-4 flex flex-col overflow-hidden rounded-md bg-rose-900 px-4 py-2">
+      <h3 className="absolute left-0 right-0 top-0 z-0 flex bg-brand-dark px-4 py-2 font-body text-xl font-bold text-white">
         <Icon icon={alertTriangle} className="mr-1 h-6 w-6" />
         Warning
       </h3>

@@ -32,15 +32,15 @@ export default function FilterItemsByType() {
       if (itemType === ItemType.All) {
         itemClassnames = 'bg-brand-default font-bold text-white'
       } else {
-        itemClassnames = 'bg-slate-600 text-white'
+        itemClassnames = 'bg-league-goldDarker text-white'
       }
     } else {
       // Unpressed button
       itemClassnames = cx(
-        'bg-transparent text-gray-600 hover:text-black group',
+        'bg-transparent text-gray-600 hover:text-gray-300 group',
         potatoMode
-          ? 'hover:bg-cyan-900 '
-          : 'after:absolute after:w-0 after:h-full after:left-0 after:top-0 after:transition-all after:duration-300 after:hover:bg-cyan-900 after:hover:w-full after:rounded-md'
+          ? 'hover:bg-slate-700'
+          : 'after:absolute after:w-0 after:h-full after:left-0 after:top-0 after:transition-all after:duration-300 after:hover:bg-slate-700 after:hover:w-full after:rounded-md'
       )
     }
     // Base button
@@ -72,9 +72,7 @@ export default function FilterItemsByType() {
   }
 
   const handleClick = (itemType: ItemType) => {
-    if (itemType === ItemType.All) {
-      dispatch(resetItemFiltersTypes())
-    } else if (itemFilters.types.length === 1 && isActive(itemType)) {
+    if (itemType === ItemType.All || (itemFilters.types.length === 1 && isActive(itemType))) {
       dispatch(resetItemFiltersTypes())
     } else {
       batch(() => {
@@ -126,18 +124,12 @@ export default function FilterItemsByType() {
                         item.name === 'Ability Haste' ||
                         item.name === 'Trinket') && <div className="border-t-2 border-yellow-900" />}
                       <Menu.Item>
-                        <div
+                        <button
                           className={cx(
                             isActive(itemType) ? 'bg-slate-600 text-white' : 'bg-slate-800 text-gray-400',
                             'group flex items-center px-4 py-2 text-sm'
                           )}
-                          tabIndex={0}
                           onClick={() => handleClick(itemType)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              handleClick(itemType)
-                            }
-                          }}
                         >
                           <Image
                             alt={item.name}
@@ -148,7 +140,7 @@ export default function FilterItemsByType() {
                             unoptimized
                           />
                           <span className="ml-2">{item.name}</span>
-                        </div>
+                        </button>
                       </Menu.Item>
                     </Fragment>
                   )
