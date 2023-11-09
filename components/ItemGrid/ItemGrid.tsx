@@ -273,12 +273,26 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
     }
   }, [items, goldOrderDirection, itemFilters, dataInitialized, initializeItems, reduceItems])
 
+  // Handle scroll show if the item grid requires a scroll bar
+  const handleScrollShow = useCallback(
+    (e: any) => {
+      const div = e.target as HTMLDivElement
+      const hasVerticalScrollbar = totalHeight > div.clientHeight
+      if (hasVerticalScrollbar) {
+        setShowScrollToBottom(true)
+      } else {
+        setShowScrollToBottom(false)
+      }
+    },
+    [totalHeight]
+  )
+
   // Listen for changes in itemPicker
   useEffect(() => {
     if (itemPicker) {
       handleScrollShow({ target: itemGridRef.current })
     }
-  }, [itemPicker.containers])
+  }, [handleScrollShow, itemGridRef, itemPicker, itemPicker.containers])
 
   // Listen for changes in selected item and scroll to it
   useEffect(() => {
@@ -298,7 +312,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
 
       setShouldScrollToItem(true)
     }
-  }, [itemPicker.selectedItem])
+  }, [dispatch, itemFilters.class, itemFilters.rarity, itemPicker.selectedItem])
 
   // Scroll to item
   useEffect(() => {
@@ -308,7 +322,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
       scrollIntoItem(selectedItem, itemRefArray, itemGridRef)
       setShouldScrollToItem(false)
     }
-  }, [shouldScrollToItem])
+  }, [itemGridRef, itemPicker.selectedItem, itemRefArray, shouldScrollToItem])
 
   // Handle scroll to bottom
   const handleScroll = (e: any) => {
@@ -318,17 +332,6 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
       setScrollToBottom(true)
     } else {
       setScrollToBottom(false)
-    }
-  }
-
-  // Handle scroll show if the item grid requires a scroll bar
-  const handleScrollShow = (e: any) => {
-    const div = e.target as HTMLDivElement
-    const hasVerticalScrollbar = totalHeight > div.clientHeight
-    if (hasVerticalScrollbar) {
-      setShowScrollToBottom(true)
-    } else {
-      setShowScrollToBottom(false)
     }
   }
 

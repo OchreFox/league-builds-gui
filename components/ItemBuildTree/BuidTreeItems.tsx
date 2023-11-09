@@ -3,6 +3,8 @@ import { RefObject } from 'react'
 import { cx } from '@emotion/css'
 import { ItemRefArrayType } from 'types/FilterProps'
 import { ItemsSchema } from 'types/Items'
+//uuid
+import { v4 as uuidv4 } from 'uuid'
 
 import { dynamicListItemStyles, dynamicUnorderedListStyles } from '@/components/ItemBuildTree/BuildTreeComponents'
 import { BuildTreeItem } from '@/components/ItemBuildTree/BuildTreeItem'
@@ -45,9 +47,10 @@ export const BuildTreeItems = ({
         if (item.depth && item.depth > depth) {
           return null
         }
+        const uuid = uuidv4()
         return (
           <li
-            key={item.id + '-build-tree'}
+            key={`${item.id}-${uuid}-build-tree`}
             className={cx(
               'relative flex flex-row items-center justify-center space-x-6 drop-shadow before:bg-yellow-700 after:bg-yellow-700',
               dynamicListItemStyles({

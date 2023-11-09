@@ -119,7 +119,7 @@ export const BuildSection = ({ id }: { id: string }) => {
 
   const closePopup = useCallback(() => {
     dispatch(setBuildDeletePopup(null))
-  }, [])
+  }, [dispatch])
 
   const handleDragStart = ({ active }: DragStartEvent) => {
     setActiveId(active.id)
@@ -172,7 +172,7 @@ export const BuildSection = ({ id }: { id: string }) => {
       }
       setBlock(block)
     }
-  }, [blocks])
+  }, [blocks, dispatch, id])
 
   return (
     <motion.div

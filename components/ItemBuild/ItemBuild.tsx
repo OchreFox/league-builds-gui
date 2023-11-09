@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import { BuildContainer } from 'components/ItemBuild/BuildContainer'
 import LinearProgress from 'components/basic/LinearProgress'
 import { batch, useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
+import ChampionPickerCard from '@/components/ChampionPicker/ChampionPickerCard'
+import { getChampionSplash } from '@/components/ItemBuild/BuildMakerComponents'
 import { useChampions } from '@/hooks/useChampions'
 import {
   selectChampionPicker,
@@ -17,9 +19,6 @@ import {
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 
-import ChampionPickerCard from '../ChampionPicker/ChampionPickerCard.1'
-import { getChampionSplash } from './BuildMakerComponents'
-
 export const ItemBuild = () => {
   const dispatch = useAppDispatch()
   const { championsData } = useChampions()
@@ -27,15 +26,18 @@ export const ItemBuild = () => {
   const championPicker = useSelector(selectChampionPicker)
   const { draggedItem } = useSelector(selectItemPicker)
 
-  const fetchChampionSplash = async (champion: ChampionsSchema) => {
-    dispatch(setChampionPickerIsLoading(true))
-    const response = await getChampionSplash(champion.id)
-    batch(() => {
-      dispatch(updateSelectedChampion({ ...champion, ...response }))
-      dispatch(setChampionPickerHover(false))
-      dispatch(setChampionPickerIsLoading(false))
-    })
-  }
+  const fetchChampionSplash = useCallback(
+    async (champion: ChampionsSchema) => {
+      dispatch(setChampionPickerIsLoading(true))
+      const response = await getChampionSplash(champion.id)
+      batch(() => {
+        dispatch(updateSelectedChampion({ ...champion, ...response }))
+        dispatch(setChampionPickerHover(false))
+        dispatch(setChampionPickerIsLoading(false))
+      })
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     // Fetch champion splash art when the selected champion changes
@@ -48,13 +50,13 @@ export const ItemBuild = () => {
         }
       })
     }
-  }, [selectedChampions])
+  }, [championsData, fetchChampionSplash, selectedChampions])
 
   useEffect(() => {
     if (draggedItem) {
       dispatch(setChampionPickerShow(false))
     }
-  }, [draggedItem])
+  }, [dispatch, draggedItem])
 
   return (
     <>

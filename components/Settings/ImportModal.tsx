@@ -21,15 +21,14 @@ import { toast } from 'react-toastify'
 import { RiotItemBuild } from 'types/Build'
 import { NotificationType } from 'types/Toast'
 
+import styles from '@/components/Settings/ImportModal.module.scss'
+import { Hint, InlineSeparator, Separator, Tip, Warning } from '@/components/Settings/ModalComponents'
+import { ToastBody } from '@/components/Settings/NotificationToast'
 import { useChampions } from '@/hooks/useChampions'
 import { setSelectedChampions } from '@/store/appSlice'
 import { setRiotItemBuild } from '@/store/itemBuildSlice'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
-
-import styles from './ImportModal.module.scss'
-import { Hint, InlineSeparator, Separator, Tip, Warning } from './ModalComponents'
-import { ToastBody } from './NotificationToast'
 
 const baseStyle =
   'border-2 border-dashed border-gray-400 text-gray-400 rounded-md p-4 flex flex-col items-center justify-center space-y-2 transition-colors duration-150 ease-in-out bg-black/40'
@@ -87,58 +86,64 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
 
   const watchBuild = watch('build')
 
-  function setBuild(itemBuild: RiotItemBuild) {
-    if (championsData) {
-      const selectedChampions = Object.values(championsData).filter((champion) =>
-        itemBuild.associatedChampions.includes(champion.id)
-      )
-      batch(() => {
-        dispatch(setSelectedChampions(selectedChampions))
-        dispatch(setRiotItemBuild(itemBuild))
-      })
+  const setBuild = useCallback(
+    (itemBuild: RiotItemBuild) => {
+      if (championsData) {
+        const selectedChampions = Object.values(championsData).filter((champion) =>
+          itemBuild.associatedChampions.includes(champion.id)
+        )
+        batch(() => {
+          dispatch(setSelectedChampions(selectedChampions))
+          dispatch(setRiotItemBuild(itemBuild))
+        })
 
-      toast(
-        <ToastBody
-          title="Build imported!"
-          message="The build has been imported successfully."
-          type={NotificationType.Success}
-          icon={circleCheck}
-        />
-      )
-    } else {
-      console.warn('Champions data not loaded yet.')
-      toast(
-        <ToastBody
-          title="Champions data not loaded yet"
-          message="The champions data is not loaded yet. Please try again later."
-          type={NotificationType.Error}
-          icon={circleX}
-        />
-      )
-    }
+        toast(
+          <ToastBody
+            title="Build imported!"
+            message="The build has been imported successfully."
+            type={NotificationType.Success}
+            icon={circleCheck}
+          />
+        )
+      } else {
+        console.warn('Champions data not loaded yet.')
+        toast(
+          <ToastBody
+            title="Champions data not loaded yet"
+            message="The champions data is not loaded yet. Please try again later."
+            type={NotificationType.Error}
+            icon={circleX}
+          />
+        )
+      }
 
-    setOpen(false)
-  }
+      setOpen(false)
+    },
+    [championsData, dispatch, setOpen]
+  )
 
-  const validateBuild = (itemBuild: RiotItemBuild) => {
-    const ajv = new Ajv()
-    const validate = ajv.compile(itemBuildSchema)
-    const valid = validate(itemBuild)
-    if (valid) {
-      setItemBuild(itemBuild)
-      resetField('build')
-    } else {
-      console.warn('Invalid json file.')
-      toast(
-        <ToastBody
-          title="Invalid JSON file"
-          message="The file you are trying to import is not valid or is not a build."
-          type={NotificationType.Error}
-          icon={circleX}
-        />
-      )
-    }
-  }
+  const validateBuild = useCallback(
+    (itemBuild: RiotItemBuild) => {
+      const ajv = new Ajv()
+      const validate = ajv.compile(itemBuildSchema)
+      const valid = validate(itemBuild)
+      if (valid) {
+        setItemBuild(itemBuild)
+        resetField('build')
+      } else {
+        console.warn('Invalid json file.')
+        toast(
+          <ToastBody
+            title="Invalid JSON file"
+            message="The file you are trying to import is not valid or is not a build."
+            type={NotificationType.Error}
+            icon={circleX}
+          />
+        )
+      }
+    },
+    [resetField]
+  )
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     try {
@@ -159,23 +164,26 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
 
   const onCloseToast = useCallback(() => {
     setOpen(false)
-  }, [])
+  }, [setOpen])
 
   const onFileDialogCancel = useCallback(() => {
     toast(<ToastBody title="Import cancelled" type={NotificationType.Info} icon={circleX} />)
   }, [])
 
-  const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
-    // Handle json file
-    if (acceptedFiles.length > 0) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const json = JSON.parse(reader.result as string)
-        validateBuild(json)
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      // Handle json file
+      if (acceptedFiles.length > 0) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const json = JSON.parse(reader.result as string)
+          validateBuild(json)
+        }
+        reader.readAsText(acceptedFiles[0])
       }
-      reader.readAsText(acceptedFiles[0])
-    }
-  }, [])
+    },
+    [validateBuild]
+  )
 
   const { getRootProps, getInputProps, isDragActive, isFocused, isDragAccept, isDragReject } = useDropzone({
     onFileDialogCancel,
@@ -200,12 +208,12 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
     if (itemBuild && championsData) {
       setBuild(itemBuild)
     }
-  }, [itemBuild, championsData])
+  }, [itemBuild, championsData, setBuild])
 
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed inset-0 z-10 overflow-y-auto" open={open} onClose={onCloseToast}>
-        <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out-expo duration-300"
@@ -267,7 +275,7 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
               )}
             >
               <div className={cx(styles.modalContent, 'px-6 py-6')}>
-                <div className="absolute top-0 right-0 z-10 hidden pt-4 pr-4 sm:block">
+                <div className="absolute right-0 top-0 z-10 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
                     className="rounded-md bg-slate-800 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-light focus:ring-offset-2"
@@ -305,7 +313,7 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                     </u>{' '}
                     your current build.
                     <br />
-                    <span className=" font-light text-gray-300">
+                    <span className="font-light text-gray-300 ">
                       To safely keep your progress, click on the <b>Export Build</b> button in the settings section of
                       the site.
                     </span>
@@ -322,7 +330,7 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                 </Hint> */}
                   {/* <hr className="border-yellow-900" /> */}
                   <div className="flex w-full flex-col justify-between">
-                    <div className="space-y-2 rounded-md bg-cyan-700/25 px-4 pt-2 pb-4">
+                    <div className="space-y-2 rounded-md bg-cyan-700/25 px-4 pb-4 pt-2">
                       <h3 className="flex items-center text-lg font-semibold text-cyan-200 underline decoration-gray-500 decoration-2 underline-offset-4">
                         <Icon icon={fileCode} className="mr-1 h-5 w-5" inline={true} />
                         Load from JSON file
@@ -348,7 +356,7 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
                     {/* Paste your build */}
                     <form
                       onSubmit={handleSubmit(onSubmit)}
-                      className="flex flex-col space-y-2 rounded-md bg-teal-700/25 px-4 pt-2 pb-4"
+                      className="flex flex-col space-y-2 rounded-md bg-teal-700/25 px-4 pb-4 pt-2"
                     >
                       <h3 className="flex items-center text-lg font-semibold text-teal-200 underline decoration-gray-500 decoration-2 underline-offset-4">
                         <Icon icon={clipboardText} className="mr-1 h-5 w-5" inline={true} />

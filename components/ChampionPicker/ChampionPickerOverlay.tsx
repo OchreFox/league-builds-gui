@@ -8,13 +8,12 @@ import SimpleBar from 'simplebar-react'
 
 import ChampionTile from '@/components/ChampionPicker/ChampionTile'
 import LoadingSpinner from '@/components/basic/LoadingSpinner'
+import HorizontalWeavingSeparator from '@/components/ui/HorizontalWeavingSeparator'
 import { useChampions } from '@/hooks/useChampions'
 import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { ChampionsSchema, Tag } from '@/types/Champions'
 
 import 'simplebar-react/dist/simplebar.min.css'
-
-import HorizontalWeavingSeparator from '../ui/HorizontalWeavingSeparator'
 
 const ChampionPickerOverlay = ({
   show,

@@ -1,6 +1,5 @@
-import { setBuildItemContextMenuShow } from '@/store/appSlice'
-import { removeItemFromBlock } from '@/store/itemBuildSlice'
-import { useAppDispatch } from '@/store/store'
+import React, { useCallback } from 'react'
+
 import { cx } from '@emotion/css'
 import { Portal } from '@headlessui/react'
 import gripHorizontal from '@iconify/icons-tabler/grip-horizontal'
@@ -9,10 +8,12 @@ import plusIcon from '@iconify/icons-tabler/plus'
 import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import React, { useCallback } from 'react'
 import { batch } from 'react-redux'
 
-import styles from './BuildItemContextMenu.module.scss'
+import styles from '@/components/ItemBuild/BuildItemContextMenu.module.scss'
+import { setBuildItemContextMenuShow } from '@/store/appSlice'
+import { removeItemFromBlock } from '@/store/itemBuildSlice'
+import { useAppDispatch } from '@/store/store'
 
 export const BuildItemContextMenu = ({
   id,
@@ -32,7 +33,7 @@ export const BuildItemContextMenu = ({
       dispatch(removeItemFromBlock({ blockId, id }))
       dispatch(setBuildItemContextMenuShow(false))
     })
-  }, [blockId, id])
+  }, [blockId, dispatch, id])
 
   return (
     <Portal>

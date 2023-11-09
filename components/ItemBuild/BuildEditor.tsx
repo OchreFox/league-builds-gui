@@ -20,7 +20,6 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import appsIcon from '@iconify/icons-tabler/apps'
 import checkIcon from '@iconify/icons-tabler/check'
 import plusIcon from '@iconify/icons-tabler/plus'
 import { PrimaryButton } from 'components/basic/PrimaryButton'
@@ -77,7 +76,7 @@ const BuildEditor = () => {
   const handleClick = useCallback(() => {
     dispatch(addEmptyBlock())
     return true
-  }, [])
+  }, [dispatch])
 
   // Update an existing block
   const setBlock = (block: any, newItems: Item[]) => {
@@ -95,7 +94,7 @@ const BuildEditor = () => {
         dispatch(addBuildAnimationQueueItem({ blockId: block.id, itemId: block.items[0].id }))
       })
     },
-    [blocks]
+    [blocks.length, dispatch]
   )
 
   // Sortable
@@ -249,7 +248,7 @@ const BuildEditor = () => {
       // If no droppable is matched, return the last match
       return lastOverId.current ? [{ id: lastOverId.current }] : []
     },
-    [activeId, blockIds]
+    [activeId, blockIds, blocks]
   )
 
   return (

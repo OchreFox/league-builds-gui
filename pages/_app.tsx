@@ -111,7 +111,7 @@ function MotionConfigWrapper({ Component, pageProps, router }: AppProps) {
   // Set initial motion config
   useEffect(() => {
     setMotionConfig(potatoMode ? 'always' : 'never')
-  }, [])
+  }, [potatoMode])
 
   // Listen for changes to the state
   useEffect(() => {

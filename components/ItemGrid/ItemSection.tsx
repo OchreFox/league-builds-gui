@@ -28,7 +28,7 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
   const itemFilters = useSelector(selectItemFilters)
   const itemPicker = useSelector(selectItemPicker)
   const rarityConstants = itemSectionConstants[rarity]
-  const itemCount = useMemo(() => itemPicker.containers[rarity].count, [itemPicker.containers])
+  const itemCount = useMemo(() => itemPicker.containers[rarity].count, [itemPicker.containers, rarity])
 
   const containerRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -44,13 +44,13 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
       marginTop: '0px',
       marginBottom: '0px',
     }
-  }, [titleRef.current, fallbackTitleRef.current])
+  }, [])
 
   const setAnimation = useCallback(
     (value: boolean) => {
       dispatch(setItemPickerContainerAnimation({ animation: value, rarity: rarity }))
     },
-    [rarity]
+    [dispatch, rarity]
   )
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
       const height = Math.ceil(containerRef.current.getBoundingClientRect().height)
       dispatch(setItemPickerContainerHeight({ rarity: rarity, height: height }))
     }
-  }, [items, titleRef.current, fallbackTitleRef.current, containerRef.current])
+  }, [items, titleStyle.marginTop, titleStyle.marginBottom, dispatch, rarity])
 
   useEffect(() => {
     return () => {
@@ -82,7 +82,7 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
         dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: 0 }))
       })
     }
-  }, [])
+  }, [dispatch, rarity])
 
   return (
     <div ref={containerRef} id={'container-' + rarity.toLowerCase()}>

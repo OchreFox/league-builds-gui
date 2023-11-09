@@ -74,20 +74,18 @@ export default function FilterItemsByType() {
   const handleClick = (itemType: ItemType) => {
     if (itemType === ItemType.All) {
       dispatch(resetItemFiltersTypes())
+    } else if (itemFilters.types.length === 1 && isActive(itemType)) {
+      dispatch(resetItemFiltersTypes())
     } else {
-      if (itemFilters.types.length === 1 && isActive(itemType)) {
-        dispatch(resetItemFiltersTypes())
-      } else {
-        batch(() => {
-          dispatch(toggleItemFiltersType(itemType))
-          dispatch(
-            setItemFilterType({
-              type: ItemType.All,
-              value: false,
-            })
-          )
-        })
-      }
+      batch(() => {
+        dispatch(toggleItemFiltersType(itemType))
+        dispatch(
+          setItemFilterType({
+            type: ItemType.All,
+            value: false,
+          })
+        )
+      })
     }
   }
 
@@ -131,9 +129,15 @@ export default function FilterItemsByType() {
                         <div
                           className={cx(
                             isActive(itemType) ? 'bg-slate-600 text-white' : 'bg-slate-800 text-gray-400',
-                            'group flex items-center  px-4 py-2 text-sm'
+                            'group flex items-center px-4 py-2 text-sm'
                           )}
+                          tabIndex={0}
                           onClick={() => handleClick(itemType)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              handleClick(itemType)
+                            }
+                          }}
                         >
                           <Image alt={item.name} className={getImageClassnames(itemType)} src={item.icon} />
                           <span className="ml-2">{item.name}</span>

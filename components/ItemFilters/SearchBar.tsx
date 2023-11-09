@@ -45,11 +45,14 @@ export default function SearchBar() {
     setFuzzyResults(undefined)
   }
 
-  const setSelectedItem = useCallback((item: ItemsSchema) => {
-    dispatch(setItemPickerSelectedItem(item))
-    setIsFocused(false)
-    inputRef.current?.blur()
-  }, [])
+  const setSelectedItem = useCallback(
+    (item: ItemsSchema) => {
+      dispatch(setItemPickerSelectedItem(item))
+      setIsFocused(false)
+      inputRef.current?.blur()
+    },
+    [dispatch]
+  )
 
   const updateQuery = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.value) {
@@ -73,7 +76,7 @@ export default function SearchBar() {
       })
       setFuzzyResults(fuzzySearchResults)
     }
-  }, [items, query])
+  }, [filteredItems, items, query])
 
   return (
     <>
@@ -107,7 +110,7 @@ export default function SearchBar() {
 
         <Combobox.Options
           as={motion.ul}
-          className="absolute top-0 left-0 right-0 -z-1 grid grid-cols-2 overflow-auto border border-league-gold bg-black/50 p-1 text-base ring-1 ring-black ring-opacity-5 drop-shadow-2xl backdrop-blur-md focus:outline-none sm:text-sm md:grid-cols-3 lg:grid-cols-4"
+          className="absolute left-0 right-0 top-0 -z-1 grid grid-cols-2 overflow-auto border border-league-gold bg-black/50 p-1 text-base ring-1 ring-black ring-opacity-5 drop-shadow-2xl backdrop-blur-md focus:outline-none sm:text-sm md:grid-cols-3 lg:grid-cols-4"
           initial="closed"
           animate={isFocused ? 'open' : 'closed'}
           exit="closed"
@@ -120,12 +123,12 @@ export default function SearchBar() {
         >
           <AnimatePresence>
             {query === '' && isFocused && (
-              <div className="mr-2 flex flex-wrap items-center py-2.5 px-4 text-sm text-gray-200">
+              <div className="mr-2 flex flex-wrap items-center px-4 py-2.5 text-sm text-gray-200">
                 <p>Type to search...</p>
               </div>
             )}
             {fuzzyResults?.length === 0 && query !== '' ? (
-              <span className="mr-2 flex w-full flex-row items-center py-2.5 px-4 text-sm text-gray-200">
+              <span className="mr-2 flex w-full flex-row items-center px-4 py-2.5 text-sm text-gray-200">
                 <Icon icon={moodSad} inline={true} className="mr-1" />
                 <p>No results found</p>
               </span>
@@ -135,7 +138,7 @@ export default function SearchBar() {
                   as="button"
                   key={'result-' + result.obj.id}
                   value={result.obj}
-                  className="relative m-1 flex items-center rounded-md border border-gray-700 bg-gray-900 py-2 px-2 text-gray-200 hover:border-gray-500 hover:bg-gray-700"
+                  className="relative m-1 flex items-center rounded-md border border-gray-700 bg-gray-900 px-2 py-2 text-gray-200 hover:border-gray-500 hover:bg-gray-700"
                 >
                   <div className="mr-2 flex h-8 w-8 shrink-0 border border-black object-cover ring-1 ring-yellow-700">
                     <Image

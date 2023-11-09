@@ -35,7 +35,7 @@ export function useLongPress(
       startCallback()
       timeout.current = setTimeout(() => callback(event), duration)
     },
-    [callback, duration]
+    [callback, duration, startCallback]
   )
 
   // This function, when called, will cancel the timeout and thus end the
@@ -47,7 +47,7 @@ export function useLongPress(
       timeout.current = null
       cancelCallback()
     }
-  }, [])
+  }, [cancelCallback])
 
   return {
     onMouseDown: onPressStart,

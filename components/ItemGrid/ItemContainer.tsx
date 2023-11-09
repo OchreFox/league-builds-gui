@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { batch } from 'react-redux'
 import { ItemContainerState } from 'types/FilterProps'
 
+import { gridContainerVariants, transitionVariant } from '@/components/ItemGrid/ItemGridComponents'
+import { StandardItem } from '@/components/ItemGrid/StandardItem'
 import {
   setItemPickerContainerAnimation,
   setItemPickerContainerColumns,
@@ -11,9 +13,6 @@ import {
   setItemPickerContainerRows,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-
-import { gridContainerVariants, transitionVariant } from './ItemGridComponents'
-import { StandardItem } from './StandardItem'
 
 export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, itemGridRef }: ItemContainerState) => {
   const dispatch = useAppDispatch()
@@ -23,7 +22,7 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
     (value: boolean) => {
       dispatch(setItemPickerContainerAnimation({ animation: value, rarity: rarity }))
     },
-    [rarity]
+    [dispatch, rarity]
   )
 
   useEffect(() => {
@@ -45,7 +44,7 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
         dispatch(setItemPickerContainerColumns({ columns: columnCount, rarity: rarity }))
       })
     }
-  }, [itemsCombined])
+  }, [dispatch, itemsCombined, rarity])
 
   // On dismount, reset values to 0
   useEffect(() => {
@@ -56,7 +55,7 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
         dispatch(setItemPickerContainerColumns({ columns: 0, rarity: rarity }))
       })
     }
-  }, [])
+  }, [dispatch, rarity])
 
   return !itemsCombined || itemsCombined.length === 0 ? null : (
     <motion.ul

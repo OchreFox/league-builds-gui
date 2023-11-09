@@ -1,4 +1,16 @@
 // https://github.com/clauderic/dnd-kit/blob/33e6dd2dc954f1f2da90d8f8af995021031b6b41/stories/2%20-%20Presets/Sortable/FramerMotion.tsx
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { cx } from '@emotion/css'
+import { ItemIcon } from 'components/ItemGrid/ItemIcon'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useSelector } from 'react-redux'
+import { ItemsSchema } from 'types/Items'
+
+import styles from '@/components/ItemBuild/BuildItem.module.scss'
+import { BuildItemContextMenu } from '@/components/ItemBuild/BuildItemContextMenu'
 import {
   removeBuildAnimationQueueItem,
   selectBuild,
@@ -7,20 +19,8 @@ import {
   setItemPickerSelectedItem,
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { cx } from '@emotion/css'
-import { AnimatePresence, motion } from 'framer-motion'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { ItemsSchema } from 'types/Items'
-
-import { ItemIcon } from 'components/ItemGrid/ItemIcon'
 
 import { easeOutExpo } from 'utils/Transition'
-
-import styles from './BuildItem.module.scss'
-import { BuildItemContextMenu } from './BuildItemContextMenu'
 
 const baseStyles: React.CSSProperties = {
   position: 'relative',
@@ -75,7 +75,7 @@ const BuildItem = ({
       dispatch(setBuildItemContextMenuShow(true))
       dispatch(setBuildItemContextMenuItem(itemId))
     },
-    [itemContextMenu, setAnchorPoint]
+    [dispatch, itemId]
   )
 
   const handleAnimationComplete = useCallback(() => {
@@ -87,7 +87,7 @@ const BuildItem = ({
         })
       )
     }, 500)
-  }, [animationQueue, blockId, id])
+  }, [blockId, dispatch, id])
 
   // Add document event listener to close context menu
   useEffect(() => {
@@ -98,7 +98,7 @@ const BuildItem = ({
     return () => {
       document.removeEventListener('click', closeContextMenu)
     }
-  }, [itemContextMenu])
+  }, [dispatch, itemContextMenu])
 
   if (!item) {
     return null
