@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { ItemBuild } from 'components/ItemBuild/ItemBuild'
@@ -9,9 +9,9 @@ export default {
   parameters: {
     layout: 'fullscreen',
   },
-} as ComponentMeta<typeof ItemBuild>
+} as Meta<typeof ItemBuild>
 
-const Template: ComponentStory<typeof ItemBuild> = () => <ItemBuild />
+const Template: StoryFn<typeof ItemBuild> = () => <ItemBuild />
 
 export const Default = Template.bind({})
 Default.args = {}

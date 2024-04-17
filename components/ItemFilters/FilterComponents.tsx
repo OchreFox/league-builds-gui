@@ -102,7 +102,7 @@ export const TypeFilters: {
   [ItemType.AttackDamage]: {
     name: 'Attack Damage',
     icon: attackDamageIcon,
-    categories: [Category.AttackDamage],
+    categories: [Category.Damage],
   },
   [ItemType.CritStrike]: {
     name: 'Critical Strike',
@@ -127,7 +127,7 @@ export const TypeFilters: {
   [ItemType.AbilityPower]: {
     name: 'Ability Power',
     icon: abilityPowerIcon,
-    categories: [Category.AbilityPower],
+    categories: [Category.SpellDamage],
   },
   [ItemType.Mana]: {
     name: 'Mana & Regeneration',
@@ -152,7 +152,7 @@ export const TypeFilters: {
   [ItemType.MagicResist]: {
     name: 'Magic Resistance',
     icon: magicResistIcon,
-    categories: [Category.MagicResistance],
+    categories: [Category.SpellBlock],
   },
   [ItemType.AbilityHaste]: {
     name: 'Ability Haste',

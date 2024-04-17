@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
-import { css, cx } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
 
 import Button, { BaseButtonProps } from '@/components/basic/Button'

@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import RiotMagicParticles from '../components/ChampionPicker/RiotMagicParticles'
+import RiotMagicParticles from '@/components/ChampionPicker/RiotMagicParticles'
 
 export default {
   title: 'BuildMaker/ChampionPicker/RiotMagicParticles',
@@ -27,9 +27,9 @@ export default {
       },
     },
   },
-} as ComponentMeta<typeof RiotMagicParticles>
+} as Meta<typeof RiotMagicParticles>
 
-const Template: ComponentStory<typeof RiotMagicParticles> = (args) => <RiotMagicParticles {...args} />
+const Template: StoryFn<typeof RiotMagicParticles> = (args) => <RiotMagicParticles {...args} />
 
 export const Default = Template.bind({})
 Default.args = {}

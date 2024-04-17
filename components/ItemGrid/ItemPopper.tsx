@@ -19,7 +19,6 @@ import {
   PhysicalDamage,
   RarityGeneric,
   RarityLegendary,
-  RarityMythic,
   Rules,
   ScaleLevel,
   ScaleMana,
@@ -90,7 +89,7 @@ export const ItemPopper = ({ popperRef, styles, attributes, setArrowRef, item }:
             </motion.div>
             <p className="inline-flex items-center font-sans font-bold text-yellow-600">
               <GoldIcon className="mr-1 h-5 w-5" alt="gold" />
-              <span className="ml-1">{item.gold?.total}</span>
+              <span className="ml-1">{item.priceTotal}</span>
             </p>
           </div>
         </div>
@@ -113,7 +112,6 @@ export const ItemPopper = ({ popperRef, styles, attributes, setArrowRef, item }:
                 PhysicalDamage,
                 RarityGeneric,
                 RarityLegendary,
-                RarityMythic,
                 Rules,
                 ScaleLevel,
                 ScaleMana,

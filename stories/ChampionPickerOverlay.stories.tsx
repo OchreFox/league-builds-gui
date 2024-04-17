@@ -1,8 +1,8 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import ChampionPickerOverlay from '../components/ChampionPicker/ChampionPickerOverlay'
-import { Tag } from '../types/Champions'
+import ChampionPickerOverlay from '@/components/ChampionPicker/ChampionPickerOverlay'
+import { Tag } from '@/types/Champions'
 
 export default {
   title: 'BuildMaker/ChampionPicker/Overlay',
@@ -28,9 +28,9 @@ export default {
       },
     },
   },
-} as ComponentMeta<typeof ChampionPickerOverlay>
+} as Meta<typeof ChampionPickerOverlay>
 
-const Template: ComponentStory<typeof ChampionPickerOverlay> = (args) => <ChampionPickerOverlay {...args} />
+const Template: StoryFn<typeof ChampionPickerOverlay> = (args) => <ChampionPickerOverlay {...args} />
 
 export const Default = Template.bind({})
 Default.args = {

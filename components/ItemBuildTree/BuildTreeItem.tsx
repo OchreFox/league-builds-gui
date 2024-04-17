@@ -86,7 +86,7 @@ export const BuildTreeItem = ({
               height={50}
             />
           </div>
-          <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+          <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.priceTotal}</p>
         </button>
       </div>
       {item.from && item.from.length > 0 && (

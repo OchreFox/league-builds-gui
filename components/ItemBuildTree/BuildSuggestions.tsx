@@ -44,13 +44,13 @@ export const BuildSuggestions = ({
 }) => {
   const dispatch = useAppDispatch()
   const itemFilters = useSelector(selectItemFilters)
-  if (!items || !baseItem || !baseItem.into) {
+  if (!items || !baseItem?.to) {
     return null
   }
 
   let itemBuilds: ItemsSchema[] = []
-  baseItem.into.forEach((itemId) => {
-    const item = Object.values(items).find((x) => x.id === itemId && x.inStore && x.tier > 0)
+  baseItem.to.forEach((itemId) => {
+    const item = Object.values(items).find((x) => x.id === itemId && x.inStore)
     if (item) {
       itemBuilds.push(item)
     }

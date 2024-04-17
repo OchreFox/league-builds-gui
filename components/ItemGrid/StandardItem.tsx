@@ -205,7 +205,6 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
           e.preventDefault()
         }}
       >
-        {/* Mythic item overlay */}
         <div ref={reference}>
           <ItemIcon item={item} usePlaceholder={true} />
         </div>

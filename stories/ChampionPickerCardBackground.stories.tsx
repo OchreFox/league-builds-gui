@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import BackgroundRenderer from '../components/ChampionPicker/ChampionPickerCardBackground'
+import BackgroundRenderer from '@/components/ChampionPicker/ChampionPickerCardBackground'
 
 export default {
   title: 'BuildMaker/ChampionPicker/CardBackground',
@@ -9,8 +9,8 @@ export default {
   parameters: {
     layout: 'fullscreen',
   },
-} as ComponentMeta<typeof BackgroundRenderer>
+} as Meta<typeof BackgroundRenderer>
 
-const Template: ComponentStory<typeof BackgroundRenderer> = () => <BackgroundRenderer />
+const Template: StoryFn<typeof BackgroundRenderer> = () => <BackgroundRenderer />
 
 export const Default = Template.bind({})

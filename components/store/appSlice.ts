@@ -35,7 +35,6 @@ const initialState: AppState = {
       [Rarity.Basic]: emptyContainer,
       [Rarity.Epic]: emptyContainer,
       [Rarity.Legendary]: emptyContainer,
-      [Rarity.Mythic]: emptyContainer,
     },
   },
   menu: {

@@ -17,7 +17,7 @@ const ItemDragOverlay = ({ item }: { item: ItemsSchema }) => {
       className="relative -m-1 flex flex-col items-center rounded-md border border-green-500 bg-green-500/50 px-2 py-2 text-center shadow-md transition-colors duration-200 ease-in-out"
     >
       <ItemIcon item={item} />
-      <p className="font-sans placeholder:text-yellow-200">{item.gold?.total}</p>
+      <p className="font-sans placeholder:text-yellow-200">{item.priceTotal}</p>
     </motion.div>
   )
 }

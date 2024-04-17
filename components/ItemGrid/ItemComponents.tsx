@@ -79,14 +79,6 @@ export const RarityGeneric = ({ children }: any) => {
 export const RarityLegendary = ({ children }: any) => {
   return <span className="font-sans font-bold text-red-400">{children}</span>
 }
-export const RarityMythic = ({ children }: any) => {
-  return (
-    <>
-      <br />
-      <span className="font-sans font-bold text-orange-600">{children}</span>
-    </>
-  )
-}
 export const ScaleLevel = ({ children }: any) => {
   return <span className="font-sans font-semibold text-cyan-400">{children}</span>
 }

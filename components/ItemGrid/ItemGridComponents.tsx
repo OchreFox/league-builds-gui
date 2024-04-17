@@ -95,7 +95,7 @@ export const matchesSearchQuery = (item: ItemsSchema, searchQuery: string) => {
 }
 
 export const isInStore = (item: ItemsSchema) => {
-  return item.inStore === true && (item.maps?.includes(11) || item.maps?.includes(12)) && item.tier !== 0
+  return item.inStore === true && (item.maps?.includes(11) || item.maps?.includes(12))
 }
 
 /**
@@ -152,28 +152,6 @@ export const itemSectionConstants: {
     fallbackBackgroundColor: 'bg-red-800',
     decorationColor: 'decoration-red-800',
     textColor: 'text-red-500',
-  },
-  [Rarity.Mythic]: {
-    backgroundColor: css`
-      background: radial-gradient(rgba(168, 85, 247, 0.25), rgba(126, 34, 206, 0.25));
-      background-size: 400% 400%;
-      animation: Glow 3s ease infinite;
-
-      @keyframes Glow {
-        0% {
-          background-position: 50% 0;
-        }
-        50% {
-          background-position: 50% 100%;
-        }
-        100% {
-          background-position: 50% 0;
-        }
-      }
-    `,
-    fallbackBackgroundColor: 'bg-purple-500',
-    decorationColor: 'decoration-purple-500',
-    textColor: 'text-purple-400',
   },
 }
 

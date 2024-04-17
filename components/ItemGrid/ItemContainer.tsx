@@ -74,6 +74,3 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
     </motion.ul>
   )
 }
-ItemContainer.defaultProps = {
-  mythic: false,
-}

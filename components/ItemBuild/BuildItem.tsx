@@ -127,7 +127,7 @@ const BuildItem = ({
         onClick={handleClick}
       >
         <ItemIcon item={item} usePlaceholder={false} />
-        <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+        <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.priceTotal}</p>
       </button>
       <AnimatePresence>
         {itemContextMenu.show && itemContextMenu.item === itemId && (

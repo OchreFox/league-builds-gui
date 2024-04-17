@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import LinearProgress from '../components/basic/LinearProgress'
+import LinearProgress from '@/components/basic/LinearProgress'
 
 export default {
   title: 'Basic/LinearProgress',
@@ -15,9 +15,9 @@ export default {
       type: 'boolean',
     },
   },
-} as ComponentMeta<typeof LinearProgress>
+} as Meta<typeof LinearProgress>
 
-const Template: ComponentStory<typeof LinearProgress> = (args) => <LinearProgress {...args} />
+const Template: StoryFn<typeof LinearProgress> = (args) => <LinearProgress {...args} />
 
 export const Default = Template.bind({})
 Default.args = {

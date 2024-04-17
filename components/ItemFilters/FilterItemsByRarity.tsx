@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 
 import { cx } from '@emotion/css'
 import circleDashed from '@iconify/icons-tabler/circle-dashed'
-import diamondIcon from '@iconify/icons-tabler/diamond'
 import squareRotated from '@iconify/icons-tabler/square-rotated'
 import triangleIcon from '@iconify/icons-tabler/triangle'
 import { Icon } from '@iconify/react'
@@ -32,8 +31,6 @@ export const RarityIcon = ({ rarity }: { rarity: Rarity }) => {
       return <Icon icon={triangleIcon} className="mr-1 h-4 w-4 fill-cyan-300 stroke-cyan-500" />
     case Rarity.Legendary:
       return <Icon icon={squareRotated} className="mr-1 h-4 w-4 fill-red-500 stroke-red-700" />
-    case Rarity.Mythic:
-      return <Icon icon={diamondIcon} className="mr-1 h-4 w-4 fill-purple-500 stroke-purple-700" />
     default:
       return <AllClasses className="mr-1 h-auto w-4" />
   }

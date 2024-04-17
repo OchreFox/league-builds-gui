@@ -14,7 +14,9 @@
   }
   &.itemButtonHovered {
     @apply z-10 ring-2 ring-cyan-50;
-    box-shadow: 0 0 25px 3px rgba(250, 204, 21, 0.5), 0 0 30px 5px rgba(207, 250, 254, 0.5),
+    box-shadow:
+      0 0 25px 3px rgba(250, 204, 21, 0.5),
+      0 0 30px 5px rgba(207, 250, 254, 0.5),
       inset 0 0 0 1px rgba(161, 98, 7, 1);
     &:hover {
       @apply bg-gray-800;
@@ -91,14 +93,6 @@
       animation: pulse-out 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
     }
   }
-}
-
-.itemMythicOverlay {
-  @apply relative inline-flex shrink-0 items-center justify-center border border-yellow-700;
-  background: linear-gradient(180deg, #c89b3c 0%, #785a28 50%, #463714 100%);
-  background-size: 400% 400%;
-  animation: glow 3s ease infinite;
-  padding: 2px;
 }
 
 .itemTooltip {

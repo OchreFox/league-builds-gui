@@ -64,7 +64,7 @@ const SuggestedItem = ({
           height={50}
         />
       </div>
-      <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+      <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.priceTotal}</p>
     </motion.div>
   )
 }
