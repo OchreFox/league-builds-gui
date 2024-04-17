@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -12,7 +11,7 @@ import trashX from '@iconify/icons-tabler/trash-x'
 import uploadIcon from '@iconify/icons-tabler/upload'
 import { AnimatePresence, motion } from 'framer-motion'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { ItemNameTooltipVariants } from '@/components/ItemGrid/ItemComponents'
 import itemStyles from '@/components/ItemGrid/StandardItem.module.scss'
@@ -179,10 +178,8 @@ const Settings = () => {
   }, [])
 
   const resetBuild = useCallback(() => {
-    batch(() => {
-      dispatch(resetItemBuild())
-      dispatch(resetApp())
-    })
+    dispatch(resetItemBuild())
+    dispatch(resetApp())
     // reset input value
   }, [dispatch])
 

@@ -8,7 +8,7 @@ import circleX from '@iconify/icons-tabler/circle-x'
 import questionMark from '@iconify/icons-tabler/question-mark'
 import { Icon } from '@iconify/react'
 import { VariantLabels, motion } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import styles from '@/components/ChampionPicker/ChampionPickerCard.module.scss'
 import ChampionPickerCardBackground from '@/components/ChampionPicker/ChampionPickerCardBackground'
@@ -144,10 +144,8 @@ const ChampionPickerCard = () => {
       }}
       onMouseLeave={() => {
         setHover(false)
-        batch(() => {
-          dispatch(setChampionPickerHover(false))
-          dispatch(setChampionPickerHint(false))
-        })
+        dispatch(setChampionPickerHover(false))
+        dispatch(setChampionPickerHint(false))
       }}
     >
       <motion.div className="relative flex flex-col overflow-hidden p-4" transition={easeInOutExpo} ref={cardRef}>

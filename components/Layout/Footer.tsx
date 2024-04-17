@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { cx } from '@emotion/css'
 import { Icon } from '@iconify/react'
 import packageJson from 'package.json'
-import logoIcon from 'public/icon.png'
 import Logo from 'public/ochrefox-logo-white.svg'
 import { useSelector } from 'react-redux'
 

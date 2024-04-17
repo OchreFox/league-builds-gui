@@ -1,29 +1,38 @@
 export interface ItemsSchema {
   id: number
-  name: string
-  description: null | string
-  maps: number[]
-  gold: Gold
-  into: number[]
-  mythic: boolean
+  active: Passive[] | boolean
   categories: Category[]
-  inStore: boolean
-  maxStacks: number
+  classes: ChampionClass[]
+  depth: number | null
+  description: null | string
+  from: number[]
+  gold: Gold
   icon: string
   iconOverlay: boolean
+  iconPath?: string
+  instance: number | null
+  inStore: boolean
+  isEnchantment?: boolean
+  maps: number[]
+  maxStacks: number
+  name: string
   nicknames: string[]
-  tier: number
-  stats: Stats
-  classes: ChampionClass[]
-  from: number[]
+  parent: number | null
+  passives?: Passive[]
+  placeholder: string
+  price?: number
+  priceTotal?: number
+  rank?: Rank[]
+  requiredAlly?: string
+  requiredBuffCurrencyCost?: number
+  requiredBuffCurrencyName?: string
   requiredChampion: RequiredChampion
   simpleDescription: null | string
+  specialRecipe?: number
+  stats: Stats
+  to: number[]
+  type: string[]
   visible: boolean | null
-  instance: number | null
-  depth: number | null
-  parent: number | null
-  placeholder: string
-  type: Array<string | null>
 }
 
 export enum Category {
@@ -38,7 +47,7 @@ export enum Category {
   Consumable = 'Consumable',
   CooldownReduction = 'CooldownReduction',
   CriticalStrike = 'CriticalStrike',
-  AttackDamage = 'Damage',
+  Damage = 'Damage',
   GoldPer = 'GoldPer',
   Health = 'Health',
   HealthRegen = 'HealthRegen',
@@ -46,13 +55,14 @@ export enum Category {
   Lane = 'Lane',
   LifeSteal = 'LifeSteal',
   MagicPenetration = 'MagicPenetration',
+  MagicResist = 'MagicResist',
   Mana = 'Mana',
   ManaRegen = 'ManaRegen',
   NonbootsMovement = 'NonbootsMovement',
   OnHit = 'OnHit',
   Slow = 'Slow',
-  MagicResistance = 'SpellBlock',
-  AbilityPower = 'SpellDamage',
+  SpellBlock = 'SpellBlock',
+  SpellDamage = 'SpellDamage',
   SpellVamp = 'SpellVamp',
   Stealth = 'Stealth',
   Tenacity = 'Tenacity',
@@ -84,16 +94,33 @@ export enum RequiredChampion {
   Kalista = 'Kalista',
 }
 
+export enum Rank {
+  Basic = 'BASIC',
+  Boots = 'BOOTS',
+  Consumable = 'CONSUMABLE',
+  Distributed = 'DISTRIBUTED',
+  Epic = 'EPIC',
+  Legendary = 'LEGENDARY',
+  Minion = 'MINION',
+  Potion = 'POTION',
+  Starter = 'STARTER',
+  Trinket = 'TRINKET',
+  Turret = 'TURRET',
+}
+
+export interface Passive {
+  unique: boolean
+  name: null | string
+  effects: null | string
+  cooldown: null | string
+  range: number | null
+  stats: Stats
+}
+
 export interface Stats {
-  armor?: Flat
-  health?: Flat
-  lethality?: Flat
-  lifesteal?: Percent
-  mana?: Flat
-  movespeed?: FlatPercent
-  omnivamp?: Percent
-  tenacity?: Flat
+  abilityHaste?: Flat
   abilityPower?: Flat
+  armor?: Flat
   armorPenetration?: Percent
   attackDamage?: Flat
   attackSpeed?: Flat
@@ -101,11 +128,17 @@ export interface Stats {
   criticalStrikeChance?: Percent
   goldPer10?: Flat
   healAndShieldPower?: Flat
+  health?: Flat
   healthRegen?: FlatPercent
+  lethality?: Flat
+  lifesteal?: Percent
   magicPenetration?: FlatPercent
   magicResistance?: Flat
+  mana?: Flat
   manaRegen?: Percent
-  abilityHaste?: Flat
+  movespeed?: FlatPercent
+  omnivamp?: Percent
+  tenacity?: Flat
 }
 
 export interface Flat {

@@ -61,7 +61,7 @@ export const ItemIcon = ({
         alt={item.name ?? ''}
         placeholder={placeholder}
         blurDataURL={getPlaceholder}
-        onLoadingComplete={loadCallback}
+        onLoad={loadCallback}
         className={cx(
           !potatoMode && placeholder === 'blur' && 'blur-xl',
           !potatoMode &&

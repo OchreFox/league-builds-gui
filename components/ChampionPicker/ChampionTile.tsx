@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react'
 
 import { css, cx } from '@emotion/css'
 import { Variants, motion } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
 import styles from '@/components/ChampionPicker/ChampionPickerOverlay.module.scss'
@@ -62,15 +62,11 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
 
   const toggleChampion = (champion: ChampionsSchema) => {
     if (isActive) {
-      batch(() => {
-        dispatch(removeAssociatedChampion(champion.id))
-        dispatch(removeSelectedChampion(champion))
-      })
+      dispatch(removeAssociatedChampion(champion.id))
+      dispatch(removeSelectedChampion(champion))
     } else {
-      batch(() => {
-        dispatch(addAssociatedChampion(champion.id))
-        dispatch(addSelectedChampion(champion))
-      })
+      dispatch(addAssociatedChampion(champion.id))
+      dispatch(addSelectedChampion(champion))
     }
   }
 
@@ -118,7 +114,7 @@ const ChampionTile = ({ champion }: { champion: ChampionsSchema }) => {
               alt={champion.name}
               placeholder="blur"
               blurDataURL={blurhashDecode(champion.placeholder)}
-              onLoadingComplete={loadCallback}
+              onLoad={loadCallback}
               className={cx(
                 !potatoMode && !isLoaded && 'blur-xl',
                 !potatoMode &&

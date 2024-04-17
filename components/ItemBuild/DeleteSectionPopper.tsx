@@ -1,6 +1,5 @@
 import { setBuildDeletePopup } from '@/store/appSlice'
 import { removeBlock } from '@/store/itemBuildSlice'
-import { selectPotatoMode } from '@/store/potatoModeSlice'
 import { useAppDispatch } from '@/store/store'
 import { cx } from '@emotion/css'
 import { Portal } from '@headlessui/react'
@@ -8,12 +7,17 @@ import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { batch, useSelector } from 'react-redux'
 import { DeleteSectionPopperProps } from 'types/Build'
 
 import popperStyles from 'components/ItemGrid/ItemPopper.module.scss'
 
-export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attributes }: DeleteSectionPopperProps) {
+export function DeleteSectionPopper({
+  popperRef,
+  id,
+  setArrowRef,
+  styles,
+  attributes,
+}: Readonly<DeleteSectionPopperProps>) {
   const dispatch = useAppDispatch()
   return (
     <Portal>
@@ -58,10 +62,8 @@ export function DeleteSectionPopper({ popperRef, id, setArrowRef, styles, attrib
             <button
               className="flex grow items-center justify-center rounded-md bg-brand-dark px-2 py-1 transition-colors duration-200 ease-out hover:bg-red-800"
               onClick={() => {
-                batch(() => {
-                  dispatch(removeBlock(id))
-                  dispatch(setBuildDeletePopup(null))
-                })
+                dispatch(removeBlock(id))
+                dispatch(setBuildDeletePopup(null))
               }}
             >
               <Icon icon={trashIcon} className="mr-1 h-5 w-5 text-gray-300" inline={true} />

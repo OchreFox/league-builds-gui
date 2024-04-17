@@ -24,7 +24,7 @@ import checkIcon from '@iconify/icons-tabler/check'
 import plusIcon from '@iconify/icons-tabler/plus'
 import { PrimaryButton } from 'components/basic/PrimaryButton'
 import { AnimatePresence } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import SimpleBar from 'simplebar-react'
 import { BlockState, Item } from 'types/Build'
 import { ItemsSchema } from 'types/Items'
@@ -89,10 +89,8 @@ const BuildEditor = () => {
       e.preventDefault()
       const item: ItemsSchema = JSON.parse(e.dataTransfer.getData('text')) as ItemsSchema
       const block = getNewBlock(blocks.length, item.id)
-      batch(() => {
-        dispatch(addBlock(block))
-        dispatch(addBuildAnimationQueueItem({ blockId: block.id, itemId: block.items[0].id }))
-      })
+      dispatch(addBlock(block))
+      dispatch(addBuildAnimationQueueItem({ blockId: block.id, itemId: block.items[0].id }))
     },
     [blocks.length, dispatch]
   )

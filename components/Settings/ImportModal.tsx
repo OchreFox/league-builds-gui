@@ -16,7 +16,7 @@ import { easeOutExpo } from 'components/ItemBuild/BuildMakerComponents'
 import { motion } from 'framer-motion'
 import { FileRejection, useDropzone } from 'react-dropzone'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RiotItemBuild } from 'types/Build'
 import { NotificationType } from 'types/Toast'
@@ -92,10 +92,8 @@ const ImportModal = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch
         const selectedChampions = Object.values(championsData).filter((champion) =>
           itemBuild.associatedChampions.includes(champion.id)
         )
-        batch(() => {
-          dispatch(setSelectedChampions(selectedChampions))
-          dispatch(setRiotItemBuild(itemBuild))
-        })
+        dispatch(setSelectedChampions(selectedChampions))
+        dispatch(setRiotItemBuild(itemBuild))
 
         toast(
           <ToastBody

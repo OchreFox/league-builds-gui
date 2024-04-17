@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { cx } from '@emotion/css'
 import { motion } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ItemSectionState, Rarity } from 'types/FilterProps'
 
 import { ItemContainer } from '@/components/ItemGrid/ItemContainer'
@@ -77,10 +77,8 @@ const ItemSection = ({ items, rarity, tier, itemRefArray, itemGridRef }: ItemSec
 
   useEffect(() => {
     return () => {
-      batch(() => {
-        dispatch(setItemPickerContainerHeight({ rarity: rarity, height: 0 }))
-        dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: 0 }))
-      })
+      dispatch(setItemPickerContainerHeight({ rarity: rarity, height: 0 }))
+      dispatch(setItemPickerContainerTitleHeight({ rarity: rarity, height: 0 }))
     }
   }, [dispatch, rarity])
 

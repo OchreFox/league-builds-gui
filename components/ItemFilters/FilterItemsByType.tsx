@@ -4,7 +4,7 @@ import { css, cx } from '@emotion/css'
 import { Menu, Transition } from '@headlessui/react'
 import { InlineIcon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { ItemType, TypeFilters } from '@/components/ItemFilters/FilterComponents'
 import { resetItemFiltersTypes, selectItemFilters, setItemFilterType, toggleItemFiltersType } from '@/store/appSlice'
@@ -73,15 +73,13 @@ export default function FilterItemsByType() {
     if (itemType === ItemType.All || (itemFilters.types.length === 1 && isActive(itemType))) {
       dispatch(resetItemFiltersTypes())
     } else {
-      batch(() => {
-        dispatch(toggleItemFiltersType(itemType))
-        dispatch(
-          setItemFilterType({
-            type: ItemType.All,
-            value: false,
-          })
-        )
-      })
+      dispatch(toggleItemFiltersType(itemType))
+      dispatch(
+        setItemFilterType({
+          type: ItemType.All,
+          value: false,
+        })
+      )
     }
   }
 

@@ -3,7 +3,7 @@ import React, { Fragment, createRef, useCallback, useEffect, useMemo, useRef, us
 import { css, cx } from '@emotion/css'
 import { scrollIntoItem } from 'components/ItemBuildTree/BuildTreeComponents'
 import { AnimatePresence, motion } from 'framer-motion'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import SimpleBar from 'simplebar-react'
 import { ItemGridProps, Rarity, SortDirection } from 'types/FilterProps'
 import { Category, ChampionClass, ItemsSchema } from 'types/Items'
@@ -30,18 +30,18 @@ import {
 } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
 
-import { getRarity, isBasic, isEpic, isLegendary, isMythic } from 'utils/ItemRarity'
+import { getRarity, isBasic, isEpic, isLegendary } from 'utils/ItemRarity'
 
 import 'simplebar-react/dist/simplebar.min.css'
+import { ItemPickerState } from '@/types/App'
 
-export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef }: ItemGridProps) {
+export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef }: Readonly<ItemGridProps>) {
   const dispatch = useAppDispatch()
   const itemFilters = useSelector(selectItemFilters)
-  const itemPicker = useSelector(selectItemPicker)
+  const itemPicker: ItemPickerState = useSelector(selectItemPicker)
   const basicItemsCount = useMemo(() => itemPicker.containers[Rarity.Basic].count, [itemPicker.containers])
   const epicItemsCount = useMemo(() => itemPicker.containers[Rarity.Epic].count, [itemPicker.containers])
   const legendaryItemsCount = useMemo(() => itemPicker.containers[Rarity.Legendary].count, [itemPicker.containers])
-  const mythicItemsCount = useMemo(() => itemPicker.containers[Rarity.Mythic].count, [itemPicker.containers])
 
   // Fetch items from custom JSON
   const { items, itemsError } = useItems()
@@ -49,12 +49,10 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
   const [basicItems, setBasicItems] = useState<Array<ItemsSchema>>([])
   const [epicItems, setEpicItems] = useState<Array<ItemsSchema>>([])
   const [legendaryItems, setLegendaryItems] = useState<Array<ItemsSchema>>([])
-  const [mythicItems, setMythicItems] = useState<Array<ItemsSchema>>([])
   // Initial items state
   const [initialBasicItems, setInitialBasicItems] = useState<Array<ItemsSchema>>([])
   const [initialEpicItems, setInitialEpicItems] = useState<Array<ItemsSchema>>([])
   const [initialLegendaryItems, setInitialLegendaryItems] = useState<Array<ItemsSchema>>([])
-  const [initialMythicItems, setInitialMythicItems] = useState<Array<ItemsSchema>>([])
   // Data initialization flag
   const [dataInitialized, setDataInitialized] = useState(false)
   // Scroll to bottom
@@ -95,7 +93,6 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
     let tempBasicItems: Array<ItemsSchema> = []
     let tempEpicItems: Array<ItemsSchema> = []
     let tempLegendaryItems: Array<ItemsSchema> = []
-    let tempMythicItems: Array<ItemsSchema> = []
     // Sort items by type
     let itemsArray = Object.values(items)
     for (let item of itemsArray) {
@@ -108,8 +105,6 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         tempEpicItems.push(item)
       } else if (isLegendary(item)) {
         tempLegendaryItems.push(item)
-      } else if (isMythic(item)) {
-        tempMythicItems.push(item)
       }
     }
 
@@ -117,30 +112,23 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
     tempBasicItems = sortItems(tempBasicItems, goldOrderDirection)
     tempEpicItems = sortItems(tempEpicItems, goldOrderDirection)
     tempLegendaryItems = sortItems(tempLegendaryItems, goldOrderDirection)
-    tempMythicItems = sortItems(tempMythicItems, goldOrderDirection)
 
     // Set initial items
     setInitialBasicItems(tempBasicItems)
     setInitialEpicItems(tempEpicItems)
     setInitialLegendaryItems(tempLegendaryItems)
-    setInitialMythicItems(tempMythicItems)
 
     setBasicItems(tempBasicItems)
     setEpicItems(tempEpicItems)
     setLegendaryItems(tempLegendaryItems)
-    setMythicItems(tempMythicItems)
 
     // Set the count of each rarity
-    batch(() => {
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: tempBasicItems.length }))
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: tempEpicItems.length }))
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: tempLegendaryItems.length }))
-      dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: tempMythicItems.length }))
-    })
+    dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: tempBasicItems.length }))
+    dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: tempEpicItems.length }))
+    dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: tempLegendaryItems.length }))
 
     // Initialize itemRefArray
-    let totalItemsAmount =
-      tempBasicItems.length + tempEpicItems.length + tempLegendaryItems.length + tempMythicItems.length
+    let totalItemsAmount = tempBasicItems.length + tempEpicItems.length + tempLegendaryItems.length
     for (let i = 0; i < totalItemsAmount; i++) {
       // Set a temporal item id to read the id of the element i in the arrays tempBasicItems, tempEpicItems, etc.
       let tempItemId = -1
@@ -150,8 +138,6 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         tempItemId = tempEpicItems[i - tempBasicItems.length].id
       } else if (i < tempBasicItems.length + tempEpicItems.length + tempLegendaryItems.length) {
         tempItemId = tempLegendaryItems[i - tempBasicItems.length - tempEpicItems.length].id
-      } else {
-        tempItemId = tempMythicItems[i - tempBasicItems.length - tempEpicItems.length - tempLegendaryItems.length].id
       }
 
       itemRefArray.current.push({
@@ -173,12 +159,10 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
       let basicVisibleItems: Array<ItemsSchema> = []
       let epicVisibleItems: Array<ItemsSchema> = []
       let legendaryVisibleItems: Array<ItemsSchema> = []
-      let mythicVisibleItems: Array<ItemsSchema> = []
 
       let basicVisibleItemsCount = 0
       let epicVisibleItemsCount = 0
       let legendaryVisibleItemsCount = 0
-      let mythicVisibleItemsCount = 0
 
       // If no filters are selected, return all items
       const hasCategoryAll = includesCategoryAll(categories)
@@ -186,12 +170,10 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         basicVisibleItems = initialBasicItems
         epicVisibleItems = initialEpicItems
         legendaryVisibleItems = initialLegendaryItems
-        mythicVisibleItems = initialMythicItems
 
         basicVisibleItemsCount = initialBasicItems.length
         epicVisibleItemsCount = initialEpicItems.length
         legendaryVisibleItemsCount = initialLegendaryItems.length
-        mythicVisibleItemsCount = initialMythicItems.length
       } else {
         // Create an array of filter methods to filter the items
         let filterMethods: Array<Function> = [
@@ -207,30 +189,23 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         let basicResults = markItemsAsVisible(basicItems, filteredItems, goldOrderDirection)
         let epicResults = markItemsAsVisible(epicItems, filteredItems, goldOrderDirection)
         let legendaryResults = markItemsAsVisible(legendaryItems, filteredItems, goldOrderDirection)
-        let mythicResults = markItemsAsVisible(mythicItems, filteredItems, goldOrderDirection)
 
         basicVisibleItems = basicResults.visibleItems
         epicVisibleItems = epicResults.visibleItems
         legendaryVisibleItems = legendaryResults.visibleItems
-        mythicVisibleItems = mythicResults.visibleItems
 
         basicVisibleItemsCount = basicResults.count
         epicVisibleItemsCount = epicResults.count
         legendaryVisibleItemsCount = legendaryResults.count
-        mythicVisibleItemsCount = mythicResults.count
       }
 
       setBasicItems(basicVisibleItems)
       setEpicItems(epicVisibleItems)
       setLegendaryItems(legendaryVisibleItems)
-      setMythicItems(mythicVisibleItems)
 
-      batch(() => {
-        dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: basicVisibleItemsCount }))
-        dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: epicVisibleItemsCount }))
-        dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: legendaryVisibleItemsCount }))
-        dispatch(setItemPickerContainerCount({ rarity: Rarity.Mythic, count: mythicVisibleItemsCount }))
-      })
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Basic, count: basicVisibleItemsCount }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Epic, count: epicVisibleItemsCount }))
+      dispatch(setItemPickerContainerCount({ rarity: Rarity.Legendary, count: legendaryVisibleItemsCount }))
     },
     [
       items,
@@ -238,11 +213,9 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
       initialBasicItems,
       initialEpicItems,
       initialLegendaryItems,
-      initialMythicItems,
       basicItems,
       epicItems,
       legendaryItems,
-      mythicItems,
       dispatch,
     ]
   )
@@ -338,10 +311,11 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
   // Add scroll event listener to item grid
   useEffect(() => {
     console.log('Adding scroll event listener to item grid')
-    itemGridRef.current?.addEventListener('scroll', handleScroll)
+    const gridRef = itemGridRef.current
+    gridRef?.addEventListener('scroll', handleScroll)
 
     return () => {
-      itemGridRef.current?.removeEventListener('scroll', handleScroll)
+      gridRef?.removeEventListener('scroll', handleScroll)
     }
   }, [itemGridRef])
 
@@ -367,7 +341,7 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
         className="mb-4 mt-4 flex-1 select-none overflow-y-auto pl-2 md:h-0 md:pr-5"
         scrollableNodeProps={{ ref: itemGridRef }}
       >
-        {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && mythicItemsCount === 0 && (
+        {basicItemsCount === 0 && epicItemsCount === 0 && legendaryItemsCount === 0 && (
           <Fragment key="noItems">
             <motion.h3
               variants={titleVariants}
@@ -417,15 +391,6 @@ export default function ItemGrid({ goldOrderDirection, itemRefArray, itemGridRef
             <ItemSection
               items={legendaryItems}
               rarity={Rarity.Legendary}
-              tier={3}
-              itemRefArray={itemRefArray}
-              itemGridRef={itemGridRef}
-            />
-          )}
-          {mythicItemsCount > 0 && (
-            <ItemSection
-              items={mythicItems}
-              rarity={Rarity.Mythic}
               tier={3}
               itemRefArray={itemRefArray}
               itemGridRef={itemGridRef}

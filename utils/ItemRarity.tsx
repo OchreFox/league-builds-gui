@@ -1,21 +1,28 @@
 import { Rarity } from '@/types/FilterProps'
-import { ItemsSchema, RequiredChampion } from '@/types/Items'
+import { ItemsSchema, Rank } from '@/types/Items'
 
 // Filters to determine the rarity of an item
 export function isBasic(item: ItemsSchema) {
-  return item.type[0] === 'Basic' && item.inStore
+  const basicRanks = [
+    Rank.Basic,
+    Rank.Boots,
+    Rank.Consumable,
+    Rank.Distributed,
+    Rank.Minion,
+    Rank.Potion,
+    Rank.Starter,
+    Rank.Trinket,
+    Rank.Turret,
+  ]
+  return item.inStore && item.rank && item.rank.some((rank) => basicRanks.includes(rank))
 }
 
 export function isEpic(item: ItemsSchema) {
-  return item.type[0] === 'Epic' && item.inStore
+  return item.inStore && item.rank && item.rank.includes(Rank.Epic)
 }
 
 export function isLegendary(item: ItemsSchema) {
-  return item.type[0] === 'Legendary' && item.inStore
-}
-
-export function isMythic(item: ItemsSchema) {
-  return item.mythic === true && item.requiredChampion === RequiredChampion.Empty && item.inStore
+  return item.inStore && item.rank && item.rank.includes(Rank.Legendary)
 }
 
 export function getRarity(item: ItemsSchema): Rarity {
@@ -28,8 +35,6 @@ export function getRarity(item: ItemsSchema): Rarity {
   if (isLegendary(item)) {
     return Rarity.Legendary
   }
-  if (isMythic(item)) {
-    return Rarity.Mythic
-  }
-  return Rarity.Empty
+  console.error('Item rarity not found')
+  return Rarity.Basic
 }

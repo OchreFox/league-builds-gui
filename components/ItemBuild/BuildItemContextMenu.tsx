@@ -8,7 +8,6 @@ import plusIcon from '@iconify/icons-tabler/plus'
 import trashIcon from '@iconify/icons-tabler/trash'
 import { Icon } from '@iconify/react'
 import { motion } from 'framer-motion'
-import { batch } from 'react-redux'
 
 import styles from '@/components/ItemBuild/BuildItemContextMenu.module.scss'
 import { setBuildItemContextMenuShow } from '@/store/appSlice'
@@ -29,10 +28,8 @@ export const BuildItemContextMenu = ({
   const dispatch = useAppDispatch()
 
   const handleDeleteItem = useCallback(() => {
-    batch(() => {
-      dispatch(removeItemFromBlock({ blockId, id }))
-      dispatch(setBuildItemContextMenuShow(false))
-    })
+    dispatch(removeItemFromBlock({ blockId, id }))
+    dispatch(setBuildItemContextMenuShow(false))
   }, [blockId, dispatch, id])
 
   return (

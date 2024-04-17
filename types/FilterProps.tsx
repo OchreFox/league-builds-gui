@@ -1,6 +1,6 @@
-import { Dispatch, MutableRefObject, RefObject, SetStateAction } from 'react'
+import { MutableRefObject, RefObject } from 'react'
 
-import { Category, ChampionClass, DraggableItem, ItemsSchema } from './Items'
+import { Category, DraggableItem, ItemsSchema } from '@/types/Items'
 
 // Auxiliary types
 export type ItemRefArrayType = MutableRefObject<
@@ -15,7 +15,6 @@ export enum Rarity {
   Basic = 'Basic',
   Epic = 'Epic',
   Legendary = 'Legendary',
-  Mythic = 'Mythic',
 }
 
 export type SortByTier = {

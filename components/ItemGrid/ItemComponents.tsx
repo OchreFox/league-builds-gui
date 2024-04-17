@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 import React from 'react'
 
 import { css, cx } from '@emotion/css'

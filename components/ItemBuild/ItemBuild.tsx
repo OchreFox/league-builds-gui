@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 
 import { BuildContainer } from 'components/ItemBuild/BuildContainer'
 import LinearProgress from 'components/basic/LinearProgress'
-import { batch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ChampionsSchema } from 'types/Champions'
 
 import ChampionPickerCard from '@/components/ChampionPicker/ChampionPickerCard'
@@ -30,11 +30,9 @@ export const ItemBuild = () => {
     async (champion: ChampionsSchema) => {
       dispatch(setChampionPickerIsLoading(true))
       const response = await getChampionSplash(champion.id)
-      batch(() => {
-        dispatch(updateSelectedChampion({ ...champion, ...response }))
-        dispatch(setChampionPickerHover(false))
-        dispatch(setChampionPickerIsLoading(false))
-      })
+      dispatch(updateSelectedChampion({ ...champion, ...response }))
+      dispatch(setChampionPickerHover(false))
+      dispatch(setChampionPickerIsLoading(false))
     },
     [dispatch]
   )

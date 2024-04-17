@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { batch } from 'react-redux'
 import { ItemContainerState } from 'types/FilterProps'
 
 import { gridContainerVariants, transitionVariant } from '@/components/ItemGrid/ItemGridComponents'
@@ -38,22 +37,18 @@ export const ItemContainer = ({ gridKey, itemsCombined, rarity, itemRefArray, it
       const columnCount = gridTemplateColumns.split(' ').length
       const rowCount = gridTemplateRows.split(' ').length
 
-      batch(() => {
-        dispatch(setItemPickerContainerGridHeight({ height: height, rarity: rarity }))
-        dispatch(setItemPickerContainerRows({ rows: rowCount, rarity: rarity }))
-        dispatch(setItemPickerContainerColumns({ columns: columnCount, rarity: rarity }))
-      })
+      dispatch(setItemPickerContainerGridHeight({ height: height, rarity: rarity }))
+      dispatch(setItemPickerContainerRows({ rows: rowCount, rarity: rarity }))
+      dispatch(setItemPickerContainerColumns({ columns: columnCount, rarity: rarity }))
     }
   }, [dispatch, itemsCombined, rarity])
 
   // On dismount, reset values to 0
   useEffect(() => {
     return () => {
-      batch(() => {
-        dispatch(setItemPickerContainerGridHeight({ height: 0, rarity: rarity }))
-        dispatch(setItemPickerContainerRows({ rows: 0, rarity: rarity }))
-        dispatch(setItemPickerContainerColumns({ columns: 0, rarity: rarity }))
-      })
+      dispatch(setItemPickerContainerGridHeight({ height: 0, rarity: rarity }))
+      dispatch(setItemPickerContainerRows({ rows: 0, rarity: rarity }))
+      dispatch(setItemPickerContainerColumns({ columns: 0, rarity: rarity }))
     }
   }, [dispatch, rarity])
 

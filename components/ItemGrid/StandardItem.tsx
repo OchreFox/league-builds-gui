@@ -206,10 +206,10 @@ export const StandardItem = ({ item, itemRefArray, itemGridRef }: StandardItemSt
         }}
       >
         {/* Mythic item overlay */}
-        <div ref={reference} className={item.mythic ? itemStyles.itemMythicOverlay : ''}>
+        <div ref={reference}>
           <ItemIcon item={item} usePlaceholder={true} />
         </div>
-        <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.gold?.total}</p>
+        <p className="font-sans text-gray-200 group-hover:text-yellow-200">{item.priceTotal}</p>
       </motion.button>
       <AnimatePresence>
         {showTooltip && (

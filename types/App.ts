@@ -1,8 +1,7 @@
 import { ItemType } from 'components/ItemFilters/FilterComponents'
-
-import { Champion, Tag } from './Champions'
-import { Rarity } from './FilterProps'
-import { ChampionClass, ItemsSchema } from './Items'
+import { Champion, Tag } from '@/types/Champions'
+import { Rarity } from '@/types/FilterProps'
+import { ChampionClass, ItemsSchema } from '@/types/Items'
 
 export interface ItemFilters {
   class: ChampionClass
