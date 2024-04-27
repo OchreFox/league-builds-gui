@@ -5,7 +5,7 @@ import circleDashed from '@iconify/icons-tabler/circle-dashed'
 import squareRotated from '@iconify/icons-tabler/square-rotated'
 import triangleIcon from '@iconify/icons-tabler/triangle'
 import { Icon } from '@iconify/react'
-import { Variants, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import AllClasses from 'public/icons/champion-class/all-classes.svg'
 import { useSelector } from 'react-redux'
 import { Rarity } from '@/types/FilterProps'
@@ -13,15 +13,6 @@ import { Rarity } from '@/types/FilterProps'
 import styles from '@/components/ItemFilters/FilterRarity.module.scss'
 import { selectItemFilters, setItemFiltersRarity } from '@/store/appSlice'
 import { useAppDispatch } from '@/store/store'
-
-const borderVariants: Variants = {
-  hidden: {
-    width: 0,
-  },
-  visible: {
-    width: '100%',
-  },
-}
 
 export const RarityIcon = ({ rarity }: { rarity: Rarity }) => {
   switch (rarity) {

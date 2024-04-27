@@ -1,4 +1,3 @@
-import { css } from '@emotion/css'
 import { ItemType, TypeFilters } from '@/components/ItemFilters/FilterComponents'
 import { Variants } from 'framer-motion'
 import fuzzy from 'fuzzy'
@@ -50,9 +49,9 @@ export const isFromChampionClass = (item: ItemsSchema, championClass: ChampionCl
 export const sortItems = (items: Array<ItemsSchema>, goldOrderDirection: SortDirection) => {
   return items.sort((a, b) => {
     if (goldOrderDirection === SortDirection.Asc) {
-      return a.gold.total - b.gold.total
+      return (a.priceTotal ?? 0) - (b.priceTotal ?? 0)
     }
-    return b.gold.total - a.gold.total
+    return (b.priceTotal ?? 0) - (a.priceTotal ?? 0)
   })
 }
 
@@ -95,7 +94,7 @@ export const matchesSearchQuery = (item: ItemsSchema, searchQuery: string) => {
 }
 
 export const isInStore = (item: ItemsSchema) => {
-  return item.inStore === true && (item.maps?.includes(11) || item.maps?.includes(12))
+  return item.inStore === true && (item.maps?.includes(11) || item.maps?.includes(12)) && item.requiredAlly === ''
 }
 
 /**

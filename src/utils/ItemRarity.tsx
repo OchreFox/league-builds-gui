@@ -14,15 +14,15 @@ export function isBasic(item: ItemsSchema) {
     Rank.Trinket,
     Rank.Turret,
   ]
-  return item.inStore && item.rank && item.rank.some((rank) => basicRanks.includes(rank))
+  return item.inStore && item.rank && item.rank.some((rank) => basicRanks.includes(rank)) && item.requiredAlly === ''
 }
 
 export function isEpic(item: ItemsSchema) {
-  return item.inStore && item.rank && item.rank.includes(Rank.Epic)
+  return item.inStore && item.rank && item.rank.includes(Rank.Epic) && item.requiredAlly === ''
 }
 
 export function isLegendary(item: ItemsSchema) {
-  return item.inStore && item.rank && item.rank.includes(Rank.Legendary)
+  return item.inStore && item.rank && item.rank.includes(Rank.Legendary) && item.requiredAlly === ''
 }
 
 export function getRarity(item: ItemsSchema): Rarity {

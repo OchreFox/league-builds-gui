@@ -1,7 +1,6 @@
 import { RefObject } from 'react'
 
 import { css, cx } from '@emotion/css'
-import _ from 'lodash'
 import { ItemRefArrayType } from '@/types/FilterProps'
 import { ItemsSchema } from '@/types/Items'
 

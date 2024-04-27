@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import { cx } from '@emotion/css'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
-import _ from 'lodash'
 import { useSelector } from 'react-redux'
 
 import { easeOutExpo } from '@/components/ItemBuild/BuildMakerComponents'

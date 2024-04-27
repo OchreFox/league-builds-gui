@@ -63,7 +63,7 @@ export const BuildSuggestions = ({
   })
   const delta = itemBuilds.length - filteredItemBuilds.length
   // Sort the item builds by gold cost
-  filteredItemBuilds = _.orderBy(filteredItemBuilds, ['gold.total'], ['asc'])
+  filteredItemBuilds = _.orderBy(filteredItemBuilds, ['priceTotal'], ['asc'])
 
   // Return a list of items in the baseItem.ItemsSchema array
   return (
