@@ -7,7 +7,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "ES2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,11 +25,31 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/store/*": ["components/store/*"],
-      "@/hooks/*": ["components/hooks/*"],
-      "@/*": ["./*"]
-    }
+      "@/store/*": [
+        "src/components/store/*"
+      ],
+      "@/hooks/*": [
+        "src/components/hooks/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx", "utils/lzma-url.js"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "additional.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/lzma-url.js",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

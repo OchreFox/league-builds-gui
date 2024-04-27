@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import { ItemBuild } from 'components/ItemBuild/ItemBuild'
+import { ItemBuild } from '@/components/ItemBuild/ItemBuild'
 
 export default {
   title: 'BuildMaker',

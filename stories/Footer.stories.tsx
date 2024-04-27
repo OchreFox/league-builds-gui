@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import Footer from 'components/Layout/Footer'
+import Footer from '@/components/Layout/Footer'
 
 export default {
   title: 'Basic/Footer',
